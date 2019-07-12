@@ -1,0 +1,580 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+    <title>运营数据汇总</title>
+    <link href="/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+    <link title="" href="/css/style.css" rel="stylesheet" type="text/css"  />
+    <link title="" href="/static/css/pagination.css" rel="stylesheet" type="text/css"  />
+    <link title="blue" href="/static/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+    <link title="green" href="/static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+    <link title="orange" href="/static/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+    <link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+    <script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="/script/jquery.cookie.js" type="text/javascript"></script>
+    <script src="/static/script/pingxun.js" type="text/javascript"></script>
+    <script src="/static/script/jquery.pagination.js" type="text/javascript"></script>
+    <script src="/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript" src="/static/script/WdatePicker.js"></script>
+    <!-- angular ui-->
+    <link rel="stylesheet" title="" type="text/css" href="/ui-layout-0.0.0/ui-layout.css"/>
+    <script src="/static/script/angular.min.js"></script>
+    <script src="/static/ui-layout-0.0.0/ui-layout.js"></script>
+    <link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+    <script src="/script/jquery.mloading.js" type="text/javascript"></script>
+    <script src="/script/layer.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+    <div class="left-main left-off" include="left" id="left"></div>
+    <div class="right-product right-off">
+        <div class="layout-mock">
+            <div class="center-back right-back">
+                <div class="container-fluid">
+                    <div class="info-center">
+                        <div class="page-header">
+                            <div class="pull-left">
+                                <h4>运营数据汇总</h4>
+                            </div>
+                        </div>
+                        <div class="search-box row">
+                            <div class="col-md-8">
+                                <form id="searchForm">
+                                    <div class="form-group">
+                                        <span class="pull-left form-span">日期:</span>
+                                        <input class="Wdate" type="text" name="applyStartDate" style="margin-top: 5px;height: 30px;" id="d15" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <span class="pull-left form-span">-</span>
+                                        <input class="Wdate" type="text" name="applyEndDate" style="margin-top: 5px;height: 30px;" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"/>
+                                    </div>
+                                </form>
+                                <div class="form-group btn-search">
+                                    <button class="btn btn-default" onclick="javascript:initData(0)"><span class="glyphicon glyphicon-search"></span> 搜索</button>
+                                    <button class="btn btn-default" onclick="javascript:exportExcel('operate')"><span class="glyphicon glyphicon-export"></span> 导出</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-margin">
+                        <table id="dataTable" class="table table-bordered table-header">
+                            <thead><input type="hidden" name="direction" id="direction"/>
+                            <tr>
+                                <!--“快借王、贷款神速、借钱富、贷款堂、好贷宝、易借侠”换成“放款快、融贷贷款借钱、宜贷贷款借钱、秒秒贷、借钱app、下款快”-->
+                                <td rowspan="3" style="text-align: center">日期</td>
+                                <td colspan="7" style="text-align: center">秒必贷</td>
+                                <td colspan="7" style="text-align: center">借钱帝</td>
+                                <td colspan="7" style="text-align: center">讯闪贷</td>
+                                <td colspan="7" style="text-align: center">借多少</td>
+                                <td colspan="7" style="text-align: center">借钱乐乐</td>
+                                <td colspan="7" style="text-align: center">贷款哒</td>
+                                <td colspan="7" style="text-align: center">借钱贷</td>
+                                <td colspan="7" style="text-align: center">贷款帝</td>
+                                <td colspan="7" style="text-align: center">贷款部落</td>
+                                <td colspan="7" style="text-align: center">叮叮招财</td>
+                                <td colspan="7" style="text-align: center">速亿贷(马甲)</td>
+                                <td colspan="7" style="text-align: center">速融贷(马甲)</td>
+                                <td colspan="7" style="text-align: center">贷款掌柜(马甲)</td>
+                                <td colspan="7" style="text-align: center">借借款(马甲)</td>
+                                <td colspan="7" style="text-align: center">贷钱来(马甲)</td>
+                                <td colspan="7" style="text-align: center">借贷帮(马甲)</td>
+                                <td colspan="7" style="text-align: center">借钱花花(马甲)</td>
+                                <td colspan="7" style="text-align: center">贷款汇(马甲)</td>
+                                <td colspan="7" style="text-align: center">秒贷宝(马甲)</td>
+                                <td colspan="7" style="text-align: center">信而贷(马甲)</td>
+                                <td colspan="7" style="text-align: center">借钱树(马甲)</td>
+                                <td colspan="7" style="text-align: center">借贷金钱(马甲)</td>
+
+                                <!-- 中鼎国泰APP -->
+                                <td colspan="7" style="text-align: center">放款快(中鼎国泰)</td>
+                                <td colspan="7" style="text-align: center">融贷贷款借钱(中鼎国泰)</td>
+                                <td colspan="7" style="text-align: center">宜贷贷款借钱(中鼎国泰)</td>
+                                <td colspan="7" style="text-align: center">秒秒贷(中鼎国泰)</td>
+                                <td colspan="7" style="text-align: center">借钱app(中鼎国泰)</td>
+                                <td colspan="7" style="text-align: center">下款快(中鼎国泰)</td>
+                                <td colspan="7" style="text-align: center">人人借钱贷款(中鼎国泰)</td>
+                                <td colspan="7" style="text-align: center">借借款(中鼎国泰)</td>
+
+                                <td colspan="7" style="text-align: center">总量</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                                <td colspan="4" style="text-align: center">基础数据</td>
+                                <td colspan="3" style="text-align: center">申请贷款</td>
+                            </tr>
+                            <tr>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                                <td>合计</td><td>IOS</td><td >安卓</td><td >H5</td><td >人数</td><td >次数</td><td >人均</td>
+                            </tr>
+                            </thead>
+                            <tbody id="productList">
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="120">
+                                    <div class="pull-right">
+                                        <nav>
+                                            <ul id="pageHtml" class="pagination">
+
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    function initData(pageIndex,sortZiduan) {
+        $("#productList").empty();
+        var values = {};
+        var data = $("#searchForm").serializeArray();
+        values["pageNo"]=(pageIndex+1);
+        values["channelNo"]="backend";
+        values["userType"]="manager";
+        values["sortColumn"]=(sortZiduan==undefined?"":sortZiduan);
+        values["sortDesc"]=($("#direction").val()==""?"asc":$("#direction").val());
+        for (var item in data) {
+            values[data[item].name] = data[item].value;
+        }
+        var result = post(operateReportUrl,values);
+        if(!result.success){
+            showTipMessage(result.message,false);
+        }else{
+            var resultData = result.data;
+            bindData(resultData);
+        }
+    }
+
+    function bindData(obj) {
+        var resultData = obj;
+        var sHtml = "";
+        $.each(resultData, function (j) {
+            var sTrHtml = "";
+            // 秒必贷
+            sTrHtml += "<tr>";
+            sTrHtml += "<td>" + resultData[j].day;
+            sTrHtml += "</td>";
+
+            sTrHtml += "<td>"+(resultData[j].mbdios + resultData[j].mbdandroid + resultData[j].mbdh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdios+"</td>";
+            sTrHtml += "<td>" + resultData[j].mbdandroid +"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].mbdApplyTime / resultData[j].mbdApplyNum)+"</td>";
+
+            //借钱帝
+            sTrHtml += "<td>"+(resultData[j].jqwios + resultData[j].jqwandroid + resultData[j].jqwh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jqwandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwApplyNum+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jqwApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].jqwApplyTime / resultData[j].jqwApplyNum)+"</td>";
+
+            //讯闪贷
+            sTrHtml += "<td>"+(resultData[j].xsdios + resultData[j].xsdandroid + resultData[j].xsdh5)+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xsdios+"</td>";
+            sTrHtml += "<td>"+resultData[j].xsdandroid+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xsdh5+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xsdApplyNum+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xsdApplyTime+"</td>";
+            sTrHtml += "<td>"+ Math.round(resultData[j].xsdApplyTime / resultData[j].xsdApplyNum)+"</td>";
+
+            //借多少
+            sTrHtml += "<td>"+ (resultData[j].jdsios + resultData[j].jdsandroid + resultData[j].jdsh5)+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jdsios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jdsandroid+ "</td>";
+            sTrHtml += "<td>"+resultData[j].jdsh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].jdsApplyTime / resultData[j].jdsApplyNum)+"</td>";
+            //借钱乐乐
+            sTrHtml += "<td>"+ (resultData[j].dsqbios + resultData[j].dsqbandroid + resultData[j].dsqbh5)+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dsqbios+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbApplyTime+"</td>";
+            sTrHtml += "<td>"+ Math.round(resultData[j].dsqbApplyTime / resultData[j].dsqbApplyNum)+"</td>";
+            //贷款哒
+            sTrHtml += "<td>"+(resultData[j].dkdios + resultData[j].dkdandroid + resultData[j].dkdh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdios+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].dkdApplyTime / resultData[j].dkdApplyNum)+"</td>";
+
+            //借钱贷
+            sTrHtml += "<td>"+ (resultData[j].dkqbios + resultData[j].dkqbandroid + resultData[j].dkqbh5)+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dkqbios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dkqbandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].dkqbApplyTime / resultData[j].dkqbApplyNum)+"</td>";
+
+            //贷款帝
+            sTrHtml += "<td>"+ (resultData[j].pxqbios + resultData[j].pxqbandroid + resultData[j].pxqbh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].pxqbandroid+"</td>";
+            sTrHtml += "<td>"+ resultData[j].pxqbh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbApplyNum+"</td>";
+            sTrHtml += "<td>"+ resultData[j].pxqbApplyTime+"</td>";
+            sTrHtml += "<td>"+ Math.round(resultData[j].pxqbApplyTime / resultData[j].pxqbApplyNum)+"</td>";
+
+            //贷款部落
+            sTrHtml += "<td>"+ (resultData[j].dkblios + resultData[j].dkblandroid + resultData[j].dkblh5)+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dkblios+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblApplyTime+"</td>";
+            sTrHtml += "<td>"+ Math.round(resultData[j].dkblApplyTime / resultData[j].dkblApplyNum)+"</td>";
+
+            //叮叮招财
+            sTrHtml += "<td>"+ (resultData[j].lsqdios + resultData[j].lsqdandroid + resultData[j].lsqdh5)+"</td>";
+            sTrHtml += "<td>"+ resultData[j].lsqdios +"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].lsqdApplyTime / resultData[j].lsqdApplyNum)+"</td>";
+
+            //速亿贷
+            sTrHtml += "<td>"+(resultData[j].sydios + resultData[j].sydandroid + resultData[j].sydh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydios+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydandroid+"</td>";
+            sTrHtml += "<td>"+ resultData[j].sydh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].sydApplyTime / resultData[j].sydApplyNum)+"</td>";
+
+            //速融贷
+            sTrHtml += "<td>"+(resultData[j].srdios + resultData[j].srdandroid + resultData[j].srdh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdios+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdApplyTime+"</td>";
+            sTrHtml += "<td>"+ Math.round(resultData[j].srdApplyTime / resultData[j].srdApplyNum)+"</td>";
+
+            //贷款掌柜
+            sTrHtml += "<td>"+ (resultData[j].dkzgios + resultData[j].dkzgandroid + resultData[j].dkzgh5)+ "</td>";
+            sTrHtml += "<td>"+ resultData[j].dkzgios+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].dkzgApplyTime / resultData[j].dkzgApplyNum)+"</td>";
+
+            //借借款
+            sTrHtml += "<td>"+(resultData[j].jjkios + resultData[j].jjkandroid + resultData[j].jjkh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jjkandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].jjkApplyTime / resultData[j].jjkApplyNum)+"</td>";
+
+            //贷钱来
+            sTrHtml += "<td>"+ (resultData[j].dqlios + resultData[j].dqlandroid + resultData[j].dqlh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlios+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlh5+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dqlApplyNum+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dqlApplyTime+"</td>";
+            sTrHtml += "<td>"+ Math.round(resultData[j].dqlApplyTime / resultData[j].dqlApplyNum)+"</td>";
+
+            //借贷帮
+            sTrHtml += "<td>"+(resultData[j].jdbios + resultData[j].jdbandroid + resultData[j].jdbh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jdbandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].jdbApplyTime / resultData[j].jdbApplyNum)+"</td>";
+
+
+            //借钱花花
+            sTrHtml += "<td>"+(resultData[j].jqhhios + resultData[j].jqhhandroid + resultData[j].jqhhh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jqhhandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].jqhhApplyTime / resultData[j].jqhhApplyNum)+"</td>";
+
+            //贷款汇
+            sTrHtml += "<td>"+(resultData[j].dkhios + resultData[j].dkhandroid + resultData[j].dkhh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dkhandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].dkhApplyTime / resultData[j].dkhApplyNum)+"</td>";
+
+            //秒贷宝
+            sTrHtml += "<td>"+(resultData[j].mdbios + resultData[j].mdbandroid + resultData[j].mdbh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].mdbandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].mdbApplyTime / resultData[j].mdbApplyNum)+"</td>";
+
+            //信而贷
+            sTrHtml += "<td>"+(resultData[j].xedios + resultData[j].xedandroid + resultData[j].xedh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xedandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].xedApplyTime / resultData[j].xedApplyNum)+"</td>";
+
+            //借钱树
+            sTrHtml += "<td>"+(resultData[j].jqsios + resultData[j].jqsandroid + resultData[j].jqsh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jqsandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].jqsApplyTime / resultData[j].jqsApplyNum)+"</td>";
+
+            //借贷金钱
+            sTrHtml += "<td>"+(resultData[j].jdjqios + resultData[j].jdjqandroid + resultData[j].jdjqh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jdjqandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].jdjqApplyTime / resultData[j].jdjqApplyNum)+"</td>";
+
+            //放款快
+            sTrHtml += "<td>"+(resultData[j].kjwios + resultData[j].kjwandroid + resultData[j].kjwh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].kjwandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].kjwApplyTime / resultData[j].kjwApplyNum)+"</td>";
+
+            //融贷贷款借钱
+            sTrHtml += "<td>"+(resultData[j].dkssios + resultData[j].dkssandroid + resultData[j].dkssh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dkssandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].dkssApplyTime / resultData[j].dkssApplyNum)+"</td>";
+
+            //宜贷贷款借钱
+            sTrHtml += "<td>"+(resultData[j].jqfios + resultData[j].jqfandroid + resultData[j].jqfh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jqfandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].jqfApplyTime / resultData[j].jqfApplyNum)+"</td>";
+
+            //秒秒贷
+            sTrHtml += "<td>"+(resultData[j].dktios + resultData[j].dktandroid + resultData[j].dkth5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dktandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkth5+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].dktApplyTime / resultData[j].dktApplyNum)+"</td>";
+
+            //借钱app
+            sTrHtml += "<td>"+(resultData[j].hdbios + resultData[j].hdbandroid + resultData[j].hdbh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].hdbandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].hdbApplyTime / resultData[j].hdbApplyNum)+"</td>";
+
+            //下款快
+            sTrHtml += "<td>"+(resultData[j].yjxios + resultData[j].yjxandroid + resultData[j].yjxh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].yjxandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].yjxApplyTime / resultData[j].yjxApplyNum)+"</td>";
+
+            //人人借钱贷款
+            sTrHtml += "<td>"+(resultData[j].bjqwios + resultData[j].bjqwandroid + resultData[j].bjqwh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].bjqwandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].bjqwApplyTime / resultData[j].bjqwApplyNum)+"</td>";
+
+            //借借款
+            sTrHtml += "<td>"+(resultData[j].bjjkios + resultData[j].bjjkandroid + resultData[j].bjjkh5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].bjjkandroid+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkh5+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkApplyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkApplyTime+"</td>";
+            sTrHtml += "<td>"+Math.round(resultData[j].bjjkApplyTime / resultData[j].bjjkApplyNum)+"</td>";
+
+            //总量
+            sTrHtml += "<td>"+(resultData[j].ios + resultData[j].android + resultData[j].h5)+"</td>";
+            sTrHtml += "<td>"+resultData[j].ios+"</td>";
+            sTrHtml += "<td>"+ resultData[j].android+"</td>";
+            sTrHtml += "<td>"+resultData[j].h5+"</td>";
+            sTrHtml += "<td>"+resultData[j].applyNum+"</td>";
+            sTrHtml += "<td>"+resultData[j].applyTime+"</td>";
+            sTrHtml += "<td>"+ Math.round(resultData[j].applyTime / resultData[j].applyNum)+"</td>";
+
+            sTrHtml += "</tr>";
+            sHtml+=sTrHtml;
+            $("#direction").val(resultData[j].sortDesc);
+        });
+
+        $("#productList").append(sHtml);
+
+        //设置分页信息
+        $("#pageHtml").pagination(obj.totalCount, { //recordCount在后台定义的一个公有变量，通过从数据库查询记录进行赋值，返回记录的总数
+            callback: pageselectCallback,  //点击分页时，调用的回调函数
+            prev_text: '« 上一页',  //显示上一页按钮的文本
+            next_text: '下一页 »',  //显示下一页按钮的文本
+            items_per_page:10,  //每页显示的项数
+            num_display_entries:6,  //分页插件中间显示的按钮数目
+            current_page:obj.currentPageNo,  //当前页索引
+            num_edge_entries:2 //分页插件左右两边显示的按钮数目
+
+        });
+    }
+    function pageselectCallback(page_id,jq){
+        initData(page_id);
+    }
+
+    $(function(){
+        $("#navtop").load("/top.html",function () {
+            topFunc();
+        });
+        $("#left").load("/left.html",function(){
+            left();
+            var links = window.location.href;
+            if(links.indexOf("operateReport")!=-1)
+            {
+                $("#operateReport").addClass("active");
+            }
+            //加载数据
+            initData(0);
+        });
+
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+package com.cw.biz.home.app.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * Created by Administrator on 2017/8/8.
+ */
+@Getter
+@Setter
+public class AppMarketDto {
+    private String day;
+    private Integer mbdHuawei;
+    private Integer mbdXiaomi;
+    private Integer mbdVivo;
+    private Integer mbdOppo;
+    private Integer mbd360;
+    private Integer mbdYyb;
+    private Integer mbdApple;
+    private Integer mbdMeizu;
+    private Integer mbdWandoujia;
+    private Integer mbdBaidu;
+    private Integer mbdSamsung;
+    private Integer mbdOther;
+
+    private Integer xsdHuawei;
+    private Integer xsdXiaomi;
+    private Integer xsdVivo;
+    private Integer xsdOppo;
+    private Integer xsd360;
+    private Integer xsdYyb;
+    private Integer xsdApple;
+    private Integer xsdMeizu;
+    private Integer xsdWandoujia;
+    private Integer xsdBaidu;
+    private Integer xsdSamsung;
+    private Integer xsdOther;
+
+    private Integer jqwHuawei;
+    private Integer jqwXiaomi;
+    private Integer jqwVivo;
+    private Integer jqwOppo;
+    private Integer jqw360;
+    private Integer jqwYyb;
+    private Integer jqwApple;
+    private Integer jqwMeizu;
+    private Integer jqwWandoujia;
+    private Integer jqwBaidu;
+    private Integer jqwSamsung;
+    private Integer jqwOther;
+
+    private Integer jdsHuawei;
+    private Integer jdsXiaomi;
+    private Integer jdsVivo;
+    private Integer jdsOppo;
+    private Integer jds360;
+    private Integer jdsYyb;
+    private Integer jdsApple;
+    private Integer jdsMeizu;
+    private Integer jdsWandoujia;
+    private Integer jdsBaidu;
+    private Integer jdsSamsung;
+    private Integer jdsOther;
+
+    private Integer dsqbHuawei;
+    private Integer dsqbXiaomi;
+    private Integer dsqbVivo;
+    private Integer dsqbOppo;
+    private Integer dsqb360;
+    private Integer dsqbYyb;
+    private Integer dsqbApple;
+    private Integer dsqbMeizu;
+    private Integer dsqbWandoujia;
+    private Integer dsqbBaidu;
+    private Integer dsqbSamsung;
+    private Integer dsqbOther;
+
+    private Integer dkqbHuawei;
+    private Integer dkqbXiaomi;
+    private Integer dkqbVivo;
+    private Integer dkqbOppo;
+    private Integer dkqb360;
+    private Integer dkqbYyb;
+    private Integer dkqbApple;
+    private Integer dkqbMeizu;
+    private Integer dkqbWandoujia;
+    private Integer dkqbBaidu;
+    private Integer dkqbSamsung;
+    private Integer dkqbOther;
+
+    private Integer dkdHuawei;
+    private Integer dkdXiaomi;
+    private Integer dkdVivo;
+    private Integer dkdOppo;
+    private Integer dkd360;
+    private Integer dkdYyb;
+    private Integer dkdApple;
+    private Integer dkdMeizu;
+    private Integer dkdWandoujia;
+    private Integer dkdBaidu;
+    private Integer dkdSamsung;
+    private Integer dkdOther;
+
+    private Integer pxqbHuawei;
+    private Integer pxqbXiaomi;
+    private Integer pxqbVivo;
+    private Integer pxqbOppo;
+    private Integer pxqb360;
+    private Integer pxqbYyb;
+    private Integer pxqbApple;
+    private Integer pxqbMeizu;
+    private Integer pxqbWandoujia;
+    private Integer pxqbBaidu;
+    private Integer pxqbSamsung;
+    private Integer pxqbOther;
+
+    private Integer dkblHuawei;
+    private Integer dkblXiaomi;
+    private Integer dkblVivo;
+    private Integer dkblOppo;
+    private Integer dkbl360;
+    private Integer dkblYyb;
+    private Integer dkblApple;
+    private Integer dkblMeizu;
+    private Integer dkblWandoujia;
+    private Integer dkblBaidu;
+    private Integer dkblSamsung;
+    private Integer dkblOther;
+
+    private Integer lsqdHuawei;
+    private Integer lsqdXiaomi;
+    private Integer lsqdVivo;
+    private Integer lsqdOppo;
+    private Integer lsqd360;
+    private Integer lsqdYyb;
+    private Integer lsqdApple;
+    private Integer lsqdMeizu;
+    private Integer lsqdWandoujia;
+    private Integer lsqdBaidu;
+    private Integer lsqdSamsung;
+    private Integer lsqdOther;
+
+    private Integer sydHuawei;
+    private Integer sydXiaomi;
+    private Integer sydVivo;
+    private Integer sydOppo;
+    private Integer syd360;
+    private Integer sydYyb;
+    private Integer sydApple;
+    private Integer sydMeizu;
+    private Integer sydWandoujia;
+    private Integer sydBaidu;
+    private Integer sydSamsung;
+    private Integer sydOther;
+
+    private Integer srdHuawei;
+    private Integer srdXiaomi;
+    private Integer srdVivo;
+    private Integer srdOppo;
+    private Integer srd360;
+    private Integer srdYyb;
+    private Integer srdApple;
+    private Integer srdMeizu;
+    private Integer srdWandoujia;
+    private Integer srdBaidu;
+    private Integer srdSamsung;
+    private Integer srdOther;
+
+    private Integer dqlHuawei;
+    private Integer dqlXiaomi;
+    private Integer dqlVivo;
+    private Integer dqlOppo;
+    private Integer dql360;
+    private Integer dqlYyb;
+    private Integer dqlApple;
+    private Integer dqlMeizu;
+    private Integer dqlWandoujia;
+    private Integer dqlBaidu;
+    private Integer dqlSamsung;
+    private Integer dqlOther;
+
+    private Integer jdbHuawei;
+    private Integer jdbXiaomi;
+    private Integer jdbVivo;
+    private Integer jdbOppo;
+    private Integer jdb360;
+    private Integer jdbYyb;
+    private Integer jdbApple;
+    private Integer jdbMeizu;
+    private Integer jdbWandoujia;
+    private Integer jdbBaidu;
+    private Integer jdbSamsung;
+    private Integer jdbOther;
+
+    private Integer dkzgHuawei;
+    private Integer dkzgXiaomi;
+    private Integer dkzgVivo;
+    private Integer dkzgOppo;
+    private Integer dkzg360;
+    private Integer dkzgYyb;
+    private Integer dkzgApple;
+    private Integer dkzgMeizu;
+    private Integer dkzgWandoujia;
+    private Integer dkzgBaidu;
+    private Integer dkzgSamsung;
+    private Integer dkzgOther;
+
+    private Integer jjkHuawei;
+    private Integer jjkXiaomi;
+    private Integer jjkVivo;
+    private Integer jjkOppo;
+    private Integer jjk360;
+    private Integer jjkYyb;
+    private Integer jjkApple;
+    private Integer jjkMeizu;
+    private Integer jjkWandoujia;
+    private Integer jjkBaidu;
+    private Integer jjkSamsung;
+    private Integer jjkOther;
+
+    private Integer jqhhHuawei;
+    private Integer jqhhXiaomi;
+    private Integer jqhhVivo;
+    private Integer jqhhOppo;
+    private Integer jqhh360;
+    private Integer jqhhYyb;
+    private Integer jqhhApple;
+    private Integer jqhhMeizu;
+    private Integer jqhhWandoujia;
+    private Integer jqhhBaidu;
+    private Integer jqhhSamsung;
+    private Integer jqhhOther;
+
+    private Integer kjwHuawei;
+    private Integer kjwXiaomi;
+    private Integer kjwVivo;
+    private Integer kjwOppo;
+    private Integer kjw360;
+    private Integer kjwYyb;
+    private Integer kjwApple;
+    private Integer kjwMeizu;
+    private Integer kjwWandoujia;
+    private Integer kjwBaidu;
+    private Integer kjwSamsung;
+    private Integer kjwOther;
+
+    private Integer dkssHuawei;
+    private Integer dkssXiaomi;
+    private Integer dkssVivo;
+    private Integer dkssOppo;
+    private Integer dkss360;
+    private Integer dkssYyb;
+    private Integer dkssApple;
+    private Integer dkssMeizu;
+    private Integer dkssWandoujia;
+    private Integer dkssBaidu;
+    private Integer dkssSamsung;
+    private Integer dkssOther;
+
+    private Integer jqfHuawei;
+    private Integer jqfXiaomi;
+    private Integer jqfVivo;
+    private Integer jqfOppo;
+    private Integer jqf360;
+    private Integer jqfYyb;
+    private Integer jqfApple;
+    private Integer jqfMeizu;
+    private Integer jqfWandoujia;
+    private Integer jqfBaidu;
+    private Integer jqfSamsung;
+    private Integer jqfOther;
+
+    private Integer dkhHuawei;
+    private Integer dkhXiaomi;
+    private Integer dkhVivo;
+    private Integer dkhOppo;
+    private Integer dkh360;
+    private Integer dkhYyb;
+    private Integer dkhApple;
+    private Integer dkhMeizu;
+    private Integer dkhWandoujia;
+    private Integer dkhBaidu;
+    private Integer dkhSamsung;
+    private Integer dkhOther;
+
+    private Integer mdbHuawei;
+    private Integer mdbXiaomi;
+    private Integer mdbVivo;
+    private Integer mdbOppo;
+    private Integer mdb360;
+    private Integer mdbYyb;
+    private Integer mdbApple;
+    private Integer mdbMeizu;
+    private Integer mdbWandoujia;
+    private Integer mdbBaidu;
+    private Integer mdbSamsung;
+    private Integer mdbOther;
+
+    private Integer xedHuawei;
+    private Integer xedXiaomi;
+    private Integer xedVivo;
+    private Integer xedOppo;
+    private Integer xed360;
+    private Integer xedYyb;
+    private Integer xedApple;
+    private Integer xedMeizu;
+    private Integer xedWandoujia;
+    private Integer xedBaidu;
+    private Integer xedSamsung;
+    private Integer xedOther;
+
+    private Integer jqsHuawei;
+    private Integer jqsXiaomi;
+    private Integer jqsVivo;
+    private Integer jqsOppo;
+    private Integer jqs360;
+    private Integer jqsYyb;
+    private Integer jqsApple;
+    private Integer jqsMeizu;
+    private Integer jqsWandoujia;
+    private Integer jqsBaidu;
+    private Integer jqsSamsung;
+    private Integer jqsOther;
+
+    private Integer jdjqHuawei;
+    private Integer jdjqXiaomi;
+    private Integer jdjqVivo;
+    private Integer jdjqOppo;
+    private Integer jdjq360;
+    private Integer jdjqYyb;
+    private Integer jdjqApple;
+    private Integer jdjqMeizu;
+    private Integer jdjqWandoujia;
+    private Integer jdjqBaidu;
+    private Integer jdjqSamsung;
+    private Integer jdjqOther;
+
+    private Integer dktHuawei;
+    private Integer dktXiaomi;
+    private Integer dktVivo;
+    private Integer dktOppo;
+    private Integer dkt360;
+    private Integer dktYyb;
+    private Integer dktApple;
+    private Integer dktMeizu;
+    private Integer dktWandoujia;
+    private Integer dktBaidu;
+    private Integer dktSamsung;
+    private Integer dktOther;
+
+    private Integer hdbHuawei;
+    private Integer hdbXiaomi;
+    private Integer hdbVivo;
+    private Integer hdbOppo;
+    private Integer hdb360;
+    private Integer hdbYyb;
+    private Integer hdbApple;
+    private Integer hdbMeizu;
+    private Integer hdbWandoujia;
+    private Integer hdbBaidu;
+    private Integer hdbSamsung;
+    private Integer hdbOther;
+
+    private Integer yjxHuawei;
+    private Integer yjxXiaomi;
+    private Integer yjxVivo;
+    private Integer yjxOppo;
+    private Integer yjx360;
+    private Integer yjxYyb;
+    private Integer yjxApple;
+    private Integer yjxMeizu;
+    private Integer yjxWandoujia;
+    private Integer yjxBaidu;
+    private Integer yjxSamsung;
+    private Integer yjxOther;
+
+    private Integer bjqwHuawei;
+    private Integer bjqwXiaomi;
+    private Integer bjqwVivo;
+    private Integer bjqwOppo;
+    private Integer bjqw360;
+    private Integer bjqwYyb;
+    private Integer bjqwApple;
+    private Integer bjqwMeizu;
+    private Integer bjqwWandoujia;
+    private Integer bjqwBaidu;
+    private Integer bjqwSamsung;
+    private Integer bjqwOther;
+
+    private Integer bjjkHuawei;
+    private Integer bjjkXiaomi;
+    private Integer bjjkVivo;
+    private Integer bjjkOppo;
+    private Integer bjjk360;
+    private Integer bjjkYyb;
+    private Integer bjjkApple;
+    private Integer bjjkMeizu;
+    private Integer bjjkWandoujia;
+    private Integer bjjkBaidu;
+    private Integer bjjkSamsung;
+    private Integer bjjkOther;
+
+}

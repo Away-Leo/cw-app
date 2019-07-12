@@ -1,0 +1,152 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>平讯数据后台管理系统</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/static/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<script src="/static/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/static/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/script/pingxun.js" type="text/javascript"></script>
+<script src="/static/script/ajaxfileupload.js" type="text/javascript"></script>
+<script src="/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+<link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+<script src="/script/jquery.mloading.js" type="text/javascript"></script>
+<script src="/script/layer.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="/static/script/WdatePicker.js"></script>
+</head>
+
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+    <div  class="left-main left-full" include="left" id="left"></div>
+  <div class="right-product view-product right-full">
+     <div class="container-fluid">
+				<div class="manage account-manage info-center">
+					<div class="page-header">
+                        <div class="pull-left">
+						    <h4>消耗成本编辑</h4>
+					    </div>
+                    </div>
+                    <form id="updateCard">
+                        <dl class="account-basic clearfix">
+                            <dd class="pull-left margin-large-left margin-small-top">
+                                <p class="text-small"><input type="hidden" id="id" name="id" style="width:250px"/>
+                                    <span class="show pull-left base-name">日期</span>
+                                    <span class="margin-left">
+                                        <input class="Wdate" type="text" name="dayId" style="margin-top: 5px;height: 30px;" id="dayId" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d',isShowClear:false,readOnly:true})"/>
+                                    </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">费用项</span>
+                                    <span class="margin-left">
+                                        <select id="feeItem" class="form-control" name="feeItem">
+                                           <option value="CPD充值">CPD充值</option>
+                                           <option value="安卓积分墙">安卓积分墙</option>
+                                           <option value="安卓刷评论下载量">安卓刷评论下载量</option>
+                                           <option value="苹果积分墙">苹果积分墙</option>
+                                           <option value="苹果机刷">苹果机刷</option>
+                                       </select>
+                                    </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">渠道</span>
+                                    <span class="margin-left">
+                                        <select id="channelNo" class="form-control" name="channel">
+                                        </select>
+                                    </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">产品名称</span>
+                                    <span class="margin-left">
+                                       <select id="appMarketList" class="form-control" name="appName">
+                                       </select>
+                                    </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">消耗成本</span>
+                                    <span class="margin-left">
+                                        <input type="text" name="costFee" id="costFee"/>
+                                    </span>
+                                </p>
+                            </dd>
+                        </dl>
+                        <dd class="pull-left margin-large-left margin-small-top">
+                            <p class="text-small">
+                                <input type="button" value="保存" style="width: 150px;" onclick="javascript:saveProduct()"/>
+                                <input type="button" value="返回" style="width: 150px;" onclick="javascript:history.go(-1)"/>
+                            </p>
+                        </dd>
+                    </form>
+				</div>
+		</div>
+  </div>
+</div>
+<script>
+function findByData() {
+    var hrefUrl = window.location.href;
+    var id=getArgsFromHref(hrefUrl,"id");
+    var param ="id="+id;
+    var result = get(findByCostIdUrl,param);
+    if(result.success)
+    {
+        $("#id").val(result.data.id);
+        $("#dayId").val(result.data.dayId);
+        $("#costFee").val(result.data.costFee);
+        $("#feeItem").val(result.data.feeItem);
+        $("#channelNo").val(result.data.channel);
+        $("#appMarketList").val(result.data.appName);
+    }else{
+        showTipMessage(result.message,true);
+    }
+}
+//保存产品
+function saveProduct() {
+    var data = $("#updateCard").serializeArray();
+    var values={};
+    for (var item in data) {
+        values[data[item].name] = data[item].value;
+    }
+    if($("#dayId").val()==undefined||$("#img").val()=='')
+    {
+        showTipMessage("请填写日期",false);
+        return false;
+    }
+    if($("#costFee").val()==undefined||$("#costFee").val()=='')
+    {
+        showTipMessage("请填写消耗成本",false);
+        return false;
+    }
+    var result = post(updateCostUrl,values);
+    if(result.success)
+    {
+        window.location.href="/static/operateCost/list.html";
+    }else{
+        showTipMessage(result.message,true);
+    }
+}
+$(function(){
+    $("#navtop").load("/top.html",function () {
+        topFunc();
+    });
+    $("#left").load("/left.html",function(){
+        left();
+        var links = window.location.href;
+        if(links.indexOf("operatecost")!=-1)
+        {
+            $("#banner").addClass("active");
+        }
+    });
+    //加载选择框数据
+    initAppList();
+    initAppMarketList();
+    findByData();
+});
+</script>
+</body>
+</html>

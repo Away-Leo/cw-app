@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>产品详情</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <link rel="stylesheet" href="/static/assets/css/iconfont/iconfont.css"/>
+    <link rel="stylesheet" href="/static/assets/css/base.css"/>
+    <link rel="stylesheet" href="/static/assets/css/common.css"/>
+    <script src="/static/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/static/assets/js/zepto.min.js"></script>
+    <script src="/static/assets/js/dialog.js"></script>
+    <script src="/static/assets/js/wechat.js"></script>
+</head>
+<style>
+.main{margin: 0rem 0 7rem;}
+</style>
+<body class="bg-gray">
+<div class="container">
+    <div class="main">
+        <div class="pro-detail-top">
+            <span class="img"><img id="detailImg" src="/assets/images/nologo.png"/></span>
+            <span class="name" id="name"></span>
+            <span class="detail">
+            	<p><span class="th">额度范围</span><span class="td" id="loanAmount"></span></p>
+                <p><span class="th">期限范围</span><span class="td" id="loanPeriod"></span></p>
+                <p><span class="th">最快放款</span><span class="td" id="loanDay">当天</span></p>
+            </span>
+        </div>
+        <div class="pro-detail-down">
+        	<dl>
+            	<dt><span></span>利率说明</dt>
+                <dd id="rateDesc"></dd>
+            </dl>
+            <dl>
+            	<dt><span></span>申请流程</dt>
+                <dd id="applyFlow"></dd>
+            </dl>
+            <dl>
+            	<dt><span></span>申请条件</dt>
+                <dd  id="applyCondition"></dd>
+            </dl>
+            <dl>
+            	<dt><span></span>申请材料</dt>
+                <dd id="applyMaterial"></dd>
+            </dl>
+        </div>
+    </div>
+     <div class="pro-detail-btn"><a id="apply" onclick="appLoan()" class="btn-apply ap-fz16">立即申请</a> </div>
+</div>
+<script>
+    function appLoan() {
+        var hrefUrl = window.location.href;
+        var id=getArgsFromHref(hrefUrl,"id");
+        var param={};
+        param["productId"]=id;
+        param["deviceNumber"]=localStorage.getItem("loginUser");
+        param["applyArea"]="wechat";
+        param["channelNo"]=localStorage.getItem("channelNo");
+        param["appName"] = localStorage.getItem("appName");
+        param["type"]="APPLY_LOAN";
+        post(applyLoan,param);
+    }
+    function findByData() {
+        var hrefUrl = window.location.href;
+        var id=getArgsFromHref(hrefUrl,"id");
+        var param = "id="+id;
+        var result = get(findByIdUrl,param);
+        if(result.success)
+        {
+            $("#productTitle").text(result.data.name);
+            $("#name").text(result.data.name);
+            $("#loanAmount").text(result.data.startAmount+"-"+result.data.endAmount+"元");
+            $("#loanPeriod").text(result.data.startPeriod+"-"+result.data.endPeriod+result.data.periodTypeStr);
+            $("#loanDay").text(result.data.loanDay+"天");
+            $("#serviceRate").text(result.data.serviceRate);
+            $("#rateDesc").text(result.data.rateMemo);
+            $("#applyCondition").text(result.data.applyCondition);
+            $("#applyFlow").text(result.data.applyFlow);
+            $("#applyMaterial").text(result.data.applyMaterial);
+            $("#detailImg").attr("src",result.data.detailImg);
+            $("#apply").attr("href",result.data.url);
+        }
+    }
+    $(function(){
+        findByData();
+    });
+</script>
+</body>
+</html>

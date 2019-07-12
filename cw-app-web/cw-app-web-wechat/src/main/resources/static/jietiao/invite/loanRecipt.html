@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>人人成单</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/assets/js/zepto.min.js"></script>
+    <script src="/assets/js/dialog.js"></script>
+    <link rel="stylesheet" href="../css/base.css"/>
+</head>
+<style>
+body{background:url(img/bg.png) no-repeat; background-size:100% auto}
+.download .img{ text-align:center;margin-top:5%}
+.download .img img{margin:30px auto 0;}
+
+.block-form{ margin-top:15%;width:100%;padding:0 20px;}
+.form{ width:95%; padding:1px 20px; margin-top:5%;font-size:1.2rem; border-radius:5px;}
+.form li{ line-height:4rem; margin-bottom:1rem; background:#fff; border-radius:5px; border-bottom:1px solid #ccc;}
+.form .icon{float:left;opacity:0.8;}
+.form .icon img{ width:2.5rem; display:inline; margin:0 5px;}
+.form input{ background:none;}
+.form .get-code{ background:#fff; display:inline-block; padding:0 10px; height:4rem; line-height:4rem; color:#fe1547; float:right; margin:5px 0 0 0;border-radius:5px; font-size:1.2rem; border-left:1px solid #ccc;}
+.login-pass{ text-align:left; }
+.login-pass a{font-size:1.2rem;color:#338ffb;}
+.btn-login{background:url(img/login.png) no-repeat;margin-top: 20px; background-size: 100%; width:100%; line-height:4rem;height:4rem; color:#fff; border-radius:20px;}
+.checkbox-style2.checked { background: url(img/radio_check.png) no-repeat;background-size: 100%;}
+</style>
+<body>
+<div class="container download">
+	<div align="center"><img src="img/logo.png" style="margin-top:15%;width: 20%;height: 20%;"/></div>
+    <div style="margin-top:5%;text-align:center;"><span style="color: #FFFFFF;font-size: 20px;">一站式金融信息发布平台</span></div>
+    <div style="margin-top:5%;text-align:center"><img src="img/flow.png" style="margin:0 auto;width:98%;height:98%;"/></div>
+    <div class="block-form">
+    	<div class="form">
+        	<ul>
+                <li>
+                    <div class="icon"><img src="img/icon_login_phone.png" alt=""/></div>
+                    <div class="input">
+                        <input type="tel" id="phone" name="userName"  placeholder="输入您的手机号" >
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li style="width: 70%;float:left;">
+                    <div class="icon"><img src="img/icon_login_cold.png" alt=""/></div>
+                    <div class="input clearfix">
+                        <input type="pwd" id="pas" width="80%" name="password" placeholder="输入验证码">
+                    </div>
+                </li>
+                <li style="width:28%;float:left;margin-left:5px;">
+                    <div class="input">
+                        <input type="button" id="sendSms" name="sendSms" value="获取验证码"/>
+                    </div>
+                </li>
+            </ul>
+             <div class="mt10" style="text-align: center">
+                <button class="btn-login radius ap-fz16" id="login"></button>
+                 <span class="checkbox-wrap" data-value="0">
+                    <span id="xieyi" class="checkbox-style2 checked"> </span>
+                </span>注册即同意<a href="/static/jtregister.html">《注册协议》</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+//    var httpUrl = "http://192.168.1.104:9999";
+    var httpUrl = "https://www.pingxundata.com:8443";
+    var sendSmsUrl = httpUrl + "/common/sendSmsVerify.json";
+    var loginUrl = httpUrl + "/common/passwordLogin.json";
+    var sendTime =60;
+    var InterValObj;
+    $(function(){
+        $("#form-input input").keyup(function(){
+            var phone=$("#phone").val();
+            var pas=  $("#pas").val();
+            var login_btn=$("#login");
+            if(phone=="" || pas==""){
+                login_btn.removeClass("check-ok");
+                login_btn[0].disabled=true;
+            }else{
+                login_btn.addClass("check-ok");
+                login_btn[0].disabled=false;
+            }
+        });
+        $("#login").click(function(){
+            var phone=$("#phone").val();
+            var pas=  $("#pas").val();
+            var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+            if(phone.length<11){
+                return showMessage("请输入手机号码！")
+            }
+            if(!isMobile.test(phone)){
+                return showMessage("请输入正确的手机号码！")
+            }
+
+            if(pas.length<4){
+                return showMessage("验证码格式不正确！")
+            }
+
+            var xieyicheck =$("#xieyi").attr("class");
+            if(xieyicheck.indexOf("checked")==-1)
+            {
+                return showMessage("请同意注册协议！")
+            }
+
+            var values={};
+            values["userName"]=phone;
+            values["password"]=pas;
+            values["appName"]="RRCD";
+            values["channelNo"]="H5";
+            var result = loginPost(loginUrl,values)
+            if(result.success){
+                localStorage.setItem("loginUser",phone);
+                window.location.href="http://finance.pingxundata.com/jietiao/invite/loanRecipt.html";
+            }else{
+                return showMessage(result.message);
+            }
+        });
+        $("#xieyi").click(function () {
+            if(this.getAttribute("class").indexOf("checked")!=-1)
+            {
+                $(this).removeClass("checked");
+            }else{
+                $(this).addClass("checked");
+            }
+        });
+        $("#sendSms").click(function(){
+            var phone=$("#phone").val();
+            var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+            if(phone.length<11){
+                return  showMessage("请输入手机号码！")
+            }
+            if(!isMobile.test(phone)){
+                return  showMessage("请输入正确的手机号码！")
+            }
+
+            var param={};
+            param["phone"] = phone;
+            param["channelNo"]="H5";
+            param["appName"] = "RRCD";
+            var result = loginPost(sendSmsUrl,param);
+            if(result.success) {
+                localStorage.setItem("channelNo","H5");
+                localStorage.setItem("appName","RRCD");
+                $("#sendSms").attr("disabled", "disabled");
+                InterValObj = setInterval("leftTimer()", 1000);
+            }else{
+                dialog({
+                    type: null,
+                    message: result.message,
+                    delay: 5000,
+                    maskOpacity: 0.01
+                });
+            }
+        });
+    });
+
+    function leftTimer() {
+        sendTime--;
+        if (sendTime == 0) {
+            window.clearInterval(InterValObj);
+            $("#sendSms").attr("disabled","true")
+            $("#sendSms").attr("value","获取验证码")
+        }
+        $("#sendSms").attr("value",""+sendTime+"s")
+    }
+    function loginPost(url,data) {
+        var returnData;
+        data["type"]="user";
+        data["channelNo"]="H5";
+        var json = JSON.stringify(data);
+        json = json.replace(/\r\n/g,"\n");
+        $.ajax({
+            url: url,
+            contentType: "application/json;charset=utf-8",
+            data: json,
+            method:"post",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                returnData = data;
+            },
+            error: function () {
+                alert("数据请求错误");
+            }
+        });
+        return returnData;
+    }
+    function showMessage(message) {
+        dialog({
+            type: null,
+            message: message,
+            delay: 1000,
+            maskOpacity: 0.01
+        });
+        return false;
+    }
+/*]]>*/
+</script>

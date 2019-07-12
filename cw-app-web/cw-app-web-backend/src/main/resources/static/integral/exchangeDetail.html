@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>结算兑换申请</title>
+<link href="/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="" href="/static/css/pagination.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/static/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/static/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/script/pingxun.js" type="text/javascript"></script>
+<script src="/static/script/jquery.pagination.js" type="text/javascript"></script>
+<script src="/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- angular ui-->
+<link rel="stylesheet" title="" type="text/css" href="/ui-layout-0.0.0/ui-layout.css"/>
+<script src="/static/script/angular.min.js"></script>
+<script src="/static/ui-layout-0.0.0/ui-layout.js"></script>
+<link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+<script src="/script/jquery.mloading.js" type="text/javascript"></script>
+<script src="/script/layer.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="/static/script/WdatePicker.js"></script>
+
+</head>
+<body>
+<div class="main">
+  <div class="right-product right-off">
+    <div class="layout-mock">
+        <div class="center-back right-back">
+        <div  id="settleForm" class="container-fluid">
+                    <div class="clearfix"></div>
+                    <form id="exchangeForm">
+                        <div class="table-margin">
+                            <dl class="account-basic clearfix">
+                                <dd class="pull-left margin-large-left margin-small-top">
+                                    <p class="text-small"><input type="hidden" name="id" id="id">
+                                        <input type="hidden" name="integral" id="integrals">
+                                        <span class="show pull-left base-name">手机号码</span>
+                                        <span class="margin-left"><label id="phone"/></span>
+                                    </p>
+                                    <p class="text-small">
+                                        <span class="show pull-left base-name">积分数</span>
+                                        <span class="margin-left"><label id="integral"/></span>
+                                    </p>
+                                    <p class="text-small">
+                                        <span class="show pull-left base-name">兑换礼品</span>
+                                        <span class="margin-left"><label  id="name"/></span>
+                                    </p>
+                                    <p class="text-small">
+                                        <span class="show pull-left base-name">兑换积分</span>
+                                        <span class="margin-left"><label id="exchangeIntegral"/></span>
+                                    </p>
+                                    <p class="text-small">
+                                        <span class="show pull-left base-name">申请时间</span>
+                                        <span class="margin-left"><label id="applyDate"/></span>
+                                    </p>
+                                    <p class="text-small">
+                                        <span class="show pull-left base-name">兑换时间</span>
+                                        <span class="margin-left">
+                                            <input class="Wdate" type="text" name="exchangeDate" style="margin-top: 5px;height: 30px;" id="d15" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"/>
+                                        </span>
+                                    </p>
+                                    <p class="text-small">
+                                        <span class="show pull-left base-name">备注</span>
+                                        <span class="margin-left"><textarea cols="50" rows="5" id="memo" name="memo"></textarea></span>
+                                    </p>
+                                </dd>
+                            </div>
+                        </form>
+                        <div class="form-group btn-search">
+                            <button class="btn btn-default" onclick="javascript:saveData()">
+                                <span class="glyphicon glyphicon-search"></span> 保存</button>
+                        </div>
+                    </div>
+          </div>
+        </div>
+   </div>
+ </div>
+</div>
+<script type="text/javascript">
+var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+function initData() {
+    var values = {};
+    var hrefUrl = window.location.href;
+    var exchangeId=getArgsFromHref(hrefUrl,"exchangeId");
+    values["id"]=exchangeId;
+    var result = post(exchangeFindByIdUrl,values);
+    if(!result.success){
+        showTipMessage(result.message,true);
+    }else{
+        var resultData = result.data;
+        $("#id").val(resultData.id);
+        $("#phone").text(resultData.phone);
+        $("#integral").text(resultData.integral);
+        $("#integrals").val(resultData.exchangeIntegral);
+        $("#name").text(resultData.name);
+        $("#memo").val(resultData.memo);
+        $("#d15").val(resultData.exchangeDate);
+        $("#exchangeIntegral").text(resultData.exchangeIntegral);
+        $("#applyDate").text(resultData.applyDate);
+    }
+}
+function saveData() {
+    var data = $("#exchangeForm").serializeArray();
+    var values={};
+    for (var item in data) {
+        values[data[item].name] = data[item].value;
+    }
+    var result = post(updateExchangeUrl,values);
+    if(!result.success){
+        showTipMessage(result.message,true);
+    }else {
+        debugger;
+        parent.layer.close(index);
+    }
+}
+$(function(){
+    initData();
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>秒必贷在线申请信用贷款</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="stylesheet" href="/assets/css/common.css"/>
+    <link rel="stylesheet" href="../css/base.css">
+    <script src="/static/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/static/assets/js/zepto.min.js"></script>
+    <script src="/static/assets/js/dialog.js"></script>
+</head>
+<body>
+<style>
+body{background:#fff;}
+.download img{ width:100%;}
+.block-form{ padding:0 20px;}
+.form .notice{ margin-bottom:1rem; font-size:1.6rem; color:#eb612b;}
+.form{ background:#fff; width:100%; padding:20px 20px; margin:0 auto; font-size:1.2rem;}
+.form li{ line-height:4rem; background:#f4f2ee; border:1px solid #ccc; border-radius:5px; margin-bottom:1rem;}
+.form .icon{  float:left;opacity:0.8;}
+.form .icon img{ width:2.5rem; display:inline; margin:0 5px;}
+.form input{ background:none; font-size:1.6rem; padding:0 10px; float:left;}
+.form .get-code{ display:inline-block; font-size:1.6rem;padding:0 10px; height:3rem; line-height:3rem; color:#eb612b; float:right; margin:5px 0 0 0; border-left:1px solid #ccc;}
+.login-pass{ text-align:left;}
+.login-pass a{font-size:1.2rem;}
+.btn-login{background:#ed4113; width:100%; line-height:4rem;height:4rem; color:#fff; box-shadow:0 6px 8px #ffc7b4;}
+
+</style>
+<div class="container download">
+    <div class="img"><img src="img/banner2.png" alt=""/></div>
+    <div class="block-form">
+    
+    	<div class="form">
+        	<div class="notice">输入您的信息，获取借款名额</div>
+        	<ul>
+                    <li class="clearfix">
+                    <div class="icon"><img src="img/icon_login_phone.png" alt=""/></i></div>
+                        
+                        <div class="input">
+                            <input type="tel" id="phone" name="userName" placeholder="输入您的手机号">
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                    <div class="icon"><img src="img/icon_login_cold.png" alt=""/></i></div>
+                        <div class="input clearfix">
+                            <input type="password" id="pas" placeholder="输入验证码" style="width:50%">
+                            <span class="get-code" id="sendSms">获取验证码</span>
+                            <span class="get-code codeover" id="sending" style="display:none">60s</span>
+                        </div>
+                    </li>
+                </ul>
+                 <div class="mt20">
+                    <button class="btn-login radius ap-fz16" id="login" >立即注册</button>
+                </div>
+                <div class="login-pass tc mt20">
+                 <span class="checkbox-wrap" data-value="0">
+                        <span id="xieyi" class="checkbox-style2 checked"> </span>
+                    </span>
+                    点击立即注册即同意<a href="/static/register.html">《注册协议》</a>
+                </div>
+        </div>
+    </div>
+
+</div>
+<div style="width:100%;color:#000;text-align: center;bottom:5px;">
+    <span class="clearfix">重庆平讯数据服务有限公司&nbsp;&nbsp;&nbsp;&nbsp;渝ICP备17008117号</span>
+    <span class="clearfix">金融市场有风险，资金使用需谨慎</span>
+</div>
+<script>
+    var httpUrl = "https://www.pingxundata.com";
+    var sendSmsUrl = httpUrl + "/common/sendSmsVerify.json";
+    var loginUrl = httpUrl + "/common/passwordLogin.json";
+    var sendTime =60;
+    var InterValObj;
+    $(function(){
+        $("#form-input input").keyup(function(){
+            var phone=$("#phone").val();
+            var pas=  $("#pas").val();
+            var login_btn=$("#login");
+            if(phone=="" || pas==""){
+                login_btn.removeClass("check-ok");
+                login_btn[0].disabled=true;
+            }else{
+                login_btn.addClass("check-ok");
+                login_btn[0].disabled=false;
+            }
+        });
+        $("#login").click(function(){
+            var phone=$("#phone").val();
+            var pas=  $("#pas").val();
+            var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+            if(phone.length<11){
+                return showMessage("请输入手机号码！")
+            }
+            if(!isMobile.test(phone)){
+                return showMessage("请输入正确的手机号码！")
+            }
+
+            if(pas.length<4){
+                return showMessage("请输入正确的验证码！")
+            }
+
+            var values={};
+            values["userName"]=phone;
+            values["password"]=pas;
+            values["appName"]="wechat";
+            var result = loginPost(loginUrl,values)
+            if(result.success)
+            {
+                localStorage.setItem("loginUser",phone);
+                window.location.href="/static/prolist.html";
+            }else{
+                dialog({
+                    type: null,
+                    message: result.message,
+                    delay: 1000,
+                    maskOpacity: 0.01
+                });
+            }
+        });
+        $("#xieyi").click(function () {
+            if(this.getAttribute("class").indexOf("checked")!=-1)
+            {
+                $(this).removeClass("checked");
+            }else{
+                $(this).addClass("checked");
+            }
+        });
+        $("#sendSms").click(function(){
+            var phone=$("#phone").val();
+            var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+            if(phone.length<11){
+                return  showMessage("请输入手机号码！")
+            }
+            if(!isMobile.test(phone)){
+                return  showMessage("请输入正确的手机号码！")
+            }
+
+            var param={};
+            param["phone"] = phone;
+            param["appName"] = "MBD";
+            var hrefUrl = window.location.href;
+            var channelNo = getArgsFromHref(hrefUrl,"channelNo");
+            var result = loginPost(sendSmsUrl,param);
+            if(result.success) {
+                $("#sending").css("display", "");
+                $("#sendSms").css("display", "none");
+                localStorage.setItem("channelNo",channelNo);
+                InterValObj = setInterval("leftTimer()", 1000);
+            }else{
+                dialog({
+                    type: null,
+                    message: result.message,
+                    delay: 1000,
+                    maskOpacity: 0.01
+                });
+            }
+        });
+    });
+
+    function leftTimer() {
+        sendTime--;
+        if (sendTime == 0) {
+            window.clearInterval(InterValObj);
+            $("#sending").css("display","none")
+            $("#sendSms").css("display","")
+        }
+        $("#sending").text(""+sendTime+"s")
+    }
+    function loginPost(url,data) {
+        var returnData;
+        data["type"]="user";
+        var hrefUrl = window.location.href;
+        var channelNo = getArgsFromHref(hrefUrl,"channelNo");
+        data["channelNo"] = channelNo;
+        localStorage.setItem("channelNo",channelNo);
+        var json = JSON.stringify(data);
+        json = json.replace(/\r\n/g,"\n");
+        $.ajax({
+            url: url,
+            contentType: "application/json;charset=utf-8",
+            data: json,
+            method:"post",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                returnData = data;
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+        return returnData;
+    }
+    function showMessage(message) {
+        dialog({
+            type: null,
+            message: message,
+            delay: 1000,
+            maskOpacity: 0.01
+        });
+        return false;
+    }
+    function getArgsFromHref(sHref, sArgName)
+    {   var args    = sHref.split("?");
+        var retval = 'wechat';
+        if(args[0] == sHref) /*参数为空*/
+        {
+            return retval; /*无需做任何处理*/
+        }
+        var str = args[1];
+        args = str.split("&");
+        for(var i = 0; i < args.length; i ++)
+        {
+            str = args[i];
+            var arg = str.split("=");
+            if(arg.length <= 1) continue;
+            if(arg[0] == sArgName) retval = arg[1];
+        }
+        return retval;
+    }
+</script>
+</body>
+</html>

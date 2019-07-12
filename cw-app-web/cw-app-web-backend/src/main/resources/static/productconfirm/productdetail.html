@@ -1,0 +1,401 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>平讯数据后台管理系统</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/static/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/static/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/script/pingxun.js" type="text/javascript"></script>
+<script src="/script/ajaxfileupload.js" type="text/javascript"></script>
+<script src="/static/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+    <script src="/script/jquery.mloading.js" type="text/javascript"></script>
+    <script src="/script/layer.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+    <div  class="left-main left-full" include="left" id="left"></div>
+  <div class="right-product view-product right-full">
+     <div class="container-fluid">
+				<div class="manage account-manage info-center">
+					<div class="page-header">
+                        <div class="pull-left">
+						    <h4>产品详情</h4>
+					    </div>
+                    </div>
+                        <dl class="account-basic clearfix">
+                            <dd class="pull-left margin-large-left margin-small-top">
+                            <p class="text-small"><input type="hidden" id="id" name="id" />
+                                <span class="show pull-left base-name">产品名称</span>
+                                <span class="margin-left"><label id="name" name="name"/></span>
+                            </p>
+                            <p class="text-small">
+                                <span class="show pull-left base-name">起始额度</span>
+                                <span class="margin-left"><label id="startAmount" name="startAmount"/>（元）</span>
+                            </p>
+                            <p class="text-small">
+                                    <span class="show pull-left base-name">期限类型</span>
+                                    <span class="margin-left">
+                                    <input type="radio" name="periodType" value="day" disabled="disabled"/>天
+                                    <input type="radio" name="periodType" value="month" disabled="disabled" checked="checked"/>月
+                                </span>
+                            </p>
+                            <p class="text-small">
+                                <span class="show pull-left base-name">截止额度</span>
+                                <span class="margin-left"><label id="endAmount" name="endAmount"/>（元）</span>
+                            </p>
+                            <p class="text-small">
+                                <span class="show pull-left base-name">起始期限</span>
+                                <span class="margin-left"><label id="startPeriod" name="startPeriod"/>（月）</span>
+                            </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">截止期限</span>
+                                    <span class="margin-left"><label id="endPeriod" name="endPeriod"/>（月）</span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">列表图片</span>
+                                    <span class="margin-left">
+                                        <form id="listForm">
+                                            <img id="listFileImg" src="/img/upload.png"  name="img" style="width:114px;height:114px"/>
+                                        </form>
+                                </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">申请条件</span>
+                                    <span class="margin-left"><label  style="width:300px;" name="applyCondition" id="applyCondition"></label></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">申请流程</span>
+                                    <span class="margin-left"><label style="width:300px;" name="applyFlow" id="applyFlow"></label></span>
+                                </p>
+                            </dd>
+                             <dd class="pull-left margin-large-left margin-small-top">
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">利率</span>
+                                    <span class="margin-left"><label id="serviceRate" name="serviceRate" />(%)</span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">利率说明</span>
+                                    <span class="margin-left"><label id="rateMemo" name="rateMemo" /></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">放款天数</span>
+                                    <span class="margin-left"><label id="loanDay" name="loanDay"/>（天）</span>
+                                </p>
+                                 <p class="text-small">
+                                     <span class="show pull-left base-name">来源渠道</span>
+                                     <span class="margin-left"><label name="channel"  id="channel" /></span>
+                                 </p>
+                                 <p class="text-small">
+                                     <span class="show pull-left base-name">H5Url</span>
+                                     <span class="margin-left"><label style="width:300px;word-wrap:break-word;word-break:keep-all;overflow:hidden;" name="url" id="url" /></span>
+                                 </p>
+                                 <p class="text-small">
+                                     <span class="show pull-left base-name">详情图片</span>
+                                     <img id="detailFileImg" src="/static/img/upload.png" style="width:114px;height:114px"/>
+                                 </p>
+                                 <p class="text-small">
+                                     <span class="show pull-left base-name">所需材料</span>
+                                     <span class="margin-left"><label style="width:300px;" id="applyMaterial"  name="applyMaterial"></label></span>
+                                 </p>
+                                 <p class="text-small">
+                                     <span class="show pull-left base-name">投放渠道</span>
+                                     <span class="margin-left">
+                                          <input type="checkbox" id="appleFlag" name="appleFlag" value="1" disabled="disabled"/>苹果
+                                          <input type="checkbox" id="androidFlag" name="androidFlag" value="1" disabled="disabled"/>安卓
+                                          <input type="checkbox" id="wechatFlag" name="wechatFlag" value="1" disabled="disabled"/>微信端
+                                     </span>
+                                 </p>
+                                 <p class="text-small">
+                                     <span class="show pull-left base-name">排序</span>
+                                     <span class="margin-left">
+                                         <input type="checkbox" name="belongApp" value="MBD" disabled="disabled"/>秒必贷
+                                         排序号：<label id="showOrder" style="width:50px"></label><br>
+                                         <input type="checkbox"  name="belongApp" value="XSD" disabled="disabled"/>贷款吧
+                                         排序号：<label id="showOrderXsd" style="width:50px"></label><br>
+                                         <input type="checkbox" name="belongApp" value="DKD" disabled="disabled"/>贷款哒
+                                         排序号：<label id="showOrderJds" style="width:50px"></label><br>
+                                         <input type="checkbox" name="belongApp" value="JQW" disabled="disabled"/>借钱王
+                                         排序号：<label id="showOrderJqw" style="width:50px"></label><br>
+                                         <input type="checkbox" name="belongApp" value="DSQB" disabled="disabled"/>借钱乐乐
+                                         排序号：<label id="showOrderDsqb" style="width:50px"></label><br>
+                                         <input type="checkbox" name="belongApp" value="DKQB" disabled="disabled"/>借钱帝
+                                         排序号：<label id="showOrderDkqb" style="width:50px"></label><br>
+                                         <input type="checkbox" name="belongApp" value="DKBL" disabled="disabled"/>贷款部落
+                                         排序号：<label id="showOrderDkbl" style="width:50px"></label><br>
+                                         <input type="checkbox" name="belongApp" value="PXQB" disabled="disabled"/>贷款帝
+                                         排序号：<label id="showOrderPxqb" style="width:50px"></label><br>
+                                         <input type="checkbox" name="belongApp" value="LSQD" disabled="disabled"/>叮叮招财
+                                         排序号：<label id="showOrderLsqd" style="width:50px"></label><br>
+                                          <input type="checkbox" name="belongApp" value="SYD" disabled="disabled"/>速亿贷
+                                         排序号：<label id="showOrderSyd" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="SRD" disabled="disabled"/>速融贷
+                                         排序号：<label id="showOrderSrd" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="JDB" disabled="disabled"/>借贷帮
+                                         排序号：<label id="showOrderJdb" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="DQL" disabled="disabled"/>贷钱来
+                                         排序号：<label id="showOrderDql" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="DKZG" disabled="disabled"/>贷款掌柜
+                                         排序号：<label id="showOrderDkzg" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="JJK" disabled="disabled"/>借借款
+                                         排序号：<label id="showOrderJjk" style="width:50px;"></label><br>
+
+                                         <input type="checkbox" name="belongApp" value="HDB" disabled="disabled"/>好贷宝
+                                         排序号：<label id="showOrderHdb" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="YJX" disabled="disabled"/>易借侠
+                                         排序号：<label id="showOrderYjx" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="JQHH" disabled="disabled"/>借钱花花
+                                         排序号：<label id="showOrderJqhh" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="KJW" disabled="disabled"/>快借王
+                                         排序号：<label id="showOrderKjw" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="DKSS" disabled="disabled"/>贷款神速
+                                         排序号：<label id="showOrderDkss" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="JQF" disabled="disabled"/>借钱富
+                                         排序号：<label id="showOrderJqf" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="DKH" disabled="disabled"/>贷款汇
+                                         排序号：<label id="showOrderDkh" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="MDB" disabled="disabled"/>秒贷宝
+                                         排序号：<label id="showOrderMdb" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="XED" disabled="disabled"/>信而贷
+                                         排序号：<label id="showOrderXed" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="JQS" disabled="disabled"/>借钱树
+                                         排序号：<label id="showOrderJqs" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="JDJQ" disabled="disabled"/>借贷金钱
+                                         排序号：<label id="showOrderJdjq" style="width:50px;"></label><br>
+                                         <input type="checkbox" name="belongApp" value="DKT" disabled="disabled"/>贷款堂
+                                         排序号：<label id="showOrderDkt" style="width:50px;"></label><br>
+                                     </span>
+                                 </p>
+                            </dd>
+                            <dd class="pull-left margin-large-left margin-small-top">
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">后台地址</span>
+                                    <span class="margin-left"><label id="backendLoginUrl" name="backendLoginUrl" style="width:250px"/></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">用户名</span>
+                                    <span class="margin-left"><label id="loginUser" name="loginUser" style="width:250px"/></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">密码</span>
+                                    <span class="margin-left"><label id="loginPwd" name="loginPwd" style="width:250px"/></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">合作模式</span>
+                                    <span class="margin-left">
+                                         <label id="cooperationModel" name="cooperationModel">
+                                         </label>
+                                     </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">合作价格</span>
+                                    <span class="margin-left"><label id="unitPrice" name="unitPrice"></label></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">产品描述</span>
+                                    <span class="margin-left"><label  style="width:300px;" name="productDesc" id="productDesc"></label></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">产品标签</span>
+                                    <span class="margin-left"><label  style="width:300px;" id="productLabel" name="productLabel"></label></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">下载APP</span>
+                                    <span class="margin-left">
+                                          <input type="radio" name="isDownloadApp" value="true" disabled="true"/>是&nbsp;&nbsp;
+                                          <input type="radio" name="isDownloadApp" value="false" disabled="true"/>否&nbsp;&nbsp;
+                                     </span>
+                                </p>
+
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">开户名称</span>
+                                    <span class="margin-left">
+                                         <span class="margin-left"><label id="accountName" style="width:250px"/></span>
+                                     </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">开户银行</span>
+                                    <span class="margin-left">
+                                         <span class="margin-left"><label id="openBankName" style="width:250px"/></span>
+                                     </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">银行账号</span>
+                                    <span class="margin-left">
+                                         <span class="margin-left"><label id="bankAccount" style="width:250px"/></span>
+                                     </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">联系地址</span>
+                                    <span class="margin-left">
+                                         <span class="margin-left"><label id="linkAddress" style="width:250px"/></span>
+                                     </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">联系电话</span>
+                                    <span class="margin-left">
+                                         <span class="margin-left"><label id="linkPhone" style="width:250px"/></span>
+                                     </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">发票类型</span>
+                                    <span class="margin-left">
+                                         <input type="radio" name="invoiceType" value="1" disabled="true"/>专票&nbsp;&nbsp;
+                                         <input type="radio" name="invoiceType" value="0" disabled="true"/>普票&nbsp;&nbsp;
+                                     </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">开票名目</span>
+                                    <span class="margin-left">
+                                         <span class="margin-left"><label id="invoiceItem" style="width:250px"/></span>
+                                     </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">税金支付方</span>
+                                    <span class="margin-left">
+                                         <span class="margin-left">
+                                              <input type="radio" name="taxesObject" value="1" disabled="true"/>收款方&nbsp;&nbsp;
+                                              <input type="radio" name="taxesObject" value="0" disabled="true"/>支付方&nbsp;&nbsp;
+                                         </span>
+                                     </span>
+                                </p>
+
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">接入时间</span>
+                                    <span class="margin-left"><label id="saveDate" name="saveDate"></label></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">上线时间</span>
+                                    <span class="margin-left"><label id="onlineDate" name="onlineDate"></label></span>
+                                </p>
+                            </dd>
+                        </dl>
+                        <dd class="pull-left margin-large-left margin-small-top">
+                            <p class="text-small">
+                                <input type="button" value="返回" style="width: 150px;" onclick="javascript:window.location.href='/static/productconfirm/productlist.html'"/>
+                            </p>
+                        </dd>
+				</div>
+		</div>
+  </div>
+</div>
+<script type="text/javascript">
+function findByData() {
+    var hrefUrl = window.location.href;
+    var id=getArgsFromHref(hrefUrl,"id");
+    var param = "id="+id
+    var result = get(findByIdUrl,param);
+    if(result.success)
+    {
+        $("#id").val(result.data.id);
+        $("#name").text(result.data.name);
+        $("#startAmount").text(result.data.startAmount);
+        $("#endAmount").text(result.data.endAmount);
+        $("#startPeriod").text(result.data.startPeriod);
+        $("#endPeriod").text(result.data.endPeriod);
+        $("#applyCondition").text(result.data.applyCondition);
+        $("#applyFlow").text(result.data.applyFlow);
+        $("#productDesc").text(result.data.productDesc);
+        $("#productLabel").text(result.data.productLabel);
+        $("input[name='periodType'][value='"+result.data.periodType+"']").attr("checked",true);
+        $("input[name='isDownloadApp'][value='"+result.data.isDownloadApp+"']").attr("checked",true);
+
+        $("#accountName").text(result.data.accountName);
+        $("#openBankName").text(result.data.openBankName);
+        $("#bankAccount").text(result.data.bankAccount);
+        $("#linkAddress").text(result.data.linkAddress);
+        $("#linkPhone").text(result.data.linkPhone);
+        $("input[name='taxesObject'][value='"+result.data.taxesObject+"']").attr("checked",true);
+        $("input[name='invoiceType'][value='"+result.data.invoiceType+"']").attr("checked",true);
+        $("#invoiceItem").text(result.data.invoiceItem);
+
+        if(result.data.appleFlag) {
+            $("#appleFlag").attr("checked", true);
+        }
+        if(result.data.androidFlag) {
+            $("#androidFlag").attr("checked", true);
+        }
+        if(result.data.wechatFlag) {
+            $("#wechatFlag").attr("checked", true);
+        }
+        $("#detailFileImg").attr("src",result.data.detailImg);
+        $("#listFileImg").attr("src",result.data.img);
+
+        $("#serviceRate").text(result.data.serviceRate);
+        $("#rateMemo").text(result.data.rateMemo);
+        $("#loanDay").text(result.data.loanDay);
+        $("#channel").text(result.data.channel);
+        $("#applyMaterial").text(result.data.applyMaterial);
+        $("#url").text(result.data.url);
+        $("#backendLoginUrl").text(result.data.backendLoginUrl);
+        $("#loginUser").text(result.data.loginUser);
+        $("#loginPwd").text(result.data.loginPwd);
+        $("#unitPrice").text(result.data.unitPrice);
+        $("#cooperationModel").text(result.data.cooperationModel);
+        $("#onlineDate").text(result.data.onlineDate);
+        $("#saveDate").text(result.data.saveDate);
+
+        $("#showOrder").text(result.data.showOrder);
+        var belongApp = result.data.belongApp.split(",");
+        for(var i=0;i<belongApp.length;i++) {
+            $("input[name='belongApp'][value='" + belongApp[i] + "']").attr("checked", true);
+        }
+        $("#showOrder").text(result.data.showOrder==null?"":result.data.showOrder);
+        $("#showOrderJqw").text(result.data.showOrderJqw==null?"":result.data.showOrderJqw);
+        $("#showOrderXsd").text(result.data.showOrderXsd==null?"":result.data.showOrderXsd);
+        $("#showOrderJds").text(result.data.showOrderJds==null?"":result.data.showOrderJds);
+        $("#showOrderDsqb").text(result.data.showOrderDsqb==null?"":result.data.showOrderDsqb);
+        $("#showOrderDkqb").text(result.data.showOrderDkqb==null?"":result.data.showOrderDkqb);
+        $("#showOrderDkbl").text(result.data.showOrderLyb==null?"":result.data.showOrderLyb);
+        $("#showOrderPxqb").text(result.data.showOrderPxqb==null?"":result.data.showOrderPxqb);
+        $("#showOrderLsqd").text(result.data.showOrderLsqd==null?"":result.data.showOrderLsqd);
+
+        $("#showOrderSyd").text(result.data.showOrderSyd==null?"":result.data.showOrderSyd);
+        $("#showOrderSrd").text(result.data.showOrderSrd==null?"":result.data.showOrderSrd);
+        $("#showOrderDql").text(result.data.showOrderDql==null?"":result.data.showOrderDql);
+        $("#showOrderJdb").text(result.data.showOrderJdb==null?"":result.data.showOrderJdb);
+        $("#showOrderDkzg").text(result.data.showOrderDkzg==null?"":result.data.showOrderDkzg);
+        $("#showOrderJjk").text(result.data.showOrderJjk==null?"":result.data.showOrderJjk);
+        $("#showOrderHdb").text(result.data.showOrderHdb==null?"":result.data.showOrderHdb);
+        $("#showOrderYjx").text(result.data.showOrderYjx==null?"":result.data.showOrderYjx);
+        $("#showOrderJqhh").text(result.data.showOrderJqhh==null?"":result.data.showOrderJqhh);
+        $("#showOrderKjw").text(result.data.showOrderKjw==null?"":result.data.showOrderKjw);
+
+        $("#showOrderDkss").text(result.data.showOrderDkss==null?"":result.data.showOrderDkss);
+        $("#showOrderJqf").text(result.data.showOrderJqf==null?"":result.data.showOrderJqf);
+        $("#showOrderDkh").text(result.data.showOrderDkh==null?"":result.data.showOrderDkh);
+        $("#showOrderMdb").text(result.data.showOrderMdb==null?"":result.data.showOrderMdb);
+        $("#showOrderXed").text(result.data.showOrderXed==null?"":result.data.showOrderXed);
+        $("#showOrderJqs").text(result.data.showOrderJqs==null?"":result.data.showOrderJqs);
+        $("#showOrderJdjq").text(result.data.showOrderJdjq==null?"":result.data.showOrderJdjq);
+        $("#showOrderDkt").text(result.data.showOrderDkt==null?"":result.data.showOrderDkt);
+    }else{
+        showTipMessage(result.message,true);
+    }
+}
+$(function(){
+    $("#navtop").load("/top.html",function () {
+        topFunc();
+    });
+    $("#left").load("/left.html",function(){
+        left();
+        var links = window.location.href;
+        if(links.indexOf("product")!=-1)
+        {
+            $("#product").addClass("active");
+        }
+    });
+    findByData();
+});
+</script>
+</body>
+</html>

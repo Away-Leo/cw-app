@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/assets/js/zepto.min.js"></script>
+    <script src="/assets/js/dialog.js"></script>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="/assets/css/base.css"/>
+    <link rel="stylesheet" href="/assets/css/common.css"/>
+</head>
+<body>
+<style>
+body{background:url(img/bg.jpg) no-repeat; background-size:100% auto}
+.download .img{ text-align:center;}
+.download .img img{ width:50%; margin:30px auto 0;}
+
+.block-form{ padding:0 20px;}
+.form{ width:95%; padding:20px 20px; margin:0 auto; font-size:1.2rem; background:#fff; border-radius:5px;}
+.form li{ line-height:4rem; margin-bottom:1rem; background:#fff; border-radius:5px; border-bottom:1px solid #ccc;}
+.form .icon{float:left;opacity:0.8;}
+.form .icon img{ width:2.5rem; display:inline; margin:0 5px;}
+.form input{ background:none;text-indent:10px;}
+.form .get-code{ background:#fff; display:inline-block; padding:0 10px; height:4rem; line-height:4rem; color:#fe1547; float:right; margin:5px 0 0 0;border-radius:5px; font-size:1.2rem; border-left:1px solid #ccc;}
+.login-pass{ text-align:left; }
+.login-pass a{font-size:1.2rem;color:#338ffb;}
+.btn-login{background:#fe1547; width:100%; line-height:4rem;height:4rem; color:#fff; border-radius:20px;}
+.checkbox-style2.checked { background: url(img/radio_check.png) no-repeat;background-size: 100%;}
+</style>
+<div class="container download">
+	<div class="img"><img src="img/img.png" alt=""/></div>
+    <div class="block-form">
+    	<div class="form">
+        	<ul>
+                    <li>
+                    	<div class="icon"><img src="img/icon_login_phone.png" alt=""/></i></div>
+                        <div class="input">
+                            <input type="tel" id="phone" name="userName"  placeholder="输入您的手机号" >
+                        </div>
+                    </li>
+                    <li>
+                    	<div class="icon"><img src="img/icon_login_cold.png" alt=""/></i></div>
+                        <div class="input clearfix">
+                            <input type="test" id="pas" name="password" placeholder="输入验证码" style="width:50%">
+                            <span class="get-code" id="sendSms">验证码</span>
+                            <span class="get-code codeover" id="sending" style="display:none">60s</span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="mt10">短信验证码直接登录</div>
+                 <div class="mt10">
+                    <button class="btn-login radius ap-fz16" id="login">立即登录</button>
+                </div>
+                
+                <div class="login-pass tc mt20">
+                 <span class="checkbox-wrap" data-value="0">
+                        <span id="xieyi" class="checkbox-style2 checked"> </span>
+                    </span>
+                    点击立即注册即同意<a href="/static/jqllRegister.html">《注册协议》</a>
+                </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+//    var httpUrl = "http://192.168.1.129:9999";
+    var httpUrl = "https://www.pingxundata.com";
+    var sendSmsUrl = httpUrl + "/common/sendSmsVerify.json";
+    var loginUrl = httpUrl + "/common/passwordLogin.json";
+    /*<![CDATA[*/
+    var sendTime =60;
+    var InterValObj;
+    $(function(){
+        $("#form-input input").keyup(function(){
+            var phone=$("#phone").val();
+            var pas=  $("#pas").val();
+            var login_btn=$("#login");
+            if(phone=="" || pas==""){
+                login_btn.removeClass("check-ok");
+                login_btn[0].disabled=true;
+            }else{
+                login_btn.addClass("check-ok");
+                login_btn[0].disabled=false;
+            }
+        });
+        $("#login").click(function(){
+            var phone=$("#phone").val();
+            var pas=  $("#pas").val();
+            var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+            if(phone.length<11){
+                return showMessage("请输入手机号码！")
+            }
+            if(!isMobile.test(phone)){
+                return showMessage("请输入正确的手机号码！")
+            }
+
+            if(pas.length<4){
+                return showMessage("密码格式不正确！")
+            }
+
+            var xieyicheck =$("#xieyi").attr("class");
+            if(xieyicheck.indexOf("checked")==-1)
+            {
+                return showMessage("请同意注册协议！")
+            }
+
+            var values={};
+            values["userName"]=phone;
+            values["password"]=pas;
+            values["appName"]="DSQB";
+            var result = loginPost(loginUrl,values)
+            if(result.success)
+            {
+                localStorage.setItem("loginUser",phone);
+                window.location.href="/static/wechatIndex.html";
+            }else{
+                return showMessage(result.message);
+            }
+        });
+        $("#xieyi").click(function () {
+            if(this.getAttribute("class").indexOf("checked")!=-1)
+            {
+                $(this).removeClass("checked");
+            }else{
+                $(this).addClass("checked");
+            }
+        });
+        $("#sendSms").click(function(){
+            var phone=$("#phone").val();
+            var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+            if(phone.length<11){
+                return  showMessage("请输入手机号码！")
+            }
+            if(!isMobile.test(phone)){
+                return  showMessage("请输入正确的手机号码！")
+            }
+
+            var param={};
+            var hrefUrl = window.location.href;
+            var channelNo = getArgsFromHref(hrefUrl,"channelNo");
+            param["phone"] = phone;
+            param["channelNo"] = channelNo;
+            param["appName"] = "DSQB";
+            var result = loginPost(sendSmsUrl,param);
+            if(result.success) {
+                $("#sending").css("display", "");
+                $("#sendSms").css("display", "none");
+                localStorage.setItem("appName","DSQB");
+                localStorage.setItem("channelNo",channelNo);
+                InterValObj = setInterval("leftTimer()", 1000);
+            }else{
+                return showMessage(result.message);
+            }
+        });
+    });
+
+    function leftTimer() {
+        sendTime--;
+        if (sendTime == 0) {
+            window.clearInterval(InterValObj);
+            $("#sending").css("display","none")
+            $("#sendSms").css("display","")
+        }
+        $("#sending").text(""+sendTime+"s")
+    }
+    function loginPost(url,data) {
+        var returnData;
+        data["type"]="user";
+        var json = JSON.stringify(data);
+        json = json.replace(/\r\n/g,"\n");
+        $.ajax({
+            url: url,
+            contentType: "application/json;charset=utf-8",
+            data: json,
+            method:"post",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                returnData = data;
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+        return returnData;
+    }
+    function showMessage(message) {
+        dialog({
+            type: null,
+            message: message,
+            delay: 1000,
+            maskOpacity: 0.01
+        });
+        return false;
+    }
+    /*]]>*/
+</script>

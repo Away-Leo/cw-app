@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title id="showTitle">产品详情</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="stylesheet" href="/mbd/assets/css/base.css">
+    <link rel="stylesheet" href="/mbd/assets/css/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/mbd/assets/css/common.css">
+    <script src="/mbd/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/mbd/assets/js/zepto.min.js"></script>
+    <script src="/static/assets/js/dialog.js"></script>
+    <script src="/mbd/assets/js/mbd.js"></script>
+    <link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+    <script src="/script/jquery.mloading.js" type="text/javascript"></script>
+    <script src="/script/layer.js" type="text/javascript"></script>
+</head>
+<style>
+.main{margin: 3.8rem 0 5rem;}
+</style>
+<body class="bg-gray">
+<div class="container">
+    <header class="bor-bottom">
+        <a href="/mbd/prolist.html" class="prev"></a>
+        产品详情
+    </header><a name="top"></a>
+    <div class="main">
+    	<div class="pro-detail-topbg">
+        <div class="pro-detail-top">
+            <span class="img"><img id="detailImg" src="/mbd/assets/images/nologo.png"></span>
+            <span class="name" id="title">叮当贷-日手续费3元</span>
+            <span class="tip" id="subTitle">纯信用，无门槛，20分钟到账，轻松借钱</span>
+            <span class="detail">
+            	<p class="left"><span class="th">申请人数</span><span class="td"><i id="applyNum">18522</i>人</span></p>
+                <p><span class="th">最快放款时间</span><span class="td"><i>5</i>分钟</span></p>
+                <p><span class="th">贷款成功率</span><span class="td"><i>99</i>%</span></p>
+            </span>
+        </div>
+        </div>
+        <div class="pro-detail-list">
+        	<ul>
+                <li class="clearfix">
+                    <span class="text">额度</span>
+                    <em><i id="loanAmount">1000-5000元</i></em>
+                </li>
+                <li class="clearfix">
+                    <span class="text">期限</span>
+                    <em><i id="loanPeriod">3-24月</i></em>
+                </li>
+                <li class="clearfix" id="date">
+                        <span class="text">月利率<i>利率仅供参考</i></span>
+                        <em id="rate">2.5</em>
+                </li>
+            </ul>
+        </div>
+        <div class="pro-detail-down">
+        	<dl class="step">
+            	<dt><span></span>申请流程</dt>
+                <dd><img src="/mbd/assets/images/step.jpg"></dd>
+            </dl>
+            <dl>
+            	<dt><span></span>申请条件</dt>
+                <dd><span id="applyCondition"></span></dd>
+            </dl>
+            <dl>
+            	<dt><span></span>申请材料</dt>
+                <dd><span id="applyMaterial"></span>
+</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!--选择弹窗 start-->
+    <div class="popFrom" style="display:none">
+    <div class="tit">请选择<a href="javascript:void(0);"><i class="iconfont icon-close"></i></a></div>
+        <ul>
+        	<li class="clearfix"><a href="javascript:void(0);">1000元</span></a></li>
+            <li class="clearfix"><a href="javascript:void(0);">2000元</span></a></li>
+            <li class="clearfix"><a href="javascript:void(0);">3000元</span></a></li>
+            <li class="clearfix"><a href="javascript:void(0);">4000元</span></a></li>
+            <li class="clearfix"><a href="javascript:void(0);">5000元</span></a></li>
+        </ul>
+	</div>
+    <div class="backbg" style="display:none"></div>
+     <!--选择弹窗 end-->
+    <input type="hidden" id="webUrl" name="webUrl"/>
+    
+    <!--登录弹窗 start-->
+    <div class="popLogin" id="popLogin" style="display:none">
+    	<div class="tit">身份验证<a href="javascript:void(0);"><i class="iconfont icon-close" id="closeWin"></i></a></div>
+    <ul>
+        <li class="clearfix">
+        <div class="icon"><img src="/mbd/assets/images/icon_login_phone.png" alt=""/></i></div>
+            
+            <div class="input">
+                <input type="tel" id="phone" maxlength="11" placeholder="输入您的手机号">
+            </div>
+        </li>
+        <li class="clearfix">
+        <div class="icon"><img src="/mbd/assets/images/icon_login_cold.png" alt=""/></i></div>
+            <div class="input clearfix">
+                <input type="test" id="pas" placeholder="输入验证码" style="width:40%">
+                <span class="get-code" id="sendSms">获取验证码</span>
+                <span class="get-code codeover" id="sending" style="display:none">60s</span>
+            </div>
+        </li>
+        <div class="mt20"><button class="btn-login radius ap-fz16" id="login">验证</button></div>
+    </ul>
+    </div>
+    <div class="backbg" id="loginDiv" style="display:none"></div>
+ <!--登录弹窗 end-->
+ <div class="pro-detail-btn"><a class="btn-apply ap-fz16" onclick="appLoan()">立即借款</a> </div>
+</div>
+</body>
+</html>
+<script>
+function appLoan() {
+    var hrefUrl = window.location.href;
+    var id=getArgsFromHref(hrefUrl,"id");
+    var param={};
+    param["productId"]=id;
+    param["deviceNumber"]=localStorage.getItem("loginUser");
+    param["applyArea"]="wechat";
+    param["channelNo"]=localStorage.getItem("channelNo");
+    param["appName"] = localStorage.getItem("appName");
+    var result = post(applyLoan,param);
+    if(result.success){//未登录则提示登录
+        var gotoUrl=$("#webUrl").val();
+        window.location.href=gotoUrl;
+    }else{
+        $("html,body").animate({scrollTop: 0}, 1000);  //带滑动效果的跳转
+        $("#popLogin").show();
+        $("#loginDiv").show();
+    }
+}
+function findByData() {
+    var hrefUrl = window.location.href;
+    var id=getArgsFromHref(hrefUrl,"id");
+    var param = "id="+id;
+    var result = get(findByIdUrl,param);
+    if(result.success){
+        $("#title").text(result.data.name.substr(0,15));
+        $("#showTitle").text(result.data.name.substr(0,15));
+        $("#subTitle").text(result.data.productDesc.substr(0,20));
+        $("#loanAmount").text(result.data.startAmount+"-"+result.data.endAmount+"元");
+        $("#loanPeriod").text(result.data.startPeriod+"-"+result.data.endPeriod+result.data.periodTypeStr);
+        $("#rate").text(result.data.serviceRate+"%");
+        $("#applyCondition").text(result.data.applyCondition);
+        $("#applyMaterial").text(result.data.applyMaterial);
+        $("#detailImg").attr("src",result.data.detailImg);
+        $("#applyNum").attr("src",result.data.clickNum);
+        $("#webUrl").val(result.data.url);
+    }
+}
+$(function(){
+    findByData();
+    $("#login").click(function(){
+        var phone=$("#phone").val();
+        var pas=  $("#pas").val();
+        var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+        if(phone.length<11){
+            return showMessage("请输入手机号码！")
+        }
+        if(!isMobile.test(phone)){
+            return showMessage("请输入正确的手机号码！")
+        }
+
+        if(pas.length<4){
+            return showMessage("请输入正确的验证码！")
+        }
+
+        var values={};
+        values["userName"]=phone;
+        values["password"]=pas;
+        values["appName"]="wechat";
+        var result = loginPost(loginUrl,values)
+        if(result.success)
+        {
+            localStorage.setItem("loginUser",phone);
+            window.location.href=$("#webUrl").val();
+        }else{
+            dialog({
+                type: null,
+                message: result.message,
+                delay: 1000,
+                maskOpacity: 0.01
+            });
+        }
+    });
+    $("#sendSms").click(function(){
+        var phone=$("#phone").val();
+        var isMobile=/^(?:13\d|15\d|18\d|17\d|19\d|16\d|14\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+        if(phone.length<11){
+            return  showMessage("请输入手机号码！")
+        }
+        if(!isMobile.test(phone)){
+            return  showMessage("请输入正确的手机号码！")
+        }
+
+        var param={};
+        param["phone"] = phone;
+        param["appName"] = "MBD";
+        var result = loginPost(sendSmsUrl,param);
+        if(result.success) {
+            var hrefUrl = window.location.href;
+            var channelNo = getArgsFromHref(hrefUrl,"channelNo");
+            $("#sending").css("display", "");
+            $("#sendSms").css("display", "none");
+            localStorage.setItem("channelNo",channelNo);
+            InterValObj = setInterval("leftTimer()", 1000);
+        }else{
+            dialog({
+                type: null,
+                message: result.message,
+                delay: 1000,
+                maskOpacity: 0.01
+            });
+        }
+    });
+    $("#closeWin").click(function () {
+        $("#popLogin").hide();
+        $("#loginDiv").hide();
+    });
+});
+function showMessage(message) {
+    dialog({
+        type: null,
+        message: message,
+        delay: 1000,
+        maskOpacity: 0.01
+    });
+    return false;
+}
+</script>

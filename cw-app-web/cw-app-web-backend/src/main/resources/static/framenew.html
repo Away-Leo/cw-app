@@ -1,0 +1,349 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>平讯数据后台管理系统</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/script/pingxun.js" type="text/javascript"></script>
+<script src="/script/highcharts.js" type="text/javascript"></script>
+<script src="/script/exporting.js" type="text/javascript"></script>
+<script src="/script/highcharts-3d.js" type="text/javascript"></script>
+<script src="/script/highcharts-zh_CN.js" type="text/javascript"></script>
+<link rel="stylesheet" title="" type="text/css" href="/ui-layout-0.0.0/ui-layout.css"/>
+<script src="/static/script/angular.min.js"></script>
+<script src="/static/ui-layout-0.0.0/ui-layout.js"></script>
+<script language="javascript" type="text/javascript" src="/static/script/WdatePicker.js"></script>
+<link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+<script src="/script/jquery.mloading.js" type="text/javascript"></script>
+<script src="/script/layer.js" type="text/javascript"></script>
+
+</head>
+<style>
+    em{ font-style:normal;}
+    body{ background:#f3f3f3; font-size:14px;}
+    .block-bg{ background:#fff; padding:20px 0; margin-bottom:20px; text-align:left;}
+    .pageIndex .title{ font-size:16px;}
+    .pageIndex .title em{ float:left; width:6px; display:inline-block; border-radius:5px; height:22px; margin-right:10px; background:#00a7e9; margin-left:20px;}
+    .pageIndex .con{ padding:15px;}
+
+    .block-statis li{ float:left;text-align: center; margin-right:20px; font-size:14px; background:#fff; width:13%; padding:20px 0 0;}
+    .block-statis li span{ font-size:50px; font-family:Arial; line-height:60px;}
+    .block-statis li ul li{ width:49%; margin:0; margin:0 0 10px 0; padding:0;}
+    .block-statis li ul li.left{ border-right:1px solid #eee;}
+    .block-statis li ul li em{ color:#999;}
+    .block-statis li ul li  span{font-size:20px;line-height:30px; }
+
+    .block-statis{ margin-bottom:20px;}
+    .block-statis em{ display:block;}
+    .blcik-histogram{ width:65%; float:left;}
+    .blcik-piechart{ width:34%; float:right;}
+    .block-statisTable{ text-align:center;width: 98%;align:center;}
+    .block-statisTable .btn i{ font-size:16px; margin-left:5px;}
+
+    .blcik-lineChart .main-nav { width:7rem; margin-left:20px;text-align:center;}
+    .blcik-lineChart .main-nav li{ display:inline-block; width:3rem; height:2.5rem; line-height:2.5rem;  border:1px solid #ccc; float:left;}
+    .blcik-lineChart .main-nav .cur{ color:#fff; background:#00a7e9;border:1px solid #00a7e9;}
+</style>
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+  <div class="left-main left-full" id="left">
+  </div>
+  <div class="right-product my-index right-full">
+     <div class="container-fluid">
+	   <div class="info-center">
+       
+       <!-- title -->
+            <div class="info-title">
+              <div class="pull-left">
+                  <h4><strong><span id="loginUser"></span></strong></h4>
+                <p>欢迎登录管理系统！
+                </p>
+                  <div class="form-group btn-search">
+                      <form id="searchForm">
+                          <div class="form-group">
+                            <span class="pull-left form-span">日期:</span>
+                            <input class="Wdate" type="text" name="applyDate" style="margin-top: 5px;height: 30px;" id="d15" onFocus="WdatePicker({isShowClear:false,readOnly:true})"/>
+                            <a href="javascript:void(0);" class="btn btn-default" onclick="toggleData()"><span class="glyphicon glyphicon-search"></span> 搜索</a>
+                        </div>
+                      </form>
+                  </div>
+              </div>
+              <div class="time-title pull-right">
+                  <div class="year-month pull-left">
+                    <p><span id="weekShow"></span> </p>
+                    <p><span id="sysdate"></span></p>
+                  </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+           <!-- content-list -->
+           <div class="pageIndex" style="width: 99%">
+               <div class="block-statis clearfix">
+                   <div class="title clearfix"><em></em><span>用户发展统计</span></div>
+                   <div class="con">
+                       <ul>
+                           <li><em>日新增用户数</em><span style="color:#997cec;font-size:50px;" id="dayUserCount"></span>
+                               <ul class="clearfix">
+                                   <li class="left"><em>应用市场</em><span id="appMarketDayNum"></span></li>
+                                   <li><em>推广渠道</em><span id="channelDayNum"></span></li>
+                               </ul>
+                           </li>
+                           <li><em>月新增用户数</em><span style="color:#4398ea;font-size:50px;" id="monthUserCount"></span>
+                               <ul class="clearfix">
+                                   <li class="left"><em>应用市场</em><span id="appMarketMonthNum"></span></li>
+                                   <li><em>推广渠道</em><span id="channelMonthNum"></span></li>
+                               </ul>
+                           </li>
+                           <li><em>日申请次数</em><span style="color:#997cec;font-size:50px;" id="dayApplyCount"></span>
+                               <ul class="clearfix">
+                                   <li class="left"><em>应用市场</em><span id="appMarketDayApplyTime"></span></li>
+                                   <li><em>推广渠道</em><span id="channelDayApplyNum"></span></li>
+                               </ul>
+                           </li>
+                           <li><em>日申请用户</em><span style="color:#997cec;font-size:50px;" id="applyNum"></span>
+                               <ul class="clearfix">
+                                   <li class="left"><em>应用市场</em><span id="appMarketApplyNum"></span></li>
+                                   <li><em>推广渠道</em><span id="channelApplyNum"></span></li>
+                               </ul>
+                           </li>
+                           <li><em>月申请次数</em><span style="color:#4398ea;font-size:50px;" id="monthApplyCount"></span>
+                               <ul class="clearfix">
+                                   <li class="left"><em>应用市场</em><span id="appMarketMonthApplyTime"></span></li>
+                                   <li><em>推广渠道</em><span id="channelApplyTime"></span></li>
+                               </ul>
+                           </li>
+                           <li><em>月申请用户</em><span style="color:#4398ea;font-size:50px;" id="monthApplyNum"></span>
+                               <ul class="clearfix">
+                                   <li class="left"><em>应用市场</em><span id="appMarketMonthApplyNum"></span></li>
+                                   <li><em>推广渠道</em><span id="channelMonthApplyNum"></span></li>
+                               </ul>
+                           </li>
+                       </ul>
+                       <a style="text-decoration:none;margin-top: 0px;border-radius:.5rem;background:#00a7e9;color:#fff;display:inline-block;line-height:2.6rem;padding:0 1rem;" href="javascript:void(0);"
+                               onclick="showApkDiv();">查看APP详情<i class="iconfont icon-arrow-up"></i></a>
+                   </div>
+               </div>
+           </div>
+           <div id="appTable" class="block-statisTable block-bg" style="display: none;">
+               <!--
+               列表隐藏用这个箭头
+               <a class="btnBlue btn" href="">查看统计详情<i class="iconfont icon-jiantou"></i></a>-->
+               <div  class="con" style="margin-top: 10px">
+                   <table id="dataTable" class="table table-bordered table-header">
+                       <thead>
+                       <tr>
+                           <td class="w15">产品名称</td>
+                           <td >日新增用户</td>
+                           <td >月新增用户</td>
+                           <td >日申请次数</td>
+                           <td >月申请次数</td>
+                       </tr>
+                       </thead>
+                       <tbody id="appList">
+                       </tbody>
+                   </table>
+               </div>
+           </div>
+           <div class="pageIndex" style="width: 99%">
+               <div class="block-statis clearfix">
+                   <div class="title clearfix"><em></em><span>分发系数</span></div>
+                   <div class="con">
+                       <table class="table table-bordered table-header">
+                           <thead>
+                           <tr>
+                               <td class="w15">应用市场</td>
+                               <td >日发展用户数</td>
+                               <td >月发展用户数</td>
+                               <td >日申请用户数</td>
+                               <td >月申请用户数</td>
+                               <td >日分发系数</td>
+                               <td >月分发系数</td>
+                           </tr>
+                           </thead>
+                           <tbody id="marketRatioList">
+                           </tbody>
+                       </table>
+                   </div>
+               </div>
+           </div>
+       </div>
+	 </div>
+  </div>
+</div>
+<script type="text/javascript">
+function findByData() {
+    var data = $("#searchForm").serialize();
+    var param = "1=1&"+data;
+    //加载app用户数
+    var result = get(homeUrl,param);
+    if(result.success){
+        $("#dayUserCount").text(result.data.dayUserCount);
+        $("#appMarketDayNum").text(result.data.appMarketDayNum);
+        $("#channelDayNum").text(result.data.channelDayNum);
+
+        $("#monthUserCount").text(result.data.monthUserCount);
+        $("#appMarketMonthNum").text(result.data.appMarketMonthNum);
+        $("#channelMonthNum").text(result.data.channelMonthNum);
+
+        $("#dayApplyCount").text(result.data.dayApplyCount);
+        $("#appMarketDayApplyTime").text(result.data.appMarketDayApplyTime);
+        $("#channelDayApplyNum").text(result.data.channelDayApplyNum);
+
+        $("#applyNum").text(result.data.applyNum);
+        $("#appMarketApplyNum").text(result.data.appMarketApplyNum);
+        $("#channelApplyNum").text(result.data.channelApplyNum);
+
+        $("#monthApplyCount").text(result.data.monthApplyCount);
+        $("#appMarketMonthApplyTime").text(result.data.appMarketMonthApplyTime);
+        $("#channelApplyTime").text(result.data.channelApplyTime);
+
+        $("#monthApplyNum").text(result.data.monthApplyNum);
+        $("#appMarketMonthApplyNum").text(result.data.appMarketMonthApplyNum);
+        $("#channelMonthApplyNum").text(result.data.channelMonthApplyNum);
+    }else{
+        showTipMessage(result.message,true);
+    }
+}
+function toggleData() {
+    //加载数据
+     findByData();
+}
+//加载app列表数据
+function initTableData(resultData) {
+    $("#appList").empty();
+    var sHtml = "";
+    $.each(resultData, function (j) {
+        var sTrHtml = "<tr onclick=\"drawChart(this,'"+resultData[j].code+"')\">";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].appName;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].dayUserCount;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].monthUserCount;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].dayApplyCount;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].monthApplyCount;
+        sTrHtml += "</td>";
+
+        sTrHtml += "</tr>";
+        sHtml += sTrHtml;
+    });
+    $("#appList").append(sHtml);
+}
+function showApkDiv(){
+    if($("#appTable").css("display")=="block")
+    {
+        $("#appTable").css("display","none");
+    }else{
+        $("#dayHourTotal").css("display","");
+        $("#shopApply").css("display","");
+        $("#productApply").css("display","");
+        //初始化表数据
+        if( $("#appList").html().replace(/(^\s*)|(\s*$)/g, '')==""){
+            var data = $("#searchForm").serialize();
+            //加载app用户数
+            var result = get(getAppUserUrl,data);
+            if(result.success)
+            {
+                initTableData(result.data);
+            }
+        }
+
+        $("#appTable").css("display","");
+    }
+}
+function showRatioData(){
+    //初始化表数据
+    var data = $("#searchForm").serialize();
+    //加载app用户数
+    var result = get(ratioUrl,data);
+    if(result.success)
+    {
+        initRatioData(result.data);
+    }
+}
+function initRatioData(resultData) {
+    $("#marketRatioList").empty();
+    var sHtml = "";
+    $.each(resultData, function (j) {
+        var sTrHtml = "<tr>";
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].channelNo;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].todayRegisterNum;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].registerNum;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].todayApplyNum;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNum;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].dayRatio;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].distributeRatio;
+        sTrHtml += "</td>";
+
+        sTrHtml += "</tr>";
+        sHtml += sTrHtml;
+    });
+    $("#marketRatioList").append(sHtml);
+}
+
+$(function(){
+    $("#navtop").load("/top.html",function () {
+        topFunc();
+    });
+    $("#left").load("/left.html",function(){
+        left();
+    });
+    findByData("all");
+    showRatioData();
+    //初始化数据
+    var userName = localStorage.getItem("userName");
+    $("#loginUser").text(userName);
+    $("#sysdate").text(getCurrentDate());
+    $("#weekShow").text(getWeek());
+
+    function tabs(tabTit,on,tabCon){
+        $(tabTit).children().hover(function(){
+            $(this).addClass(on).siblings().removeClass(on);
+            var index = $(tabTit).children().index(this);
+            $(tabCon).children().eq(index).show().siblings().hide();
+        });
+    };
+    tabs(".tab-hd","cur",".tab-bd");
+});
+</script>
+</body>
+</html>

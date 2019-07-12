@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>用户管理</title>
+<link href="/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="" href="/static/css/pagination.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/static/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/static/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/script/pingxun.js" type="text/javascript"></script>
+<script src="/static/script/jquery.pagination.js" type="text/javascript"></script>
+<script src="/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- angular ui-->
+<link rel="stylesheet" title="" type="text/css" href="/ui-layout-0.0.0/ui-layout.css"/>
+<script src="/static/script/angular.min.js"></script>
+<script src="/static/ui-layout-0.0.0/ui-layout.js"></script>
+<link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+<script src="/script/jquery.mloading.js" type="text/javascript"></script>
+    <script src="/script/layer.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+  <div class="left-main left-off" include="left" id="left"></div>
+  <div class="right-product right-off">
+    <div class="layout-mock">
+        <div class="center-back right-back">
+        <div class="container-fluid">
+          <div class="info-center">
+                    <div class="page-header">
+                      <div class="pull-left">
+						<h4>用户管理</h4>
+					</div>
+                    </div>
+				    <div class="search-box row">
+                       <div class="col-md-8">
+                           <form id="searchForm">
+                                <div class="form-group">
+                                  <span class="pull-left form-span">用户名称:</span>
+                                   <input type="text" name="nameOrCode" class="form-control" placeholder="请输入用户名称"/>
+                                </div>
+                           </form>
+                       <div class="form-group btn-search">
+                            <button class="btn btn-default" onclick="javascript:initData(0)"><span class="glyphicon glyphicon-search"></span> 搜索</button>
+                        </div>
+                        </div>
+                        <div class="col-md-4">
+                         <div class="btn-group pull-right" role="group" aria-label="...">
+                          <button type="button" class="btn btn-default" onclick="javascript:addUser()"><span class="glyphicon glyphicon-plus"></span> 新增</button>
+                        </div>
+                        </div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                      <div class="table-margin">
+                      <table id="dataTable" class="table table-bordered table-header">
+                      <thead>
+                         <tr><td>序号</td>
+                           <td class="w15">用户名称</td>
+                           <td >登陆账号</td>
+                           <td >状态</td>
+                           <td >操作</td>
+                         </tr>
+                         </thead>
+                         <tbody id="productList">
+
+                         </tbody>
+                         <tfoot>
+                          <tr>
+                            <td colspan="8">
+                              <div class="pull-right">
+                                  <nav>
+                                      <ul id="pageHtml" class="pagination">
+
+                                      </ul>
+                                    </nav>
+                              </div>
+                            </td>
+                          </tr>
+                         </tfoot>
+                      </table>
+                    </div>
+                    </div>
+          </div>
+        </div>
+   </div>
+ </div>
+</div>
+<script type="text/javascript">
+function addUser() {
+    window.location.href="/static/user/useradd.html";
+}
+function initData(pageIndex) {
+    $("#productList").empty();
+    var values = {};
+    var data = $("#searchForm").serializeArray();
+    values["pageNo"]=(pageIndex+1);
+    values["channelNo"]="backend";
+    values["userType"]="manager";
+    for (var item in data) {
+        values[data[item].name] = data[item].value;
+    }
+    var result = post(userListUrl,values);
+    if(!result.success){
+        showTipMessage(result.message,true);
+    }else{
+        var resultData = result.data;
+        bindData(resultData);
+    }
+}
+
+function bindData(obj) {
+    var resultData = obj.result;
+    var sHtml = "";
+    $.each(resultData, function (j) {
+        var sTrHtml = "";
+        sTrHtml += "<tr>";
+        sTrHtml += "<td>"+resultData[j].id;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].displayName;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].username;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].locked?'锁定':'正常';
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += "<label>编辑</label>";
+        sTrHtml += "&nbsp;&nbsp;";
+        if(resultData[j].locked) {
+            sTrHtml += "<span>解锁</span>";
+        }else {
+            sTrHtml += "<span>锁定</span>";
+        }
+        sTrHtml += "&nbsp;&nbsp;";
+        sTrHtml += "<detail>详情</detail>";
+        sTrHtml += "</td>";
+
+        sTrHtml += "</tr>";
+        sHtml += sTrHtml;
+    });
+    $("#productList").append(sHtml);
+
+    //设置分页信息
+    $("#pageHtml").pagination(obj.totalCount, { //recordCount在后台定义的一个公有变量，通过从数据库查询记录进行赋值，返回记录的总数
+        callback: pageselectCallback,  //点击分页时，调用的回调函数
+        prev_text: '« 上一页',  //显示上一页按钮的文本
+        next_text: '下一页 »',  //显示下一页按钮的文本
+        items_per_page:10,  //每页显示的项数
+        num_display_entries:6,  //分页插件中间显示的按钮数目
+        current_page:(obj.currentPageNo-1),  //当前页索引
+        num_edge_entries:2 //分页插件左右两边显示的按钮数目
+
+    });
+    //停用
+    $("#dataTable tr td span").click(function(){
+        var id = $(this).parent().parent().find("td")[0].innerText;//alert(this);
+        if(confirm("确定要停用该用户吗？"))
+        {
+            var values = {};
+            values["id"]=id;
+            var data =  post(lockUrl,values);
+            if(data.success) {
+                initData(0);
+            }
+        }
+    });
+    //编辑
+    $("#dataTable tr td label").click(function(){
+        var id = $(this).parent().parent().find("td")[0].innerText;
+        window.location.href="/static/user/useredit.html?id="+id;
+    });
+    //编辑
+    $("#dataTable tr td detail").click(function(){
+        var id = $(this).parent().parent().find("td")[0].innerText;
+        window.location.href="/static/user/userdetail.html?id="+id;
+    });
+}
+
+function pageselectCallback(page_id,jq){
+    initData(page_id);
+}
+//加载数据
+initData(0);
+
+$(function(){
+    $("#navtop").load("/top.html",function () {
+        topFunc();
+    });
+    $("#left").load("/left.html",function(){
+        left();
+        var links = window.location.href;
+        if(links.indexOf("user")!=-1)
+        {
+            $("#usermanager").addClass("active");
+        }
+    });
+
+});
+
+</script>
+</body>
+</html>

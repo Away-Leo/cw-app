@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>信用卡</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="stylesheet" href="/borrow/assets/css/base.css">
+    <link rel="stylesheet" href="/borrow/assets/css/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/borrow/assets/css/common.css">
+    <script src="/borrow/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/borrow/assets/js/zepto.min.js"></script>
+    <script src="/borrow/assets/js/dialog.js"></script>
+    <script src="/borrow/assets/js/ui_flexslider.js"></script><!--banner滚动-->
+    <script src="/borrow/assets/js/borrow.js"></script>
+</head>
+<body class="bg-gray">
+<div class="container">
+    <header class="bor-bottom">
+        <a href="javascript:history.go(-1);" class="prev"></a>
+        信用卡
+    </header>
+    <div class="main card-wrap">
+    	<div class="banner">
+            <div class="lst flexBanner">
+                <ul class="slides" id="banner">
+                    <!--<li class="lst1"><a href="javascript:void(0);"><img src="/borrow/assets/images/card_banner02.png"/></a></li>-->
+                    <!--<li class="lst2"><a href="javascript:void(0);"><img src="/borrow/assets/images/noimage.jpg"/></a></li>-->
+                    <!--<li class="lst3"><a href="javascript:void(0);"><img src="/borrow/assets/images/card_banner01.jpg"/></a></li>-->
+                    <!--<li class="lst4"><a href="javascript:void(0);"><img src="/borrow/assets/images/noimage.jpg"/></a></li>-->
+                </ul>
+            </div>
+            
+        </div>
+    	<div class="card-banner clearfix" id="recommandImg">
+        	<!---->
+            <!--<a href="#"><img src="/borrow/assets/images/card_banner02.png"></a>-->
+            <!--<a href="#"><img src="/borrow/assets/images/card_banner02.png"></a>-->
+            <!--<a href="#"></a>-->
+        </div>
+        <div class="card-list">
+            <ul id="cardlist">
+            </ul>
+        </div>
+    </div>
+
+</div>
+<div class="footer">
+        <div class="footNav">
+            <ul class="clearfix">
+                <li class="nav_01">
+                    <a href="/borrow/index.html">
+                        <p class="icon"></p>
+                        <p>首页</p>
+                    </a>
+                </li>
+                <li class="nav_02">
+                    <a href="/borrow/card.html"  class="cur">
+                        <p class="icon"></p>
+                        <p>信用卡</p>
+                    </a>
+                </li>
+                <li class="nav_03">
+                    <a href="/borrow/member_index.html">
+                        <p class="icon"></p>
+                        <p>我的</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        loadBanner();
+        loadRecommand();
+        loadCard();
+        //滚动banner切换原点
+        $('.flexBanner').flexslider({
+            animation: "slide",
+            itemMargin: 0,
+            prevText: '&#xf053;',
+            nextText: '&#xf054;',
+            pauseOnAction: false,
+            pauseOnHover: true,
+            move: 5
+        });
+    });
+    function loadBanner() {
+        var param = "position=creditcard";
+        var result = get(loadBannerUrl,param);
+        if(result.success)
+        {
+            var sHtml="";
+            var resultData = result.data;
+            $.each(resultData, function (j) {
+                var sLiHtml = "";
+                sLiHtml += "<li  class='lst"+(j+1)+"'>";
+                sLiHtml += " <img href='javascript:void(0)'><img src='"+resultData[j].bannerImg+"'/></a>";
+                sLiHtml += " </li>";
+                sHtml += sLiHtml;
+            });
+            $("#banner").append(sHtml);
+        }
+    }
+    function loadRecommand() {
+        var param = {};
+        var result = post(loadRecommendUrl,param);
+        if(result.success)
+        {
+            var sHtml="";
+            var resultData = result.data;
+            $.each(resultData, function (j) {
+                var sLiHtml = "";
+                sLiHtml += " <a href='javascript:void(0)'><img src='"+resultData[j].recommendImg+"'></a>";
+                sHtml += sLiHtml;
+            });
+            $("#recommandImg").append(sHtml);
+        }
+    }
+
+    function loadCard() {
+        var param = {};
+        var result = post(loadCardUrl,param);
+        if(result.success)
+        {
+            var sHtml="";
+            var resultData = result.data.content;
+            $.each(resultData, function (j) {
+                var sLiHtml = "";
+                sLiHtml += " <li>";
+                sLiHtml += " <span class='img'><img src='"+resultData[j].img+"'></span>";
+                sLiHtml += "<span class='name'>"+resultData[j].name+"</span>";
+                sLiHtml += "<span class='detail'>"+resultData[j].cardDesc+"</span>";
+                sLiHtml += "<span class='nub'>申请人数<em>"+resultData[j].clickNum+"</em>人</span>";
+                sLiHtml += " <a href='"+resultData[j].url+"' class='btn btn-apply'>我要办卡</a>";
+                sLiHtml += "</li>";
+                sHtml += sLiHtml;
+            });
+            $("#cardlist").append(sHtml);
+        }
+    }
+
+</script>
+
+</body>
+</html>

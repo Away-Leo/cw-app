@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="stylesheet" href="/jieqianwang/assets/css/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/jieqianwang/assets/css/base.css">
+    <link rel="stylesheet" href="/jieqianwang/assets/css/common.css">
+    <script src="/jieqianwang/assets/js/zepto.min.js"></script>
+    <script src="/jieqianwang/assets/js/dialog.js"></script>
+    <script>
+        $(function(){
+            $("#form-input input").keyup(function(){
+                var phone=$("#phone").val();
+                var pas=  $("#pas").val();
+                var login_btn=$("#login");
+                if(phone=="" || pas==""){
+                    login_btn.removeClass("check-ok");
+                    login_btn[0].disabled=true;
+                }else{
+                    login_btn.addClass("check-ok");
+                    login_btn[0].disabled=false;
+                }
+            });
+            $("#login").click(function(){
+                var phone=$("#phone").val();
+                var pas=  $("#pas").val();
+                var login_btn=$("#login");
+                var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+                if(!isMobile.test(phone)){
+                    $.dialog({
+                        type: null,
+                        message: "请输入正确的手机号码！",
+                        delay: 1000,
+                        maskOpacity: 0.01
+                    });
+                    return false;
+                }else{
+
+                }
+
+                if(pas.length<6){
+                    $.dialog({
+                        type: null,
+                        message: "密码不正确！",
+                        delay: 1000,
+                        maskOpacity: 0.01
+                    });
+                    return false;
+                }else{
+                     $.dialog({
+                         type: 'loading',
+                         message: "正在登录中...",
+                         delay: 3000,
+                         maskOpacity: 0.01
+                     });
+                }
+                window.location.href="/jieqianwang/index.html";
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <header>
+        <a href="javascript:history.go(-1);" class="prev"></a>
+    </header>
+    <div class="main">
+        <div class="login">
+            <div class="login-logo">
+                <img src="/jieqianwang/assets/images/logo.png" alt=""/>
+            </div>
+        </div>
+        <div class="form-wrap mt20">
+            <div class="icon-form" id="form-input">
+                <ul>
+                    <li>
+                        <div class="icon"><i class="iconfont">&#xe608;</i>
+                        </div>
+                        <div class="input">
+                            <input type="tel" id="phone" placeholder="11位手机号码">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icon">
+                            <i class="iconfont">&#xe648;</i>
+                        </div>
+                        <div class="input">
+                            <input type="password" id="pas" placeholder="确认登录密码" style="width:50%">
+                            <span class="get-code">获取验证码</span>
+                            <span class="get-code codeover" style="display:none">倒计时60s, 剩余2次</span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="mt10 tip">短信验证码直接登录</div>
+                <div class="mt10">
+                    <button class="btn-login radius ap-fz16" id="login" disabled >登录</button>
+                </div>
+                <div class="login-pass tc mt10">
+                <span class="checkbox-wrap" data-value="0">
+                        <span class="checkbox-style2 checked"> </span>
+                    </span>
+                    同意<a href="forget-password.html">《注册协议》</a> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

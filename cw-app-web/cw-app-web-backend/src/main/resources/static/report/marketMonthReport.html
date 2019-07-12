@@ -1,0 +1,395 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>收入月报</title>
+<link href="/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="" href="/static/css/pagination.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/static/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/static/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/script/pingxun.js" type="text/javascript"></script>
+<script src="/static/script/jquery.pagination.js" type="text/javascript"></script>
+<script src="/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- angular ui-->
+<link rel="stylesheet" title="" type="text/css" href="/ui-layout-0.0.0/ui-layout.css"/>
+<script src="/static/script/angular.min.js"></script>
+<script src="/static/ui-layout-0.0.0/ui-layout.js"></script>
+<link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+<script src="/script/jquery.mloading.js" type="text/javascript"></script>
+<script src="/script/layer.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="/static/script/WdatePicker.js"></script>
+
+</head>
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+  <div class="left-main left-off" include="left" id="left"></div>
+  <div class="right-product right-off">
+    <div class="layout-mock">
+        <div class="center-back right-back">
+        <div class="container-fluid">
+          <div class="info-center">
+                    <div class="page-header">
+                      <div class="pull-left">
+						<h4>收入月报</h4>
+					</div>
+                    </div>
+				    <div class="search-box row">
+                       <div class="col-md-8" style="width: 100%">
+                           <form id="searchForm">
+                               <div class="form-group">
+                                   <span class="pull-left form-span">账期:</span>
+                                   <input class="Wdate" type="text" id="applyStartDate" name="applyStartDate" style="margin-top: 5px;height: 30px;" id="d15" onFocus="WdatePicker({dateFmt:'yyyy-MM',maxDate:'%y-%M',isShowClear:false,readOnly:true})"/>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">公司名称:</span>
+                                   <input type="text" id="enterpriseName" name="enterpriseName" style="margin-top: 5px;height: 30px;"/>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">产品名称:</span>
+                                   <input type="text" id="productName" name="productName" style="margin-top: 5px;height: 30px;"/>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">结算周期:</span>
+                                   <select id="settleCycle" class="form-control" name="settleCycle">
+                                       <option value="">全部</option>
+                                       <option value="1">日结</option>
+                                       <option value="2">周结</option>
+                                       <option value="3">月结</option>
+                                   </select>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">状态:</span>
+                                   <select id="status" class="form-control" name="status">
+                                       <option value="9">全部</option>
+                                       <option value="0">未确认</option>
+                                       <option value="1">已确认</option>
+                                       <option value="2">已复核</option>
+                                       <option value="3">已开票</option>
+                                       <option value="4">已邮寄</option>
+                                       <option value="5">已回款</option>
+                                       <option value="99">复核统计</option>
+                                   </select>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">发票类型:</span>
+                                   <select id="invoiceType" class="form-control" name="invoiceType">
+                                       <option value="9">全部</option>
+                                       <option value="1">专票</option>
+                                       <option value="0">普票</option>
+                                   </select>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">是否开票:</span>
+                                   <select id="isBilling" class="form-control" name="isBilling">
+                                       <option value="9">全部</option>
+                                       <option value="3">已开票</option>
+                                       <option value="6">不开票</option>
+                                   </select>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">回款日期:</span>
+                                   <input class="Wdate" type="text" id="backDate" name="backDate" style="margin-top: 5px;height: 30px;" id="d16" onFocus="WdatePicker({dateFmt:'yyyy-MM',minDate:'#F{$dp.$D(\'applyStartDate\')}',maxDate:'%y-%M',isShowClear:false,readOnly:true})"/>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">客户联系人:</span>
+                                   <select id="operateNo" class="form-control" name="operateNo">
+                                   </select>
+                               </div>
+                           </form>
+                           <div class="form-group btn-search">
+                                <button class="btn btn-default" onclick="javascript:initData(0)"><span class="glyphicon glyphicon-search"></span> 搜索</button>
+                                <button class="btn btn-default" onclick="javascript:exportExcel('incomeMonth')"><span class="glyphicon glyphicon-export"></span> 导出</button>
+                           </div>
+                        </div>
+
+                        </div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                      <div class="table-margin">
+                      <table id="dataTable" class="table table-bordered table-header">
+                          <input type="hidden" name="direction" id="direction"/>
+                      <thead>
+                         <tr>
+                            <td>序号</td>
+                            <td class="w15">公司名称</td>
+                            <td>产品名称</td>
+                            <td>合作类型</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'applyTime')">申请次数</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'applyNum')">申请用户数</td>
+                            <td>CPA价格</td>
+                            <td>CPS价格</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'applyNuma')">CPA数</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'applyNums')">CPS数</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'loanAmount')">下款额</td>
+                            <td>均单值</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'incomeA')">CPA收入</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'applyNumaRate')">CPA转化率</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'incomeS')">CPS收入</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'applyNumsRate')">CPS转化率</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'invoiceFee')">开票税费</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'totalIncome')">总收入</td>
+                             <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'confirmSettleFee')">结算金额</td>
+                            <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'incomeFee')">回款金额</td>
+                            <!--<td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'backFeeDate')">回款时间</td>-->
+                            <td>入库时间</td>
+                            <td>客户联系人</td>
+                            <td>操作</td>
+                         </tr>
+                         </thead>
+                         <tbody id="productList">
+
+                         </tbody>
+                         <tfoot>
+                          <tr>
+                            <td colspan="23">
+                              <div class="pull-right">
+                                  <nav>
+                                      <ul id="pageHtml" class="pagination">
+
+                                      </ul>
+                                    </nav>
+                              </div>
+                            </td>
+                          </tr>
+                         </tfoot>
+                      </table>
+                    </div>
+                    </div>
+          </div>
+        </div>
+   </div>
+ </div>
+</div>
+<script type="text/javascript">
+function initData(pageIndex,sortZiduan) {
+    $("#productList").empty();
+    var values = {};
+    var data = $("#searchForm").serializeArray();
+    values["pageNo"]=(pageIndex+1);
+    values["channelNo"]="backend";
+    values["sortColumn"]=sortZiduan;
+    values["sortDesc"]=$("#direction").val();
+    for (var item in data) {
+        values[data[item].name] = data[item].value;
+    }
+    var result = post(marketMonthReportUrl,values);
+    if(!result.success){
+        showTipMessage(result.message,true);
+    }else{
+        var resultData = result.data;
+        bindData(resultData);
+    }
+}
+function bindData(obj) {
+    var resultData = obj;
+    var sHtml = "";
+    $.each(resultData, function (j) {
+        var sTrHtml = "";
+        sTrHtml += "<tr>";
+        sTrHtml += "<td>";
+        sTrHtml += j;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].enterpriseName==null?"":resultData[j].enterpriseName;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += "<a href=\"javascript:void(0)\" onclick=\"viewDetail("+resultData[j].id+",'"+resultData[j].dayId+"')\">"+resultData[j].productName+"</a>";
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].cooperationModel==null?"":resultData[j].cooperationModel;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyTime==null?0:resultData[j].applyTime;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNum==null?0:resultData[j].applyNum;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].priceA==null?0:resultData[j].priceA;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].priceS==null?0:resultData[j].priceS;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNuma==null?0:resultData[j].applyNuma;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNums==null?0:resultData[j].applyNums;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].loanAmount==null?0:resultData[j].loanAmount;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNums==null?0:Math.round(resultData[j].loanAmount/resultData[j].applyNums);
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].incomeA==null?0:resultData[j].incomeA;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNumaRate==null?"0":resultData[j].applyNumaRate+"%";
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].incomeS==null?0:resultData[j].incomeS;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNumsRate==null?"0":resultData[j].applyNumsRate+"%";
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].invoiceFee==null?0:resultData[j].invoiceFee;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td style=\"cursor: pointer\" title=\"点击实现排序\">";
+        sTrHtml += "<a href=\"javascript:void(0)\" onclick=\"viewIncome("+resultData[j].id+")\">"+(resultData[j].totalIncome==null?0:resultData[j].totalIncome)+"</a>";
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td style=\"cursor: pointer\" title=\"点击实现排序\">";
+        sTrHtml += resultData[j].confirmSettleFee==null?0:resultData[j].confirmSettleFee;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td style=\"cursor: pointer\" title=\"点击实现排序\">";
+        sTrHtml += "<a href=\"javascript:void(0)\" onclick=\"viewBackDate("+resultData[j].id+")\" >"+(resultData[j].incomeFee==null?0:resultData[j].incomeFee)+"</a>";
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].importDate.substr(0,10);
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].operateName;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        if(resultData[j].enterpriseName!='合计') {
+            //月结
+            sTrHtml += "&nbsp;&nbsp;<a href=\"javascript:viewSettle(" + resultData[j].id + ");\">结算单</a>";
+            if (resultData[j].settleCycle == 3) {
+                if (resultData[j].status == 1) {
+                    sTrHtml += "&nbsp;&nbsp;<a href=\"javascript:changeStatus(" + resultData[j].id + ",'" + resultData[j].productName + "',2,'复核');\"><font color='red'>复核</font></a>";
+                } else if (resultData[j].status == 2) {
+                    if (resultData[j].isBilling == 6) {
+                        sTrHtml += "&nbsp;&nbsp;不开票";
+                        sTrHtml += "&nbsp;&nbsp;<a href=\"javascript:changeStatus(" + resultData[j].id + ",'" + resultData[j].productName + "',5,'已回款','" + resultData[j].totalIncome + "');\"><font color='red'>确认回款</font></a>";
+                    } else {
+                        sTrHtml += "&nbsp;&nbsp;<a href=\"javascript:changeStatus(" + resultData[j].id + ",'" + resultData[j].productName + "',3,'开票');\"><font color='red'>开票</font></a>";
+                    }
+                } else if (resultData[j].status == 3) {
+                    sTrHtml += "&nbsp;&nbsp;已开票";
+                } else if (resultData[j].status == 4) {
+                    sTrHtml += "&nbsp;&nbsp;已邮寄";
+                    sTrHtml += "&nbsp;&nbsp;<a href=\"javascript:changeStatus(" + resultData[j].id + ",'" + resultData[j].productName + "',5,'已回款','" + resultData[j].totalIncome + "');\"><font color='red'>确认回款</font></a>";
+                } else if (resultData[j].status == 5) {
+                    sTrHtml += "&nbsp;&nbsp;已回款";
+                } else if (resultData[j].status == 6) {
+                    sTrHtml += "&nbsp;&nbsp;<a href=\"javascript:changeStatus(" + resultData[j].id + ",'" + resultData[j].productName + "',5,'已回款','" + resultData[j].totalIncome + "');\"><font color='red'>确认回款</font></a>";
+                }
+            }else{
+                if (resultData[j].status == 1) {
+                    sTrHtml += "&nbsp;&nbsp;已确认&nbsp;&nbsp;<a href=\"javascript:changeStatus(" + resultData[j].id + ",'" + resultData[j].productName + "',2,'复核');\"><font color='red'>复核</font></a>";
+                }else if (resultData[j].status == 2 && resultData[j].isBilling == 3) {
+                    sTrHtml += "&nbsp;&nbsp;已开票&nbsp;&nbsp;<a href=\"javascript:changeStatus(" + resultData[j].id + ",'" + resultData[j].productName + "',3,'开票');\"><font color='red'>开票</font></a>";
+                } else if (resultData[j].status == 4) {
+                    sTrHtml += "&nbsp;&nbsp;已邮寄";
+                    sTrHtml += "&nbsp;&nbsp;<a href=\"javascript:changeStatus(" + resultData[j].id + ",'" + resultData[j].productName + "',5,'已回款','" + resultData[j].totalIncome + "');\"><font color='red'>确认回款</font></a>";
+                }
+            }
+        }
+
+        sTrHtml += "</td>";
+
+        sTrHtml += "</tr>";
+        sHtml += sTrHtml;
+        $("#direction").val(resultData[j].sortDesc);
+    });
+
+    $("#productList").append(sHtml);
+}
+//加载数据
+initData(0);
+function viewDetail(id,dayId) {
+    window.location.href="/static/report/marketDailyDetail.html?productId="+id+"&applyStartDate="+dayId;
+}
+function viewIncome(id) {
+    layer.ready(function(){
+        layer.open({
+            type: 2,
+            title: '收入详情',
+            maxmin: true,
+            area: ['800px', '500px'],
+            content: "/static/report/settleIncome.html?productId="+id,
+            end: function(){
+
+            }
+        });
+    });
+}
+function viewSettle(id){
+    layer.ready(function(){
+        layer.open({
+            type: 2,
+            title: '结算单',
+            maxmin: true,
+            area: ['800px', '850px'],
+            content: "/static/report/settlement.html?productId="+id+"&"+$("#searchForm").serialize(),
+            end: function(){
+
+            }
+        });
+    });
+}
+function viewBackDate(id){
+    layer.ready(function(){
+        layer.open({
+            type: 2,
+            title: '回款明细',
+            maxmin: true,
+            area: ['600px', '650px'],
+            content: "/static/report/incomeBackList.html?productId="+id+"&"+$("#searchForm").serialize(),
+            end: function(){
+
+            }
+        });
+    });
+}
+$(function(){
+    $("#navtop").load("/top.html",function () {
+        topFunc();
+    });
+    $("#left").load("/left.html",function(){
+        left();
+        var links = window.location.href;
+        if(links.indexOf("marketMonthReport")!=-1)
+        {
+            $("#marketMonthReport").addClass("active");
+        }
+    });
+    initAppList();
+    initMarketOperateList();
+});
+
+</script>
+</body>
+</html>

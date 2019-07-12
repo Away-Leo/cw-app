@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="ui-mobile" style="font-size: 20px;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>借款申请</title>
+<meta http-equiv="Expires" content="-1">               
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache"> 
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ <style>
+ .checkbox {
+  width: 12px;
+  height: 12px;
+  background: url(images/radio.png) -2px -40px no-repeat;
+  display: inline-block;
+  vertical-align: -1px;
+  margin-right: 0.5rem; }
+
+.checkbox.checked {
+  background: url(images/radio.png) -2px -56px no-repeat;
+  margin-right: 0.5rem; }
+
+.checkbox-style2 {
+  width: 16px;
+  height: 16px;
+  background: url(images/radio.png)  no-repeat;
+  background-size:100%;
+  display: inline-block;
+  vertical-align: -3px; }
+
+.checkbox-style2.checked {
+  background: url(images/radio_check.png) no-repeat;background-size:100%; }
+
+ </style>
+<script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/script/pingxun.js" type="text/javascript"></script>
+    
+</head>
+<body>
+ <form method="POST" id="applyForm" class="ui-mobile-viewport ui-overlay-a">
+        <!-- main start -->
+        <div class="wrapper wrapper-bg" style="background:#faa700">
+          <div class="register" style="text-align:center">
+            <ul class="info-list">
+              <li>
+                <input type="text" placeholder="借款金额（元）" data-role="none" name="productId" id="productId">
+              </li>
+              <li>
+                <input type="text" placeholder="借款期限" data-role="none" name="deviceNumber" id="deviceNumber">
+              </li>             
+            </ul>
+	            <a style="width:auto" rel="external" href="javascript:;" onclick="apply();" style="background:#faa700" class="com-btn ui-link">立即借款</a>
+          </div>
+
+        </div>
+        <!-- main end -->
+ </form>
+<script type="text/javascript">
+function apply(){
+    var values={};
+    var hrefUrl = window.location.href;
+    alert(hrefUrl);
+    var sessionId=getArgsFromHref(hrefUrl,"sessionId");
+    alert(sessionId);
+	var data = $("#applyForm").serializeArray();
+    for (var item in data) {
+        values[data[item].name] = data[item].value;
+    }
+    values["Cookie"]="JSESSIONID="+sessionId;
+    var result = post("https://192.168.1.166:9999/front/product/applyLoan.json",values);
+    console.log(result);
+}
+function post(url,data) {
+    var returnData;
+    data["type"]="manager";
+    var json = JSON.stringify(data);
+    json = json.replace(/\r\n/g,"\n");
+    $.ajax({
+        url: url,
+        contentType: "application/json;charset=utf-8",
+        data: json,
+        method:"post",
+        dataType: "json",
+        async: false,
+        beforeSend:function () {
+            console.log(1);
+        },
+        success: function (data) {
+            console.log(data);
+        },
+        complete:function () {
+            alert(0);
+        },
+        error: function () {
+            alert("数据请求错误!");
+        }
+    });
+    return returnData;
+}
+</script>
+</body></html>

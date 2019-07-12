@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>借款记录</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <link rel="stylesheet" href="/static/assets/css/iconfont/iconfont.css"/>
+    <link rel="stylesheet" href="/static/assets/css/base.css"/>
+    <link rel="stylesheet" href="/static/assets/css/common.css"/>
+    <script src="/static/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/static/assets/js/jquery.cookie.js"></script>
+    <script src="/static/assets/js/zepto.min.js"></script>
+    <script src="/static/assets/js/dialog.js"></script>
+    <script src="/static/assets/js/wechat.js"></script>
+</head>
+<style>
+.pro-list li .btn{ top:3rem;}
+</style>
+<body class="bg-gray">
+<div class="container">
+    <div class="main">
+        <div class="pro-list">
+            <ul id="recordList">
+            </ul>
+        </div>
+    </div>
+
+</div>
+<script>
+    function initData(pageNo) {
+        var values = {};
+        values["pageNo"]=pageNo+1;
+        values["appName"] = "MBD";
+        var result = get(findApplyListUrl,values);
+        if(result.success) {
+            var resultData = result.data;
+            bindData(resultData);
+        }else{
+            showMessage(result.message);
+            window.location.href="/static/wechatLogin.html";
+        }
+
+    }
+    function bindData(obj) {
+        var resultData = obj.content;
+        $("#pageNo").val(obj.number+1);
+        var sHtml = "";
+        $.each(resultData, function (j) {
+            var sLiHtml = "";
+            sLiHtml += "<li>";
+            sLiHtml += " <span class=\"img\"><img src=\""+resultData[j].img+"\"/></span>";
+            sLiHtml += "     <span class=\"name\">"+resultData[j].productName+"</span>";
+            sLiHtml += "    <span class=\"detail\">";
+            sLiHtml += "    <p><span class=\"th\">额度范围</span><span class=\"td\">"+resultData[j].startAmount+"-"+resultData[j].endAmount+"元</span></p>";
+            sLiHtml += "<p><span class=\"th\">期限范围</span><span class=\"td\">"+resultData[j].startPeriod+"-"+resultData[j].endPeriod+resultData[j].periodType+"</span></p>";
+            sLiHtml += "<p><span class=\"th\">最快放款</span><span class=\"td\">"+resultData[j].loanDay+"天</span></p>";
+            sLiHtml += "    </span>";
+            sLiHtml += "    <a href=\"javascript:void(0)\" class=\"btn btn-apply\" onclick=\"viewDetail("+resultData[j].productId+")\" >再次申请</a>";
+            sLiHtml += " </li>";
+            sHtml += sLiHtml;
+        });
+        if(sHtml=="")
+        {
+            sHtml+="<div class=\"main\">";
+            sHtml+="    <div class=\"invest-buy\"><img src=\"/assets/images/nodate@3x.png\" alt=\"\"/></div>";
+            sHtml+="    <p class=\"tc c-gray-666\">暂无数据！</p>";
+            sHtml+="</div>";
+        }
+
+        $("#recordList").append(sHtml);
+    }
+    function viewDetail(id) {
+        window.location.href="/static/prodetail.html?id="+id;
+    }
+    $(window).scroll(function() {
+        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+            var pageNo = $("#pageNo").val();
+            pageNo = parseInt(pageNo);
+            initData(pageNo);
+        }
+    });
+    initData(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>平讯数据后台管理系统</title>
+<link href="/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/static/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<script src="/static/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/static/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/script/pingxun.js" type="text/javascript"></script>
+<script src="/static/script/ajaxfileupload.js" type="text/javascript"></script>
+<script src="/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+<link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+<script src="/script/jquery.mloading.js" type="text/javascript"></script>
+<script src="/script/layer.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+    <div  class="left-main left-full" include="left" id="left"></div>
+  <div class="right-product view-product right-full">
+     <div class="container-fluid">
+				<div class="manage account-manage info-center">
+					<div class="page-header">
+                        <div class="pull-left">
+						    <h4>Banner管理</h4>
+					    </div>
+                    </div>
+                    <form id="updateCard">
+                        <dl class="account-basic clearfix">
+                            <dd class="pull-left margin-large-left margin-small-top">
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">推送APP</span>
+                                    <span class="margin-left">
+                                    <select id="appMarketList" name="appName" class="form-control">
+                                    </select>
+                                </span>
+                                </p>
+                                <p class="text-small"><input type="hidden" id="id" name="id" style="width:250px"/>
+                                    <span class="show pull-left base-name">推送标题</span>
+                                    <span class="margin-left"><input type="text" id="title" name="title" style="width:250px"/></span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">推送内容</span>
+                                    <span class="margin-left">
+                                        <textarea type="tex" id="content" cols="50" rows="10"  name="content"></textarea>
+                                    </span>
+                                </p>
+                                <p class="text-small">
+                                    <span class="show pull-left base-name">跳转URL</span>
+                                    <span class="margin-left">
+                                    <input type="text" id="url" name="url" style="width:250px"/>
+                                </span>
+                                </p>
+                            </dd>
+                        </dl>
+                        <dd class="pull-left margin-large-left margin-small-top">
+                            <p class="text-small">
+                                <input type="button" value="保存" style="width: 150px;" onclick="javascript:saveProduct()"/>
+                                <input type="button" value="返回" style="width: 150px;" onclick="javascript:backbannertList()"/>
+                            </p>
+                        </dd>
+                    </form>
+				</div>
+		</div>
+  </div>
+</div>
+<script>
+function findByData() {
+    var hrefUrl = window.location.href;
+    var id=getArgsFromHref(hrefUrl,"id");
+    var param ="id="+id;
+    var result = get(findMessageByIdUrl,param);
+    if(result.success){
+        $("#id").val(result.data.id);
+        $("#title").val(result.data.title);
+        $("#appMarketList").val(result.data.appName);
+        $("#content").val(result.data.content);
+        $("#url").val(result.data.url);
+    }else{
+        showTipMessage(result.message,true);
+    }
+}
+//保存产品
+function saveProduct() {
+    var data = $("#updateCard").serializeArray();
+    var values={};
+    for (var item in data) {
+        values[data[item].name] = data[item].value;
+    }
+    if($("#title").val()==undefined||$("#title").val()=='')
+    {
+        showTipMessage("请填写推送信息标题",false);
+        return false;
+    }
+    if($("#content").val()==undefined||$("#content").val()=='')
+    {
+        showTipMessage("请填写推送内容",false);
+        return false;
+    }
+    var result = post(updateMessageUrl,values);
+    if(result.success)
+    {
+        window.location.href="/static/push/list.html";
+    }else{
+        showTipMessage(result.message,true);
+    }
+}
+$(function(){
+    $("#navtop").load("/top.html",function () {
+        topFunc();
+    });
+    $("#left").load("/left.html",function(){
+        left();
+        var links = window.location.href;
+        if(links.indexOf("edit")!=-1)
+        {
+            $("#edit").addClass("active");
+        }
+    });
+    //加载选择框数据
+    initAppList();
+    findByData();
+});
+</script>
+</body>
+</html>

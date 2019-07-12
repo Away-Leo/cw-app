@@ -1,0 +1,505 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>首页</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <link rel="stylesheet" href="/static/assets/css/iconfont/iconfont.css"/>
+    <link rel="stylesheet" href="/static/assets/css/base.css"/>
+    <link rel="stylesheet" href="/static/assets/css/common.css"/>
+    <script src="/static/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/static/assets/js/zepto.min.js"></script>
+    <script src="/static/assets/js/dialog.js"></script>
+    <script src="/static/assets/js/wechat.js"></script>
+    <script src="/static/assets/js/jquery.cookie.js"></script>
+    <style type="text/css">
+        .index-wrap{margin: 0 0 70px;}
+        #box{position: relative; width: 60%;display: inline-block; margin:  0 1rem}
+        #bg{background:#f1f1f1;height: 1rem;box-shadow: inset -1px 0px 5px #ccc; margin-top: 5px;border-radius: 5px; overflow: hidden;}
+        #bt{height: 2rem;border-radius: 17px;margin-top:-0.8rem; overflow: hidden; position: absolute; left: 0px;top: 8px; cursor: pointer;}
+        #boxmonth{position: relative; width: 60%;display: inline-block; margin:  0 1rem}
+        #bgmonth{background:#f1f1f1;height: 1rem;box-shadow: inset -1px 0px 5px #ccc; margin-top: 5px;border-radius: 5px; overflow: hidden;}
+        #btmonth{height: 2rem;border-radius: 17px;margin-top:-0.8rem; overflow: hidden; position: absolute; left: 0px;top: 8px; cursor: pointer;}
+    </style>
+</head>
+<body class="bg-gray">
+<div class="container">
+    <div class="index-wrap">
+    	<div class="loan">
+            <div class="priceTit">借款金额</div>
+            <div class="priceLoan"><em>￥</em><span id="loanAmount">1,000</span>
+                <form id="searchForm">
+                <input type="hidden" name="loanAmount" id="loanAmountHide"/>
+                <input type="hidden" name="loanPeriod" id="loanPeriodHide"/>
+                <input type="hidden" name="dateCycle" id="dateCycleHide"/>
+                <input type="hidden" name="job" id="jobHide"/>
+                </form>
+            </div>
+        </div>
+        <div style="left: 50px;">
+            <canvas id="clock" style="background: #f3f3f3;height: 51%;width: 100%;">您的浏览器不支持canvas标签</canvas>
+        </div>
+        <div class="data">
+        	<ul class="main-nav  tab-hd clearfix">
+              <li class="cur">日</li>
+              <li>月</li>
+            </ul>
+            <div class="tab-bd clearfix">
+         	   <div class="main-con timeChoice">
+                    <span class="dd" id="minDay">1天</span>
+                    <span>
+                        <div id="box">
+                            <div id="bg">
+                                <div id="bgcolor"></div>
+                            </div>
+                            <div id="btnDiv">
+                                <img id="bt" src="/assets/images/barchoice.png"/>
+                            </div>
+                        </div>
+                    </span>
+                   <span class="dd" id="maxDay">50天</span>
+               </div>
+ 		       <div class="main-con timeChoice" style="display:none;">
+               	    <span class="dd" id="minMonth">1月</span>
+                    <span>
+                        <div id="boxmonth">
+                            <div id="bgmonth">
+                                <div id="bgcolormonth"></div>
+                            </div>
+                            <div id="btnDivMonth">
+                                <img id="btmonth" src="/static/assets/images/barchoice.png"/>
+                            </div>
+                        </div>
+                    </span>
+                    <span class="dd" id="maxMonth">36月</span>
+               </div>
+      		</div>
+            
+            <div class="result clearfix">
+            	<ul>
+                	<li><em>还款日期</em><span id="repayDay">1<em>天</em></span></li>
+                    <li><em>每期应还</em><span><em>￥</em><label id="monthRepayFee">0</label></span></li>
+                </ul>
+            </div>
+            
+        </div>
+        <div class="occ" id="jobDiv"><a href="javascript:void(0)" id="showText">选择职业</a></div>
+        <div class="pro-list-filterResult" id="jobList" style="display: none">
+            <ul id="jobItem">
+            </ul>
+        </div>
+      <div class="index-btn"><a class="btn-apply ap-fz16" id="search">搜索</a> </div>
+    </div>
+    <div class="footer">
+        <div class="footNav">
+            <ul class="clearfix">
+                <li class="nav_01">
+                    <a href="/static/wechatIndex.html"  class="cur">
+                        <p class="icon"></p>
+                        <p>首页</p>
+                    </a>
+                </li>
+                <li class="nav_02">
+                    <a href="/static/member.html">
+                        <p class="icon"></p>
+                        <p>我的</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script> /*<![CDATA[*/
+$(function() {
+    var cycleObj=$("#clock");
+    function resizeCanvas() {
+        cycleObj.attr("width", $(window).get(0).innerWidth);
+        cycleObj.attr("height", $(window).get(0).innerHeight/3+20);
+    };
+    resizeCanvas();
+    function tabs(tabTit, on, tabCon) {
+        $(tabTit).children().hover(function () {
+            $(this).addClass(on).siblings().removeClass(on);
+            var index = $(tabTit).children().index(this);
+            $(tabCon).children().eq(index).show().siblings().hide();
+            if($(this).context.innerHTML=="日")
+            {
+                $("#dateCycleHide").val("day");
+                $("#loanAmountHide").val(min);
+                $("#loanPeriodHide").val(minDay);
+                $("#repayDay").text(minDay+"天");
+            }else{
+                $("#dateCycleHide").val("month");
+                $("#loanAmountHide").val(min);
+                $("#loanPeriodHide").val(minMonth);
+                $("#repayDay").text(minMonth+"月");
+            }
+            calcRepayFee($("#loanAmountHide").val(),$("#loanPeriodHide").val());
+        });
+    };
+    tabs(".tab-hd", "cur", ".tab-bd");
+    //初始化页面参数
+    $("#loanAmountHide").val(max);
+    $("#loanPeriodHide").val(minDay);
+    $("#dateCycleHide").val("day");
+
+    $("#search").bind("tap",function () {
+        if($("#loanAmountHide")==null||$("#loanAmountHide")==undefined)
+        {
+            alert("请选择借款金额");
+            return false;
+        }
+        if($("#loanPeriodHide")==null||$("#loanPeriodHide")==undefined)
+        {
+            alert("请选择借款期限");
+            return false;
+        }
+        if($("#jobHide")==null||$("#jobHide")==undefined)
+        {
+            alert("请选择职业");
+            return false;
+        }
+        var param = $("#searchForm").serialize();
+        window.location.href = "/static/prolist.html?"+param;
+    });
+    document.getElementById('jobDiv').addEventListener("tap",function(){
+        if($("#jobList").css("display")=="none")
+        {
+            $("#jobList").css("display","");
+            $("#backbg").css("display","");
+            $("#jobList").css("top","26rem");
+        }else{
+            $("#jobList").css("display","none");
+            $("#backbg").css("display","none");
+        }});
+
+    //贷款期限日选择
+    var $bg = $('#bg');
+    var $bgcolor = $('#bgcolor');
+    var $btn = $('#bt');
+    document.getElementById('box').addEventListener("touchmove",function(e){
+        var location = e.targetTouches[0].pageX;
+        e.preventDefault();
+        var day = Math.round((location - $(window).get(0).innerWidth * 0.2) / singleKdDay);
+        if (day > (maxDay - minDay)) {
+            day = maxDay - minDay;
+        }
+        if(day<=0)
+        {
+            day = 0;
+        }
+        $btn.css('left', singleKdDay * day);
+        $bgcolor.stop().animate({width: singleKdDay * day}, 200);
+        $("#dateCycleHide").val("day");
+        $("#loanPeriodHide").val(parseInt(day + minDay));
+        $("#repayDay").html(parseInt(day + minDay) + "<em>天</em>");
+        calcRepayFee($("#loanAmountHide").val(),parseInt(day+minDay));
+    });
+    $bg.click(function (e) {
+        var location = getLocation(e.clientX, e.clientY);
+        var day = Math.round((location.x-$(window).get(0).innerWidth*0.2)/singleKdDay);
+        if(day>(maxDay-minDay))
+        {
+            day = maxDay-minDay;
+        }
+        $btn.css('left', singleKdDay*day);
+        $bgcolor.stop().animate({width: singleKdDay*day}, 200);
+        $("#dateCycleHide").val("day");
+        $("#loanPeriodHide").val(parseInt(day+minDay));
+        $("#repayDay").html(parseInt(day+minDay)+"<em>天</em>");
+        calcRepayFee($("#loanAmountHide").val(),parseInt(day+minDay));
+    });
+    //借款月期限选择
+    var $bgmonth = $('#bgmonth');
+    var $bgcolormonth = $('#bgcolormonth');
+    var $btnmonth = $('#btmonth');
+    document.getElementById('boxmonth').addEventListener("touchmove",function(e){
+        var location = e.targetTouches[0].pageX;
+        e.preventDefault();
+        var month = Math.round((location-$(window).get(0).innerWidth*0.2)/singleKdMonth);
+        if(month>(maxMonth-minMonth))
+        {
+            month = maxMonth-minMonth;
+        }
+        if(month<=0)
+        {
+            month = 0;
+        }
+        $btnmonth.css('left', singleKdMonth*month);
+        $bgcolormonth.stop().animate({width: singleKdMonth*month}, 200);
+        $("#dateCycleHide").val("month");
+        $("#loanPeriodHide").val(parseInt(month+minMonth));
+        $("#repayDay").html(parseInt(month+minMonth)+"<em>月</em>");
+        calcRepayFee($("#loanAmountHide").val(),parseInt(month+minMonth));
+    });
+
+    $bgmonth.click(function (e) {
+        var location = getLocation(e.clientX, e.clientY);
+        var month = Math.round((location.x-$(window).get(0).innerWidth*0.2)/singleKdMonth);
+        if(month>(maxMonth-minMonth))
+        {
+            month = maxMonth-minMonth;
+        }
+        $btnmonth.css('left', singleKdMonth*month);
+        $bgcolormonth.stop().animate({width: singleKdMonth*month}, 200);
+        $("#dateCycleHide").val("month");
+        $("#loanPeriodHide").val(parseInt(month+minMonth));
+        $("#repayDay").html(parseInt(month+minMonth)+"<em>月</em>");
+        calcRepayFee($("#loanAmountHide").val(),parseInt(month+minMonth));
+    });
+
+    $("#clock").click(function(e){
+        var location = getLocation(e.clientX, e.clientY);
+        var angle = getAngle(width,width,location.x,location.y);
+        if(angle>90&&angle<=180)
+        {
+            angle=90;
+        }
+        if(angle>180&&angle<=270)
+        {
+            angle=270;
+        }
+        if(angle<=90||angle>=270)
+        {
+            drawCycle(zz,centerImage,angle);
+        }
+    });
+
+    $("ul#jobItem li").bind("tap",function(e){
+        $("#jobHide").val(e.target.getAttribute("title"));
+        $("#showText").text(e.target.getAttribute("name"));
+        $("#jobList").css("display","none");
+        $("#backbg").css("display","none");
+    });
+    findByData();
+});
+
+
+//初始化贷款参数信息
+var minDay;
+var maxDay;
+var maxMonth;
+var minMonth;
+var rate;
+var max;
+var min;
+var singleKd ;
+var singleKdDay ;
+var singleKdMonth;
+function findByData() {
+    var param = {};
+    var result = get(findParameterUrl,param);
+
+    if(result.success)
+    {
+        min = result.data.startAmount;
+        max = result.data.endAmount;
+        minDay = result.data.startPeriodDay;
+        maxDay = result.data.endPeriodDay;
+        minMonth = result.data.startPeriodMonth;
+        maxMonth = result.data.endPeriodMonth;
+        rate = result.data.loanRate;
+        singleKd = (max-min)/180;
+        singleKdDay = 200/(maxDay-minDay);
+        singleKdMonth = 200/(maxMonth-minMonth);
+        //初始化数据
+        $("#loanAmount").text(min);
+        $("#loanAmountHide").val(min);
+        $("#loanPeriodHide").val(minDay);
+        $("#dateCycleHide").val("day");
+
+        $("#repayDay").text(result.data.startPeriodDay+"天");
+        $("#minDay").text(result.data.startPeriodDay+"天");
+        $("#maxDay").text(result.data.endPeriodDay+"天");
+        $("#minMonth").text(result.data.startPeriodMonth+"月");
+        $("#maxMonth").text(result.data.endPeriodMonth+"月");
+        zz.onload = function () {
+            drawCycle(zz,centerImage,270);
+        }
+    }
+}
+/** 仪表盘选择器*/
+var canvas = document.getElementById('clock');
+var clock = canvas.getContext('2d');
+var ttt =45;
+var width=$("#clock").width()*0.45;
+var beishu=1.15;
+var ybeishu=1.1;
+var zz = new Image();
+var centerImage=new Image();
+zz.src="../assets/images/zhizheng.png";
+centerImage.src="../assets/images/zhuanpan.png";
+
+function drawCycle(zz,centerImage,angle){
+    clock.clearRect(0, 0, $("#clock").width(), $("#clock").height());
+    //外圆
+    clock.save();
+    clock.beginPath();
+    clock.lineWidth=5;
+    clock.strokeStyle="white";
+    clock.fillStyle="white";
+    clock.moveTo(width*beishu,width*ybeishu);
+    clock.arc(width*beishu,width*ybeishu,width-10,Math.PI,Math.PI*2,false);
+    clock.fill();
+
+    //内圆
+    clock.save();
+    clock.beginPath();
+    clock.lineWidth=5;
+    clock.strokeStyle="#f3f3f3";
+    clock.fillStyle="#f3f3f3";
+    clock.moveTo(width*beishu,width*ybeishu);
+    clock.arc(width*beishu,width*ybeishu,width*0.3,Math.PI,Math.PI*2,false);
+    clock.fill();
+
+    if(ttt<45)
+    {
+        ttt = 45;
+    }
+    if(ttt>75)
+    {
+        ttt = 75;
+    }
+    //外圆
+    clock.save();
+    clock.lineWidth=2;
+    clock.fillStyle="#F6525B";
+    clock.moveTo(width*beishu,width*ybeishu);
+    clock.arc(width*beishu,width*ybeishu,width-10,Math.PI,Math.PI * (angle/180-0.5),false);
+    clock.fill();
+    if(angle>=0&&angle<=90)
+    {
+        angle = angle+90;
+    }
+    if(angle>=270&&angle<=360)
+    {
+        angle = angle-270;
+    }
+    var loanAmountFee=Math.round(angle*singleKd)+min;
+    var loanAmount = document.getElementById("loanAmount");
+    loanAmount.innerHTML =loanAmountFee;
+    $("#loanAmountHide").val(loanAmountFee);
+
+    //计算每月应还金额
+    calcRepayFee(loanAmountFee,$("#loanPeriodHide").val());
+
+    //内圆
+    clock.save();
+    clock.beginPath();
+    clock.lineWidth=5;
+    clock.strokeStyle="#f3f3f3";
+    clock.fillStyle="#f3f3f3";
+    clock.moveTo(width*beishu,width*ybeishu);
+    clock.arc(width*beishu,width*ybeishu,width*0.3+10,Math.PI-0.1,Math.PI*2.1,false);
+    clock.fill();
+
+    //大刻度
+    for (var i = 10; i < 15; i++) {
+        clock.save();
+        //设置时针的粗细
+        clock.lineWidth = 5;
+        //设置时针的颜色
+        clock.strokeStyle = "#f3f3f3";
+        //先设置0,0点
+        clock.translate(width*beishu, width*ybeishu);
+        //再设置旋转角度
+        clock.rotate((i * 30) * Math.PI / 180);//角度*Math.PI/180=弧度
+        clock.beginPath();
+        clock.moveTo(0, -(width-40));
+        clock.lineTo(0, -(width-30));
+        clock.closePath();
+        clock.stroke();
+        clock.restore();
+    }
+    //小刻度
+    for (var i = 46; i < 75; i++) {
+        clock.save();
+        //设置时针的粗细
+        clock.lineWidth = 5;
+        //设置时针的颜色
+        clock.strokeStyle = "#f3f3f3";
+        //先设置0,0点
+        clock.translate(width*beishu, width*ybeishu);
+        //再设置旋转角度
+        clock.rotate((i * 6) * Math.PI / 180);//角度*Math.PI/180=弧度
+        clock.beginPath();
+        clock.moveTo(0, -(width-20));
+        clock.lineTo(0, -(width-30));
+        clock.closePath();
+        clock.stroke();
+        clock.restore();
+    }
+    //内侧小圆圈
+    clock.save();
+    clock.translate(width*beishu-centerImage.width/4, width*ybeishu-centerImage.height/4);
+    clock.drawImage(centerImage,0,0,centerImage.width/2,centerImage.height/2);
+    clock.restore();
+
+    //画指针
+    clock.save();
+    clock.translate(width*beishu, width*ybeishu);
+    clock.rotate((Math.PI * ((angle)/180-0.5)));
+    //clock.drawImage(zz,-(zz.width*0.65*beishu/2-zz.width*0.65*beishu/4),-zz.height*0.65*beishu/2,zz.width*0.65*beishu/2,zz.height*0.65*beishu/2);
+    clock.drawImage(zz,-(zz.width/2-zz.width/4),-zz.height/2,zz.width/2,zz.height/2);
+    clock.restore();
+
+}
+//鼠标点击事件
+document.getElementById('clock').addEventListener("touchmove",function(e){
+    var location = e.targetTouches[0];
+    e.preventDefault();
+    var angle = getAngle(width,width,location.pageX,location.pageY);
+    if(angle>90&&angle<=180)
+    {
+        angle=90;
+    }
+    if(angle>180&&angle<=270)
+    {
+        angle=270;
+    }
+
+    if(angle<=90||angle>=270)
+    {
+        drawCycle(zz,centerImage,angle);
+    }
+});
+
+//初始化职业数据
+function initCondition(type) {
+    var values = {};
+    values["type"]=type;
+    var result = get(findByType,values);
+    var resultData = result.data;
+    var sHtml = "";
+    $.each(resultData, function (j) {
+        var sLiHtml = "";
+        sLiHtml += "<li id=\"jobItemValue\">";
+        sLiHtml += " <a href=\"javascript:void(0)\" title='"+resultData[j].code+"' name='"+resultData[j].name+"'>"+resultData[j].name+"</a>";
+        sLiHtml += " </li>";
+        sHtml += sLiHtml;
+    });
+    $("#"+type+"Item").append(sHtml);
+}
+function calcRepayFee(fee,period) {
+    //根据时间和金额计算每月应还款额
+    var dateCycle = $("#dateCycleHide").val();
+    var repayFee=0;
+    if("month"==dateCycle)
+    {  //〔贷款本金×月利率×(1＋月利率)＾还款月数〕÷〔(1＋月利率)＾还款月数-1〕
+        repayFee = Math.round((fee * (rate/12) * Math.pow(1+(rate/12),parseInt(period)))/(Math.pow(1+rate,parseInt(period))-1));
+        repayFee = Math.round(fee/period)+repayFee
+    }else{
+        //日利率*天数
+        repayFee = Math.round(fee * (rate/360) * parseInt(period))+parseInt(fee);
+    }
+    $("#monthRepayFee").text(repayFee);
+}
+initCondition("job");
+/*]]>*/
+</script>
+</body>
+</html>

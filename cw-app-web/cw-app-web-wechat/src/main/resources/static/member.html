@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>个人中心</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <link rel="stylesheet" href="/static/assets/css/iconfont/iconfont.css"/>
+    <link rel="stylesheet" href="/static/assets/css/base.css"/>
+    <link rel="stylesheet" href="/static/assets/css/common.css"/>
+    <script src="/static/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/static/assets/js/zepto.min.js"></script>
+    <script src="/static/assets/js/dialog.js"></script>
+    <script src="/static/assets/js/wechat.js"></script>
+    <script>    /*<![CDATA[*/
+    $(function(){
+            $("#logout").click(function(){
+                var values={};
+                localStorage.clear();
+                get(logoutUrl,values);
+                window.location.href="/static/wechatLogin.html";
+            });
+            var loginUser = localStorage["loginUser"];
+            if(loginUser!=null&&loginUser!="null")
+            {
+                $("#userName").text(loginUser);
+                $("#logout").css("display","");
+            }else{
+                $("#logout").css("display","none");
+                $("#loginBtn").css("display","");
+            }
+        })
+    /*]]>*/
+    </script>
+</head>
+<body class="bg-gray">
+<div class="container">
+    <div class="member-wrap">
+        <div class="member-top">
+            <img src="/assets/images/face.png" class="face"/>
+            <div class="phone"><span id="userName"></span><a id="loginBtn" href="/static/wechatLogin.html" style="display:none">登录</a></div>
+        </div>
+        <div class="member-select-list">
+            <ul>
+                <li>
+                    <a href="record.html">
+                        <span class="icon"><img src="/assets/images/icon_member_5.png"/></span>
+                        <span class="text">申请记录</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="aboutus.html">
+                        <span class="icon"><img src="/assets/images/icon_member_2.png"/></span>
+                        <span class="text">关于我们</span>
+                    </a>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <a href="tel:02362912663">
+                        <span class="icon"><img src="/assets/images/icon_member_4.png"/></span>
+                        <span class="text">联系客服</span>
+                    </a>
+                </li>
+                <li>
+                        <span class="icon"><img src="/assets/images/icon_member_3.png"/></span>
+                        <span class="text">版本号1.0</span>
+                </li>
+            </ul>
+
+        </div>
+        <a href="javascript:void(0);" id="logout" class="btn-quit ap-fz16" style="display:none">退出登录</a>
+    </div>
+    <div class="footer">
+        <div class="footNav">
+            <ul class="clearfix">
+                <li class="nav_01">
+                    <a href="/static/wechatIndex.html" >
+                        <p class="icon"></p>
+                        <p>首页</p>
+                    </a>
+                </li>
+                <li class="nav_02">
+                    <a href="/static/member.html" class="cur">
+                        <p class="icon"></p>
+                        <p>我的</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

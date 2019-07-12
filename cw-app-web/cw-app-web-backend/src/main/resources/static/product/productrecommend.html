@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>产品推荐</title>
+<link href="/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="" href="/static/css/pagination.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/static/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/static/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/script/pingxun.js" type="text/javascript"></script>
+<script src="/static/script/jquery.pagination.js" type="text/javascript"></script>
+<script src="/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- angular ui-->
+<link rel="stylesheet" title="" type="text/css" href="/ui-layout-0.0.0/ui-layout.css"/>
+<script src="/static/script/angular.min.js"></script>
+<script src="/static/ui-layout-0.0.0/ui-layout.js"></script>
+<link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+<script src="/script/jquery.mloading.js" type="text/javascript"></script>
+<script src="/script/layer.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+  <div class="left-main left-off" include="left" id="left"></div>
+  <div class="right-product right-off">
+    <div class="layout-mock">
+        <div class="center-back right-back">
+        <div class="container-fluid">
+          <div class="info-center">
+                    <div class="page-header">
+                      <div class="pull-left">
+						<h4>产品推荐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="button" onclick="updateRecommend(1)" value="开启">
+                            <input type="button" onclick="updateRecommend(0)" value="关闭">
+                            <input type="hidden" id="productId" name="productId"><br>
+                        </h4>
+					</div>
+                    </div>
+                    <div id="productDiv">
+                        <div class="search-box row">
+                           <div class="col-md-8">
+                               提示：推荐产品数量不低于6个，不超过20个<br><br>
+                               <input type="checkbox" style="width: 25px" onclick="checkAll('productList')">全选&nbsp;&nbsp;
+                               <a class="btn btn-default" onclick="javascript:setRecommend(1)">取消推荐</a>
+                           </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="search-box row" id="productList">
+                        </div>
+                        <div class="search-box row" style="width:500px;">
+                            <form id="searchForm">
+                                <div class="form-group clearfix">
+                                    &nbsp;&nbsp;<input type="checkbox" style="width: 25px" onclick="checkAll('noRecommendProductList')">全选
+                                    &nbsp;&nbsp;产品名称&nbsp;<input type="text" id="productName" name="productName" placeholder="请输入产品名称"/>
+                                    <a class="btn btn-default" onclick="javascript:initNoRecommendData()">搜索</a>
+                                    <a class="btn btn-default" onclick="javascript:setRecommend(0)">设置推荐</a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="search-box row" id="noRecommendProductList">
+                        </div>
+                    </div>
+             </div>
+          </div>
+        </div>
+   </div>
+ </div>
+</div>
+<script type="text/javascript">
+function initData() {
+    $("#productList").empty();
+    var productId=$("#productId").val()
+    var param="?productId="+productId;
+    var result = get(productRecommendUrl+param,param);
+    if(!result.success){
+        showTipMessage("会话超时",true);
+    }else{
+        var resultData = result.data;
+        bindData(resultData,1);
+    }
+}
+function initNoRecommendData() {
+    $("#noRecommendProductList").empty();
+    var values={};
+    values["productId"]=$("#productId").val();
+    values["productName"]=$("#productName").val();
+    var result = post(productNoRecommendUrl,values);
+    if(!result.success){
+        showTipMessage("会话超时",true);
+    }else{
+        var resultData = result.data;
+        bindData(resultData,2);
+    }
+}
+function updateRecommend(type) {
+    var values={};
+    values["id"] = $("#productId").val();
+    values["recommendFlag"] = type;
+    var result = post(updateProductRecommendUrl,values);
+    if(!result.success){
+        showTipMessage("会话超时",false);
+    }else{
+        if(type==1){
+            $("#productDiv").show();
+        }else{
+            $("#productDiv").hide();
+        }
+    }
+}
+function checkAll(divId) {
+    $("div#"+divId+" input[name='recommendProductId']").each(function(){
+        if($(this).prop("checked")){
+            $(this).prop("checked", false);
+        }else{
+            $(this).prop("checked", true);
+        }
+    });
+}
+function bindData(obj,type) {
+    var resultData = obj;
+    var sHtml = "";
+    var sTrHtml = "<table style='border-collapse:separate;border-spacing:20px; '>";
+    $.each(resultData, function (j) {
+        if(j%9==0){
+            sTrHtml += "<tr>";
+        }
+        sTrHtml += "<td>";
+        sTrHtml += "<table style='text-align:center'>";
+        sTrHtml += "<tr><td width='100px'><img width='50px' height='50px' src='";
+        sTrHtml += resultData[j].img;
+        sTrHtml += "'></img></td></tr>";
+
+        sTrHtml += "<tr><td><input type='checkbox' name='recommendProductId' value='"+resultData[j].id+"'/> ";
+        sTrHtml += resultData[j].name;
+        sTrHtml += "</td></tr>";
+
+        sTrHtml += "</table>";
+        sTrHtml += "</td>";
+        if(j%3==8){
+            sTrHtml += "</tr>";
+        }
+    });
+    sTrHtml += "</table>";
+    sHtml += sTrHtml;
+    if(type==1){
+        $("#productList").append(sHtml);
+    }else{
+        $("#noRecommendProductList").append(sHtml);
+    }
+}
+//设置推荐
+function setRecommend(type) {
+    var values={};
+    var recommendProductId ="";
+    if(type==1){
+        $("div#productList input:checkbox[name=recommendProductId]:checked").each(function(i){
+            recommendProductId += ($(this).val()+",");
+        });
+        values["recommendType"] = 1 ;
+        if(recommendProductId==""){
+            showTipMessage("请选择取消推荐的产品",false);
+            return ;
+        }
+    }else{
+        $("div#noRecommendProductList input:checkbox[name=recommendProductId]:checked").each(function(i){
+             recommendProductId += ($(this).val()+",");
+        });
+        values["recommendType"] = 0 ;
+        if(recommendProductId==""){
+            showTipMessage("请选择设置推荐的产品",false);
+            return ;
+        }
+    }
+    if(recommendProductId!=""){
+        recommendProductId = recommendProductId.substr(0,recommendProductId.length-1);
+        values["productId"] = $("#productId").val();
+        values["recommendProductId"] = recommendProductId ;
+        var result = post(productSetRecommendUrl,values);
+        if(!result.success){
+            showTipMessage(result.message,false);
+        }else{
+            initData();
+            initNoRecommendData();
+        }
+    }
+}
+$(function(){
+    var hrefUrl = window.location.href;
+    var productName = $("#productName").val();
+    var productId=getArgsFromHref(hrefUrl,"id");
+    $("#productId").val(productId);
+
+    $("#navtop").load("/top.html",function () {
+        topFunc();
+    });
+    $("#left").load("/left.html",function(){
+        left();
+        var links = window.location.href;
+        if(links.indexOf("productrecommend")!=-1){
+            $("#productrecommend").addClass("active");
+        }
+    });
+    //加载默认推荐产品
+    initData();
+    initNoRecommendData();
+});
+
+</script>
+</body>
+</html>

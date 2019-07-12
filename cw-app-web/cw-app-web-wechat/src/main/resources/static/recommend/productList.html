@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>速融贷-每日新品推荐</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="stylesheet" href="/recommend/assets/css/base.css">
+    <link rel="stylesheet" href="/recommend/assets/css/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/recommend/assets/css/common.css">
+    <script src="/recommend/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/recommend/assets/js/zepto.min.js"></script>
+    <script src="/recommend/assets/js/dialog.js"></script>
+    <script src="/recommend/assets/js/recommend.js"></script>
+    <link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+    <script src="/script/jquery.mloading.js" type="text/javascript"></script>
+</head>
+<body class="bg-gray">
+<div class="container">
+    <header class="bor-bottom">
+        每日新品推荐
+        <a class="filter" href="javascript:void(0)" onclick="showItem()">综合指数<i class="iconfont icon-xiangxiajiantou"></i></a>
+    </header>
+    <div class="main">
+            <!--筛选结果弹出层 start-->
+           <div class="pro-list-filterResult" id="zsList" style="display: none">
+            <i class="iconfont icon-toparrow"></i>
+            	<ul>
+                    <li><a href="javascript:void(0)" onclick="initData(0,'cgl')">成功率</a></li>
+                    <li><a href="javascript:void(0)" onclick="initData(0,'fksd')">放款速度</a></li>
+                    <li><a href="javascript:void(0)" onclick="initData(0,'dydk')">抵押贷款</a></li>
+                    <li><a href="javascript:void(0)" onclick="initData(0,'zged')">最高额度</a></li>
+                    <li><a href="javascript:void(0)" onclick="initData(0,'rq')">人气</a></li>
+                </ul>
+            </div>
+            <!--筛选结果弹出层 end-->
+        <div class="pro-tip"><font style="color:red">温馨提示：同时申请3个以上贷款产品，100%下款成功率！</font></div>
+        <div class="pro-list"><input type="hidden" name="pageNo" id="pageNo"/>
+            <ul id="productList">
+
+            </ul>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
+<script>
+    function initData(pageNo,zsType) {
+        $("#productList").empty();
+        var hrefUrl = window.location.href;
+        var channelNo = getArgsFromHref(hrefUrl,"channelNo");
+        if(channelNo==undefined||channelNo==null){
+            channelNo="recommend";
+        }
+        var values={};
+        $("#zsList").hide();
+        values["pageNo"]=pageNo+1;
+        values["sizePerPage"]=20;
+        values["zsType"]=zsType;
+        values["appName"]="SRD";
+        values["channel"]=channelNo;
+        // values["productSubType"]="xkz";
+        values["is"]="xkz";
+        var result = post(productListUrl,values);
+        if(result.success) {
+            var resultData = result.data;
+            bindData(resultData,channelNo);
+        }else{
+            window.location.href="/static/recommend/productList.html";
+        }
+    }
+    function showItem() {
+        $("#zsList").show();
+    }
+    var pageFlag=false;
+    function bindData(obj,channelNo) {
+        var resultData = obj.content;
+        $("#pageNo").val(obj.number+1);
+        var sHtml = "";
+        $.each(resultData, function (j) {
+            var sLiHtml = "";
+            sLiHtml += "<li class=\"clearfix\">";
+            sLiHtml += "    <a href=\"javascript:void(0);\" onclick='viewDetail("+resultData[j].id+",\""+channelNo+"\")'>";
+            if(resultData[j].isRecommend==1){
+                sLiHtml += "    <span class=\"best\"></span>";
+            }
+            sLiHtml += "    <span class=\"img\"><img src=\""+resultData[j].img+"\"></span>";
+            sLiHtml += "    <span class=\"name\">"+resultData[j].name+"</span>";
+            sLiHtml += "    <span class=\"detail\">";
+            sLiHtml += "    <p><span class=\"th\">最高额度</span><span class=\"td\"><em>"+resultData[j].endAmount+"</em>元</span></p>";
+            sLiHtml += "    <p><span class=\"th\">月利率</span><span class=\"td\"><em>"+resultData[j].serviceRate+"%</em></span></p>";
+            sLiHtml += "    <p><span class=\"th\">申请人数</span><span class=\"td\"><em>"+resultData[j].clickNum+"</em>人</span></p>";
+            sLiHtml += "</span>";
+            sLiHtml += "</a>";
+            sLiHtml += "</li>";
+            pageFlag = true;
+            sHtml += sLiHtml;
+        });
+        if(resultData==""&&!pageFlag){
+            $("#productList").empty();
+            sHtml = "<div class=\"main\">";
+            sHtml += "<div class=\"invest-buy\"><img src=\"/assets/images/nodate@3x.png\" alt=\"\"/></div>";
+            sHtml += "<p class=\"tc c-gray-666\">暂无数据！</p>";
+            sHtml += "</div>";
+        }
+        $("#productList").append(sHtml);
+    }
+    //记录访问页面次数
+    function initViewDetail() {
+        var hrefUrl = window.location.href;
+        var id=getArgsFromHref(hrefUrl,"id");
+        var channelNo = getArgsFromHref(hrefUrl,"channelNo");
+        if(channelNo==undefined||channelNo==null){
+            channelNo="recommend";
+        }
+        var param={};
+        param["productId"]=id;
+        param["deviceNumber"]=localStorage.getItem("loginUser");
+        param["applyArea"]="productList";//APP用户推荐产品列表（新产品）
+        param["channelNo"]=channelNo;
+        param["appName"] = "MBD";
+        post(applyLoan,param);
+    }
+    $(function(){
+        initData(0);
+        initViewDetail();
+    });
+</script>

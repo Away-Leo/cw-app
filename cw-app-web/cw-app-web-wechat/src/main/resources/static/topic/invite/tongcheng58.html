@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>在线申请信用贷款</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="stylesheet" href="/static/topic/css/base.css">
+    <link rel="stylesheet" href="/assets/css/common.css"/>
+    <script src="/static/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/static/assets/js/zepto.min.js"></script>
+    <script src="/static/assets/js/dialog.js"></script>
+</head>
+<body>
+<style>
+body{background:#ef3927;}
+.download img{ width:100%;}
+.block-form{ background:#ef3927; padding:0 20px;}
+.form{ background:#fff; width:90%; padding:20px 20px; margin:0 auto; font-size:1.2rem;}
+.form li{ line-height:4rem; border-bottom:1px solid #ef3927;}
+.form input{ background:none; font-size:1.6rem;}
+.form .get-code{ background:#fc6b5c; border:1px solid #ef3927; display:inline-block; padding:0 10px; height:3rem; line-height:3rem; color:#fff; float:right; margin:5px 0 0 0;}
+.login-pass{ text-align:left;}
+.login-pass a{font-size:1.2rem;}
+.btn-login{background:#ef3927; width:100%; line-height:4rem;height:4rem; color:#fff;}
+.code { text-align:center;}
+.code img{ width:80%;}
+.down{ width:80%; margin:2rem auto 1rem; text-align:center;}
+.down a{ width:35%;}
+.down .left{ float:left;}
+.down .right{ float:right;}
+.down img{ display:inline-block;width:100%; }
+</style>
+<div class="container download">
+	<div class="img"><img src="img/invite_01.png" alt=""/></div>
+    <div class="img"><img src="img/invite_02.jpg" alt=""/></div>
+    <div class="block-form">
+    	<div class="form">
+        	<ul>
+                    <li>
+                        <div class="input">
+                            <input type="tel" id="phone" name="userName" placeholder="输入您的手机号">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input clearfix">
+                            <input type="password" id="pas" placeholder="输入验证码" style="width:50%">
+                            <span class="get-code" id="sendSms">获取验证码</span>
+                            <span class="get-code codeover" id="sending" style="display:none">60</span>
+                        </div>
+                    </li>
+                </ul>
+                 <div class="mt10">
+                    <button class="btn-login radius ap-fz16" id="login">立即注册</button>
+                </div>
+                <div class="login-pass tc mt10">
+                    点击立即注册即同意<a href="/static/register.html">《注册协议》</a>
+                </div>
+        </div>
+    </div>
+    <div class="img"><img src="img/invite_03.jpg" alt=""/></div>
+    <div class="img"><img src="img/invite_04.jpg" alt=""/></div>
+    <div class="code">
+    	<img src="img/invite_05.jpg" alt=""/><br>
+   </div>
+
+</div>
+<script>
+    var httpUrl = "https://www.pingxundata.com";
+    var sendSmsUrl = httpUrl + "/common/sendSmsVerify.json";
+    var loginUrl = httpUrl + "/common/passwordLogin.json";
+    var sendTime =60;
+    var InterValObj;
+    $(function(){
+        $("#form-input input").keyup(function(){
+            var phone=$("#phone").val();
+            var pas=  $("#pas").val();
+            var login_btn=$("#login");
+            if(phone=="" || pas==""){
+                login_btn.removeClass("check-ok");
+                login_btn[0].disabled=true;
+            }else{
+                login_btn.addClass("check-ok");
+                login_btn[0].disabled=false;
+            }
+        });
+        $("#login").click(function(){
+            var phone=$("#phone").val();
+            var pas=  $("#pas").val();
+            var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+            if(phone.length<11){
+                return showMessage("请输入手机号码！")
+            }
+            if(!isMobile.test(phone)){
+                return showMessage("请输入正确的手机号码！")
+            }
+
+            if(pas.length<4){
+                return showMessage("密码格式不正确！")
+            }
+
+            var values={};
+            values["userName"]=phone;
+            values["password"]=pas;
+            values["channelNo"] = "CSEEQ6WQY";//58同城
+            values["appName"]="wechat";
+            var result = loginPost(loginUrl,values)
+            if(result.success)
+            {
+                localStorage.setItem("loginUser",phone);
+                localStorage.setItem("channelNo","CSEEQ6WQY");
+                window.location.href="/static/prolist.html";
+            }else{
+                dialog({
+                    type: null,
+                    message: result.message,
+                    delay: 1000,
+                    maskOpacity: 0.01
+                });
+            }
+        });
+        $("#xieyi").click(function () {
+            if(this.getAttribute("class").indexOf("checked")!=-1){
+                $(this).removeClass("checked");
+            }else{
+                $(this).addClass("checked");
+            }
+        });
+        $("#sendSms").click(function(){
+            var phone=$("#phone").val();
+            var isMobile=/^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/; //手机号码验证规则
+            if(phone.length<11){
+                return  showMessage("请输入手机号码！")
+            }
+            if(!isMobile.test(phone)){
+                return  showMessage("请输入正确的手机号码！")
+            }
+
+            var param={};
+            param["phone"] = phone;
+            param["channelNo"] = "CSEEQ6WQY";//58同城
+            param["appName"] = "MBD";
+            var result = loginPost(sendSmsUrl,param);
+            if(result.success) {
+                $("#sending").css("display", "")
+                $("#sendSms").css("display", "none")
+                localStorage.setItem("channelNo","CSEEQ6WQY");
+                InterValObj = setInterval("leftTimer()", 1000);
+            }else{
+                dialog({
+                    type: null,
+                    message: result.message,
+                    delay: 1000,
+                    maskOpacity: 0.01
+                });
+            }
+        });
+    });
+
+    function leftTimer() {
+        sendTime--;
+        if (sendTime == 0) {
+            window.clearInterval(InterValObj);
+            $("#sending").css("display","none")
+            $("#sendSms").css("display","")
+        }
+        $("#sending").text(""+sendTime+"")
+    }
+    function loginPost(url,data) {
+        var returnData;
+        data["type"]="user";
+        data["channelNo"] = "CSEEQ6WQY";
+        var json = JSON.stringify(data);
+        json = json.replace(/\r\n/g,"\n");
+        $.ajax({
+            url: url,
+            contentType: "application/json;charset=utf-8",
+            data: json,
+            method:"post",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                returnData = data;
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+        return returnData;
+    }
+    function showMessage(message) {
+        dialog({
+            type: null,
+            message: message,
+            delay: 1000,
+            maskOpacity: 0.01
+        });
+        return false;
+    }
+</script>
+</body>
+</html>

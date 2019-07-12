@@ -1,0 +1,146 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>平讯数据后台管理系统</title>
+<link href="/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/static/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/static/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/static/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<link href="/static/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
+<link href="/static/css/demo.css" rel="stylesheet" type="text/css"/>
+<script src="/static/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/script/pingxun.js" type="text/javascript"></script>
+<script src="/script/ajaxfileupload.js" type="text/javascript"></script>
+<script src="/static/script/jquery.ztree.core.js" type="text/javascript"></script>
+<script src="/static/script/jquery.ztree.excheck.js" type="text/javascript"></script>
+<script type="text/javascript" src="/static/script/jquery.ztree.exedit.js"></script>
+    <link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+    <script src="/script/jquery.mloading.js" type="text/javascript"></script>
+    <script src="/script/layer.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+  <div  class="left-main left-full" include="left" id="left"></div>
+  <div class="right-product view-product right-full">
+     <div class="container-fluid">
+				<div class="manage account-manage info-center">
+					<div class="page-header">
+                        <div class="pull-left">
+						    <h4>角色管理</h4>
+					    </div>
+                    </div>
+                    <form id="addRole">
+                        <dl class="account-basic clearfix">
+                            <dd class="pull-left margin-large-left margin-small-top">
+                            <p class="text-small">
+                                <span class="show pull-left base-name">角色名称</span>
+                                <span class="margin-left"><input type="text" id="role" name="role" style="width:250px"/></span>
+                            </p>
+                            <p class="text-small">
+                                <span class="show pull-left base-name">角色描述</span>
+                                <span class="margin-left"><input type="text" id="description" name="description" style="width:250px"/></span>
+                            </p>
+                            <p class="text-small">
+                                <span class="show pull-left base-name">角色权限</span>
+                                <span class="margin-left">
+                                    <div class="content_wrap" style="margin-top: -20px;margin-left: 70px">
+                                        <div class="zTreeDemoBackground left">
+                                            <ul id="treeDemo" class="ztree"></ul>
+                                        </div>
+                                    </div>
+                                </span>
+                            </p>
+                            </dd>
+                        </dl>
+                        <dd class="pull-left margin-large-left margin-small-top">
+                            <p class="text-small">
+                                <input type="button" value="保存" style="width: 150px;" onclick="javascript:saveRole()"/>
+                            </p>
+                        </dd>
+                    </form>
+				</div>
+		</div>
+  </div>
+</div>
+<script type="text/javascript">
+var setting = {
+    check: {
+        enable: true,
+        chkboxType : { "Y" : "ps", "N" : "ps" }
+    },
+    data: {
+        simpleData: {
+            enable: true
+        }
+    },
+    callback:{
+        onCheck:onCheck
+    }
+};
+var zNodes;
+function findAllResource() {
+    var param="id=";
+    var result = get(allResourceUrl,param);
+    if(result.success)
+    {
+        zNodes = eval("("+result.data+")");
+    }else{
+        showTipMessage(result.message,true);
+    }
+}
+findAllResource();
+//保存角色
+function saveRole() {
+    var data = $("#addRole").serializeArray();
+    var values={};
+    for (var item in data) {
+        values[data[item].name] = data[item].value;
+    }
+    values["resourceIds"] = eval("("+resourceId+")");
+    if($("#role").val()==undefined||$("#role").val()=='')
+    {
+        showTipMessage("请填写角色名称",false);
+        return false;
+    }
+    var result = post(saveRoleUrl,values);
+    if(result.success)
+    {
+        window.location.href="/role/rolelist.html";
+    }else{
+        showTipMessage(result.message,true);
+    }
+}
+//设置选中
+var resourceId;
+function onCheck() {
+    var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+    var nodes   = treeObj.getCheckedNodes(true);
+    resourceId  = "[";
+    for (var i = 0; i < nodes.length; i++) {
+        resourceId += parseInt(nodes[i].id); //获取选中节点的值
+        if(i<nodes.length-1)
+        {
+            resourceId+=",";
+        }
+    }
+    resourceId  += "]";
+}
+$(function(){
+    $("#navtop").load("/top.html",function () {
+        topFunc();
+    });
+    $("#left").load("/left.html",function(){
+        left();
+    });
+    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+});
+</script>
+</body>
+</html>

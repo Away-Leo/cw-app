@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="stylesheet" href="/jieqianwang/assets/css/base.css">
+    <link rel="stylesheet" href="/jieqianwang/assets/css/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/jieqianwang/assets/css/common.css">
+    <script src="/jieqianwang/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/jieqianwang/assets/js/zepto.min.js"></script>
+    <script src="/jieqianwang/assets/js/dialog.js"></script>
+<script>
+$(function(){
+    function tabs(tabTit,on,tabCon){
+        $(tabTit).children().hover(function(){
+            $(this).addClass(on).siblings().removeClass(on);
+            var index = $(tabTit).children().index(this);
+           	$(tabCon).children().eq(index).show().siblings().hide();
+    	});
+	};
+    tabs(".tab-hd","cur",".tab-bd");
+});
+</script>
+</head>
+<body class="bg-gray">
+<div class="container">
+    <div class="index-wrap">
+    	<div class="loanInfo">
+        	<div class="tit">贷款吧</div>
+            <div class="result clearfix">
+            	<ul>
+                	<li><em>还款日期</em><span>60<em>天</em></span></li>
+                    <li><em>每期应还</em><span><em>￥</em>1300</span></li>
+                </ul>
+            </div>
+            <div class="loan">
+                <div class="priceTit">借款金额</div>
+                <div class="priceLoan"><em>￥</em><span>80,000</span></div>
+            </div>
+            <div class="scale"><em></em><span><img src="/jieqianwang/assets/images/scale.png"></span></div>
+        </div>
+        <div class="data">
+        	<ul class="main-nav  tab-hd clearfix">
+              <li class="cur">日</li>
+              <li>月</li>
+            </ul>
+            <div class="tab-bd clearfix">
+         	   <div class="main-con timeChoice">
+                    <span class="dd">1天</span>
+                    <span class="bar"><em style="left:10%;"><img src="/jieqianwang/assets/images/barchoice.png"></em></span>
+                    <span class="dd">365天</span>               
+               </div>
+ 		       <div class="main-con timeChoice" style="display:none;">
+               	<span class="dd">1月</span>
+                    <span class="bar"><em style="left:10%;"><img src="/jieqianwang/assets/images/barchoice.png"></em></span>
+                    <span class="dd">36月</span> 
+               
+               </div>
+      		</div>    
+        </div>
+        <div class="occ"><a href="#">选择职业</a></div>
+      <div class="index-btn"><a href="/jieqianwang/prolist.html" class="btn-apply ap-fz16">搜索</a> </div>
+    </div>
+    <div class="footer">
+        <div class="footNav">
+            <ul class="clearfix">
+                <li class="nav_01">
+                    <a href="/jieqianwang/index.html"  class="cur">
+                        <p class="icon"></p>
+                        <p>首页</p>
+                    </a>
+                </li>
+                <li class="nav_02">
+                    <a href="/jieqianwang/news.html">
+                        <p class="icon"></p>
+                        <p>消息</p>
+                    </a>
+                </li>
+                <li class="nav_03">
+                    <a href="/jieqianwang/card.html">
+                        <p class="icon"></p>
+                        <p>信用卡</p>
+                    </a>
+                </li>
+                <li class="nav_04">
+                    <a href="/jieqianwang/member_index.html">
+                        <p class="icon"></p>
+                        <p>我的</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>产品列表</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <link rel="stylesheet" href="/static/assets/css/iconfont/iconfont.css"/>
+    <link rel="stylesheet" href="/static/assets/css/base.css"/>
+    <link rel="stylesheet" href="/static/assets/css/common.css"/>
+    <script src="/static/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/static/assets/js/zepto.min.js"></script>
+    <script src="/static/assets/js/dialog.js"></script>
+    <script src="/static/assets/js/wechat.js"></script>
+</head>
+<style>
+    .bottom{height:50px;width:100%;position:fixed;bottom:0;background-color:rgba(0,0,0,0.8);display:flex;align-items:center;padding-left:15px;padding-right:15px;}
+    .bottom p{color:#FFF;}
+</style>
+<body class="bg-gray">
+<div class="container">
+    <div class="main">
+            <div class="pro-list-filter">
+                <ul>
+                    <li id="loanAmount"><a href="javascript:void(0)">贷款金额<em></em></a></li>
+                    <li id="loanPeriod"><a href="javascript:void(0)" >贷款期限<em></em></a></li>
+                    <li id="loanType"><a href="javascript:void(0)">贷款类型<em></em></a></li>
+                </ul>
+            </div>
+            <!--筛选结果弹出层 start-->
+           <div class="pro-list-filterResult" id="loanAmountList" style="display: none">
+            	<ul id="loanAmountItem">
+                </ul>
+            </div>
+            <div class="pro-list-filterResult" id="loanPeriodList" style="display: none">
+                <ul id="loanPeriodItem">
+                </ul>
+            </div>
+            <div class="pro-list-filterResult" id="loanTypeList" style="display: none">
+                <ul id="loanTypeItem">
+                </ul>
+            </div>
+            <div class="backbg" id="backbg" style="display: none"></div>
+            <!--筛选结果弹出层 end-->
+        <div class="pro-tip" style="color: red;">温馨提示：同时申请3个产品，贷款通过率提高98%！</div>
+        <div class="pro-list"><input type="hidden" name="pageNo" id="pageNo"/>
+            <ul id="wechatlist">
+            </ul>
+        </div>
+    </div>
+    <div class="bottom">
+        <img src="assets/images/srdlogo.png" alt="" style="width: 24px;height: 24px;margin-right:5px"/>
+        <p>点击下载APP，了解最新借贷产品</p>
+        <a style="flex-grow:2;text-align:right;height:33px;margin-right: 10px;" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.pingxun.surongloan">
+            <img src="assets/images/opensrdicon.png" width="114px" height="33px" alt=""/>
+        </a>
+    </div>
+</div>
+<script>
+    var pageFlag=false;
+    $(function(){
+        initData(0);
+        //加载筛选项
+        initCondition("loanAmount");
+        initCondition("loanPeriod");
+        initCondition("loanType");
+        $("#loanAmount").click(function(){
+            if($("#loanAmountList").css("display")=="none")
+            {
+                $("#loanAmountList").css("display","");
+                $("#backbg").css("display","");
+            }else{
+                $("#loanAmountList").css("display","none");
+                $("#backbg").css("display","none");
+            }
+            $("#loanPeriodList").css("display","none");
+            $("#loanTypeList").css("display","none");
+        });
+        $("#loanPeriod").click(function(){
+            $("#loanAmountList").css("display","none");
+            if($("#loanPeriodList").css("display")=="none")
+            {
+                $("#loanPeriodList").css("display","");
+                $("#backbg").css("display","");
+            }else{
+                $("#loanPeriodList").css("display","none");
+                $("#backbg").css("display","none");
+            }
+            $("#loanTypeList").css("display","none");
+        });
+        $("#loanType").click(function(){
+            $("#loanAmountList").css("display","none");
+            $("#loanPeriodList").css("display","none");
+            if($("#loanTypeList").css("display")=="none")
+            {
+                $("#loanTypeList").css("display","");
+                $("#backbg").css("display","");
+            }else{
+                $("#loanTypeList").css("display","none");
+                $("#backbg").css("display","none");
+            }
+        });
+
+    });
+    function viewDetail(id) {
+        window.location.href="/static/prodetail.html?id="+id;
+    }
+    function initData(pageNo) {
+        var values = {};
+        values["pageNo"]=pageNo+1;
+        var hrefUrl = window.location.href;
+        console.log(hrefUrl);
+        values["loanAmount"]=getArgsFromHref(hrefUrl,"loanAmount");//[[${loanAmount}]];
+        values["loanPeriod"]=getArgsFromHref(hrefUrl,"loanPeriod");//[[${loanPeriod}]];
+        values["periodType"]=getArgsFromHref(hrefUrl,"periodType");//[[${periodType}]];
+        values["channelNo"]=localStorage.getItem("channelNo");
+        values["job"]=getArgsFromHref(hrefUrl,"job");//[[${job}]];
+        var result = post(productListUrl,values);
+        if(result.success) {
+            var resultData = result.data;
+            bindData(resultData);
+        }else{
+            window.location.href="/static/wechatLogin.html";
+        }
+    }
+    //加载查询条件
+    function initCondition(type) {
+        var values = {};
+        values["type"]=type;
+        var result = get(findByType,values);
+        var resultData = result.data;
+        var sHtml = "";
+        $.each(resultData, function (j) {
+            var sLiHtml = "";
+            sLiHtml += "<li onclick=\"checkItem('"+type+"','"+resultData[j].code+"','"+resultData[j].cycle+"')\">";
+            sLiHtml += " <a href=\"javascript:void(0)\">"+resultData[j].name+"</a>";
+            sLiHtml += " </li>";
+            sHtml += sLiHtml;
+        });
+        $("#"+type+"Item").append(sHtml);
+    }
+    function bindData(obj) {
+        var resultData = obj.content;
+        $("#pageNo").val(obj.number+1);
+        var sHtml = "";
+        $.each(resultData, function (j) {
+            var sLiHtml = "";
+            sLiHtml += "<li onclick='viewDetail("+resultData[j].id+")'>";
+            sLiHtml += " <span class=\"img\"><img src=\""+resultData[j].img+"\"/></span>";
+            sLiHtml += "     <span class=\"name\">"+resultData[j].name+"</span>";
+            sLiHtml += "    <span class=\"detail\">";
+            sLiHtml += "    <p><span class=\"th\">额度范围</span><span class=\"td\">"+resultData[j].startAmount+"-"+resultData[j].endAmount+"元</span></p>";
+            sLiHtml += "<p><span class=\"th\">期限范围</span><span class=\"td\">"+resultData[j].startPeriod+"-"+resultData[j].endPeriod+resultData[j].periodType+"</span></p>";
+            sLiHtml += "<p><span class=\"th\">最快放款</span><span class=\"td\">当天</span></p>";
+            sLiHtml += "    </span>";
+            sLiHtml += "    <a href=\"javascript:void(0)\" class=\"btn btn-apply\" onclick=\"viewDetail("+resultData[j].id+")\" >申请贷款</a>";
+            sLiHtml += "    <span class=\"nub\">申请人数<em>"+resultData[j].clickNum+"</em>人</span>";
+            sLiHtml += " </li>";
+            sHtml += sLiHtml;
+        });
+        if(resultData==""&&!pageFlag)
+        {
+            $("#wechatlist").empty();
+            sHtml = "<div class=\"main\">";
+            sHtml += "<div class=\"invest-buy\"><img src=\"/assets/images/nodate@3x.png\" alt=\"\"/></div>";
+            sHtml += "<p class=\"tc c-gray-666\">暂无数据！</p>";
+            sHtml += "</div>";
+        }
+        $("#wechatlist").append(sHtml);
+    }
+    $(window).scroll(function() {
+        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+            var pageNo = $("#pageNo").val();
+            pageNo = parseInt(pageNo);
+            pageFlag = true;
+            initData(pageNo);
+        }
+    });
+    function checkItem(type,code,cycle) {
+        var values = {};
+        var pageNo = 0;
+        pageNo = parseInt(pageNo);
+        values["pageNo"]=pageNo+1;
+        values["channelNo"]=localStorage.getItem("channelNo");
+        values["dateCycle"]=cycle;
+        values[type]=code;
+        $("#"+type+"List").css("display","none");
+        $("#backbg").css("display","none");
+        pageFlag=false;
+        $("#wechatlist").empty();
+        var resultd = post(productListUrl,values);
+        if(resultd.success) {
+            var data = resultd.data;
+            bindData(data);
+        }
+    }
+</script>
+</body>
+</html>

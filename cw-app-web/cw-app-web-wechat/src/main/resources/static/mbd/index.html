@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>秒必贷</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="stylesheet" href="/mbd/assets/css/base.css">
+    <link rel="stylesheet" href="/mbd/assets/css/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/mbd/assets/css/common.css">
+    <script src="/mbd/assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/mbd/assets/js/zepto.min.js"></script>
+    <script src="/mbd/assets/js/dialog.js"></script>
+    <script src="/mbd/assets/js/mbd.js"></script>
+    <link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+    <script src="/script/jquery.mloading.js" type="text/javascript"></script>
+</head>
+<body class="bg-gray">
+<div class="container">
+    <header class="bor-bottom">
+        首页
+        <a href="tel:4008622287" class="iconfont icon-help"></a>
+    </header>
+    <div class="main page-index">
+    	<div class="icon">
+        	<ul class="clearfix">
+            	<li><a href="javascript:void(0)" onclick="findByType('diyaLoan')"><em><img src="/mbd/assets/images/icon01@2x.png"></em><span>抵押贷款</span></a></li>
+                <li><a href="javascript:void(0)" onclick="findByType('salaryLoan')"><em><img src="/mbd/assets/images/icon02@2x.png"></em><span>工薪贷款</span></a></li>
+                <li><a href="javascript:void(0)" onclick="findByType('creditcardloan')"><em><img src="/mbd/assets/images/icon03@2x.png"></em><span>信用贷款</span></a></li>
+                <li><a href="javascript:void(0)" onclick="findByType('xiaoejishuloan')"><em><img src="/mbd/assets/images/icon04@2x.png"></em><span>小额速贷</span></a></li>
+                <li><a href="javascript:void(0)" onclick="findByType('salaryLoan')"><em><img src="/mbd/assets/images/icon05@2x.png"></em><span>新口子</span></a></li>
+                <li><a href="javascript:void(0)" onclick="findByType('xiaoejishuloan')"><em><img src="/mbd/assets/images/icon06@2x.png"></em><span>快速微额贷</span></a></li>
+                <li><a href="javascript:void(0)" onclick="findByType('salaryLoan')"><em><img src="/mbd/assets/images/icon07@2x.png"></em><span>新人专享</span></a></li>
+                <li><a href="javascript:void(0)" onclick="findByType('creditcardloan')"><em><img src="/mbd/assets/images/icon08@2x.png"></em><span>低门槛贷</span></a></li>
+            </ul>
+        </div>
+        <div class="banner clearfix">
+        	<div class="left banner01"><a href="javascript:void(0)" onclick="findByType('xiaoejishuloan')"><h3>黑户专区</h3><span>线上申请，快速放款</span></a></div>
+            <div class="right">
+            	<ul>
+            	<li class="banner02"><a href="javascript:void(0)" onclick="findByType('creditcardloan')"><h3>急用钱快进</h3><span>5000元现金轻松拿</span></a></li>
+                <li class="banner03"><a href="javascript:void(0)" onclick="findByType('salaryLoan')"><h3>高通过大本营</h3><span>通过率高</span></a></li>
+                </ul>
+            </div>
+            
+        </div>
+        <div class="pro-list">
+        	<div class="title clearfix"><h2>热门推荐</h2><span><a href="#"></a></span></div>
+            <ul id="recommendProduct">
+
+            </ul>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
+<script>
+    var pageFlag=false;
+    function findByType(type) {
+        window.location.href="/static/mbd/prolist.html?loanType="+type;
+    }
+    function initData(pageNo) {
+
+        var result = get(productRecommendUrl,"channel=wechat&appName=MBD&pageNo="+(pageNo+1));
+        if(result.success) {
+            var resultData = result.data;
+            bindData(resultData);
+        }else{
+            window.location.href="/static/mbd/index.html";
+        }
+    }
+    function bindData(obj) {
+        var resultData = obj;
+        $("#pageNo").val(obj.number+1);
+        var sHtml = "";
+        $.each(resultData, function (j) {
+            var sLiHtml = "";
+            sLiHtml += "<li class=\"clearfix\">";
+            sLiHtml += "    <a href=\"javascript:void(0);\" onclick='viewDetail("+resultData[j].id+")'>";
+            sLiHtml += "    <span class=\"img\"><img src=\""+resultData[j].img+"\"></span>";
+            sLiHtml += "    <span class=\"name\">"+resultData[j].name+"</span>";
+            sLiHtml += "    <span class=\"detail\">";
+            sLiHtml += "    <p><span class=\"th\">最高额度</span><span class=\"td\"><em>"+resultData[j].endAmount+"</em>元</span></p>";
+            sLiHtml += "    <p><span class=\"th\">月利率</span><span class=\"td\"><em>"+resultData[j].serviceRate+"%</em></span></p>";
+            sLiHtml += "    <p><span class=\"th\">申请人数</span><span class=\"td\"><em>"+resultData[j].clickNum+"</em>人</span></p>";
+            sLiHtml += "</span>";
+            sLiHtml += "</a>";
+            sLiHtml += "</li>";
+
+            sHtml += sLiHtml;
+        });
+        if(resultData==""&&!pageFlag){
+            $("#recommendProduct").empty();
+            sHtml = "<div class=\"main\">";
+            sHtml += "<div class=\"invest-buy\"><img src=\"/assets/images/nodate@3x.png\" alt=\"\"/></div>";
+            sHtml += "<p class=\"tc c-gray-666\">暂无数据！</p>";
+            sHtml += "</div>";
+        }
+        $("#recommendProduct").append(sHtml);
+    }
+    $(function(){
+        initData(0);
+    });
+</script>

@@ -1,0 +1,639 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+    <title>应用市场数据汇总</title>
+    <link href="/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+    <link title="" href="/css/style.css" rel="stylesheet" type="text/css"  />
+    <link title="" href="/static/css/pagination.css" rel="stylesheet" type="text/css"  />
+    <link title="blue" href="/static/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+    <link title="green" href="/static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+    <link title="orange" href="/static/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+    <link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+    <script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="/script/jquery.cookie.js" type="text/javascript"></script>
+    <script src="/static/script/pingxun.js" type="text/javascript"></script>
+    <script src="/static/script/jquery.pagination.js" type="text/javascript"></script>
+    <script src="/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript" src="/static/script/WdatePicker.js"></script>
+    <!-- angular ui-->
+    <link rel="stylesheet" title="" type="text/css" href="/ui-layout-0.0.0/ui-layout.css"/>
+    <script src="/static/script/angular.min.js"></script>
+    <script src="/static/ui-layout-0.0.0/ui-layout.js"></script>
+    <link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+    <script src="/script/jquery.mloading.js" type="text/javascript"></script>
+    <script src="/script/layer.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+    <div class="left-main left-off" include="left" id="left"></div>
+    <div class="right-product right-off">
+        <div class="layout-mock">
+            <div class="center-back right-back">
+                <div class="container-fluid">
+                    <div class="info-center">
+                        <div class="page-header">
+                            <div class="pull-left">
+                                <h4>应用市场数据汇总</h4>
+                            </div>
+                        </div>
+                        <div class="search-box row">
+                            <div class="col-md-8">
+                                <form id="searchForm">
+                                    <div class="form-group">
+                                        <span class="pull-left form-span">日期:</span>
+                                        <input class="Wdate" type="text" name="applyStartDate" style="margin-top: 5px;height: 30px;" id="d15" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <span class="pull-left form-span">-</span>
+                                        <input class="Wdate" type="text" name="applyEndDate" style="margin-top: 5px;height: 30px;" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"/>
+                                    </div>
+                                </form>
+                                <div class="form-group btn-search">
+                                    <button class="btn btn-default" onclick="javascript:initData(0)"><span class="glyphicon glyphicon-search"></span> 搜索</button>
+                                    <button class="btn btn-default" onclick="javascript:exportExcel('appTotal')"><span class="glyphicon glyphicon-export"></span> 导出</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-margin">
+                        <table id="dataTable" class="table table-bordered table-header">
+                            <thead><input type="hidden" name="direction" id="direction"/>
+                            <tr>
+                                <td rowspan="2" style="text-align: center">日期</td>
+                                <td colspan="12" style="text-align: center">秒必贷</td>
+                                <td colspan="12" style="text-align: center">借钱帝</td>
+                                <td colspan="12" style="text-align: center">讯闪贷</td>
+                                <td colspan="12" style="text-align: center">借多少</td>
+                                <td colspan="12" style="text-align: center">借钱乐乐</td>
+                                <td colspan="12" style="text-align: center">贷款哒</td>
+                                <td colspan="12" style="text-align: center">借钱贷</td>
+                                <td colspan="12" style="text-align: center">贷款帝</td>
+                                <td colspan="12" style="text-align: center">贷款部落</td>
+                                <td colspan="12" style="text-align: center">叮叮招财</td>
+                                <td colspan="12" style="text-align: center">速亿贷</td>
+                                <td colspan="12" style="text-align: center">速融贷</td>
+                                <td colspan="12" style="text-align: center">贷钱来</td>
+                                <td colspan="12" style="text-align: center">借贷帮</td>
+                                <td colspan="12" style="text-align: center">贷款掌柜</td>
+                                <td colspan="12" style="text-align: center">借借款</td>
+
+                                <td colspan="12" style="text-align: center">借钱花花</td>
+                                <td colspan="12" style="text-align: center">贷款汇</td>
+                                <td colspan="12" style="text-align: center">秒贷宝</td>
+                                <td colspan="12" style="text-align: center">信而贷</td>
+                                <td colspan="12" style="text-align: center">借钱树</td>
+                                <td colspan="12" style="text-align: center">借贷金钱</td>
+                                <!--“快借王、贷款神速、借钱富、贷款堂、好贷宝、易借侠”换成“放款快、融贷贷款借钱、宜贷贷款借钱、秒秒贷、借钱app、下款快”-->
+                                <td colspan="12" style="text-align: center">放款快（中鼎国泰）</td>
+                                <td colspan="12" style="text-align: center">融贷贷款借钱（中鼎国泰）</td>
+                                <td colspan="12" style="text-align: center">宜贷贷款借钱（中鼎国泰）</td>
+                                <td colspan="12" style="text-align: center">秒秒贷（中鼎国泰）</td>
+                                <td colspan="12" style="text-align: center">借钱app（中鼎国泰）</td>
+                                <td colspan="12" style="text-align: center">下款快（中鼎国泰）</td>
+                                <td colspan="12" style="text-align: center">人人借钱贷款（中鼎国泰）</td>
+                                <td colspan="12" style="text-align: center">借借款（中鼎国泰）</td>
+                            </tr>
+                            <tr>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                                <td>华为</td><td>小米</td><td>VIVO</td><td>OPPO</td><td>360</td><td>应用宝</td><td>苹果</td><td>魅族</td><td>豌豆荚</td><td>百度</td><td>三星</td><td>其它</td>
+                            </tr>
+                            </thead>
+                            <tbody id="productList">
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="361">
+                                    <div class="pull-right">
+                                        <nav>
+                                            <ul id="pageHtml" class="pagination">
+
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    function initData(pageIndex,sortZiduan) {
+        $("#productList").empty();
+        var values = {};
+        var data = $("#searchForm").serializeArray();
+        values["pageNo"]=(pageIndex+1);
+        values["channelNo"]="backend";
+        values["userType"]="manager";
+        values["sortColumn"]=(sortZiduan==undefined?"":sortZiduan);
+        values["sortDesc"]=($("#direction").val()==""?"asc":$("#direction").val());
+        for (var item in data) {
+            values[data[item].name] = data[item].value;
+        }
+        var result = post(appMarketReportUrl,values);
+        if(!result.success){
+            showTipMessage(result.message,true);
+        }else{
+            var resultData = result.data;
+            bindData(resultData);
+        }
+    }
+
+    function bindData(obj) {
+        var resultData = obj;
+        var sHtml = "";
+        $.each(resultData, function (j) {
+            var sTrHtml = "";
+            // 秒必贷
+            sTrHtml += "<tr><td>" + resultData[j].day+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbd360+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdYyb+ "</td>";
+            sTrHtml += "<td>"+resultData[j].mbdApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].mbdOther+"</td>";
+
+            //借钱帝
+            sTrHtml += "<td>"+resultData[j].jqwHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqw360+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jqwYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqwOther+"</td>";
+
+            //讯闪贷
+            sTrHtml += "<td>"+resultData[j].xsdHuawei+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xsdXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].xsdVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].xsdOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].xsd360+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xsdYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].xsdApple+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xsdMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].xsdWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].xsdBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].xsdSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xsdOther+"</td>";
+
+            //借多少
+            sTrHtml += "<td>"+resultData[j].jdsHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jds360+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].jdsMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdsOther+"</td>";
+
+            //借钱乐乐
+            sTrHtml += "<td>"+resultData[j].dsqbHuawei+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dsqbXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqb360+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].dsqbOther+"</td>";
+
+            //贷款哒
+            sTrHtml += "<td>"+resultData[j].dkdHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdXiaomi+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dkdVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkd360+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkdOther+"</td>";
+
+            //借钱贷
+            sTrHtml += "<td>"+resultData[j].dkqbHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqb360+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkqbOther+"</td>";
+
+            //贷款帝
+            sTrHtml += "<td>"+resultData[j].pxqbHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbXiaomi+"</td>";
+            sTrHtml += "<td>"+ resultData[j].pxqbVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqb360+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].pxqbOther+"</td>";
+
+            //贷款部落
+            sTrHtml += "<td>"+resultData[j].dkblHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkbl360+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkblOther+"</td>";
+
+            //叮叮招财
+            sTrHtml += "<td>"+resultData[j].lsqdHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqd360+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].lsqdOther+"</td>";
+
+            //速亿贷
+            sTrHtml += "<td>"+resultData[j].sydHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydOppo+"</td>";
+            sTrHtml += "<td>"+ resultData[j].syd360+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].sydOther+"</td>";
+
+            //速融贷
+            sTrHtml += "<td>"+resultData[j].srdHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdXiaomi+"</td>";
+            sTrHtml += "<td>"+ resultData[j].srdVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].srd360+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdMeizu+"</td>";
+            sTrHtml += "<td>"+ resultData[j].srdWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].srdSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].srdOther+"</td>";
+            //贷钱来
+            sTrHtml += "<td>"+resultData[j].dqlHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dql360+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].dqlOther+"</td>";
+            //借贷帮
+            sTrHtml += "<td>"+resultData[j].jdbHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdb360+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdbOther+"</td>";
+
+            //贷款掌柜
+            sTrHtml += "<td>"+resultData[j].dkzgHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzg360+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgApple+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgSamsung+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkzgOther+"</td>";
+
+            //借借款
+            sTrHtml += "<td>"+resultData[j].jjkHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjk360+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].jjkMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jjkSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jjkOther+"</td>";
+
+            //借钱花花
+            sTrHtml += "<td>"+resultData[j].jqhhHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhh360+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqhhSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jqhhOther+"</td>";
+
+            //贷款汇
+            sTrHtml += "<td>"+resultData[j].dkhHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkh360+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].dkhMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkhSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dkhOther+"</td>";
+            //秒贷宝
+            sTrHtml += "<td>"+resultData[j].mdbHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdb360+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].mdbMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].mdbSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].mdbOther+"</td>";
+            //信而贷
+            sTrHtml += "<td>"+resultData[j].xedHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].xed360+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].xedMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].xedSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].xedOther+"</td>";
+            //借钱树
+            sTrHtml += "<td>"+resultData[j].jqsHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqs360+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].jqsMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqsSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jqsOther+"</td>";
+            //借贷金钱
+            sTrHtml += "<td>"+resultData[j].jdjqHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjq360+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jdjqSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jdjqOther+"</td>";
+//“快借王、贷款神速、借钱富、贷款堂、好贷宝、易借侠”换成“放款快、融贷贷款借钱、宜贷贷款借钱、秒秒贷、借钱app、下款快”
+            //放款快
+            sTrHtml += "<td>"+resultData[j].kjwHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjw360+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].kjwMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].kjwSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].kjwOther+"</td>";
+            //融贷贷款借钱
+            sTrHtml += "<td>"+resultData[j].dkssHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkss360+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].dkssMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkssSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dkssOther+"</td>";
+            //宜贷贷款借钱
+            sTrHtml += "<td>"+resultData[j].jqfHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqf360+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].jqfMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].jqfSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].jqfOther+"</td>";
+            //秒秒贷
+            sTrHtml += "<td>"+resultData[j].dktHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].dkt360+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].dktMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].dktSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].dktOther+"</td>";
+            //借钱app
+            sTrHtml += "<td>"+resultData[j].hdbHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdb360+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].hdbMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].hdbSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].hdbOther+"</td>";
+            //下款快
+            sTrHtml += "<td>"+resultData[j].yjxHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjx360+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].yjxMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].yjxSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].yjxOther+"</td>";
+
+            //人人借钱贷款
+            sTrHtml += "<td>"+resultData[j].bjqwHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqw360+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjqwSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].bjqwOther+"</td>";
+
+            //借借款
+            sTrHtml += "<td>"+resultData[j].bjjkHuawei+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkXiaomi+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkVivo+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkOppo+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjk360+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkYyb+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkApple+ "</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkMeizu+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkWandoujia+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkBaidu+"</td>";
+            sTrHtml += "<td>"+resultData[j].bjjkSamsung+"</td>";
+            sTrHtml += "<td>"+ resultData[j].bjjkOther+"</td>";
+
+            sTrHtml += "</tr>";
+            sHtml+=sTrHtml;
+            $("#direction").val(resultData[j].sortDesc);
+        });
+
+        $("#productList").append(sHtml);
+
+        //设置分页信息
+        $("#pageHtml").pagination(obj.totalCount, { //recordCount在后台定义的一个公有变量，通过从数据库查询记录进行赋值，返回记录的总数
+            callback: pageselectCallback,  //点击分页时，调用的回调函数
+            prev_text: '« 上一页',  //显示上一页按钮的文本
+            next_text: '下一页 »',  //显示下一页按钮的文本
+            items_per_page:10,  //每页显示的项数
+            num_display_entries:6,  //分页插件中间显示的按钮数目
+            current_page:obj.currentPageNo,  //当前页索引
+            num_edge_entries:2 //分页插件左右两边显示的按钮数目
+
+        });
+    }
+    function pageselectCallback(page_id,jq){
+        initData(page_id);
+    }
+    //加载数据
+    initData(0);
+
+    $(function(){
+        $("#navtop").load("/top.html",function () {
+            topFunc();
+        });
+        $("#left").load("/left.html",function(){
+            left();
+            var links = window.location.href;
+            if(links.indexOf("appMarketReport")!=-1)
+            {
+                $("#appMarketReport").addClass("active");
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

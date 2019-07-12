@@ -1,0 +1,377 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+<title>商户收入回盘统计表</title>
+<link href="/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="" href="/static/css/pagination.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="/static/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="/static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="/static/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link href="/css/templatecss.css" rel="stylesheet" title="" type="text/css" />
+<script src="/script/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="/script/jquery.cookie.js" type="text/javascript"></script>
+<script src="/static/script/pingxun.js" type="text/javascript"></script>
+<script src="/static/script/jquery.pagination.js" type="text/javascript"></script>
+<script src="/bootstrap-3.3.5-dist/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- angular ui-->
+<link rel="stylesheet" title="" type="text/css" href="/ui-layout-0.0.0/ui-layout.css"/>
+<script src="/static/script/angular.min.js"></script>
+<script src="/static/ui-layout-0.0.0/ui-layout.js"></script>
+<link title="blue" href="/script/jquery.mloading.css" rel="stylesheet" type="text/css"/>
+<script src="/script/jquery.mloading.js" type="text/javascript"></script>
+<script src="/script/layer.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="/static/script/WdatePicker.js"></script>
+
+</head>
+<body>
+<div id="navtop"></div>
+<div class="down-main">
+  <div class="left-main left-off" include="left" id="left"></div>
+  <div class="right-product right-off">
+    <div class="layout-mock">
+        <div class="center-back right-back">
+        <div class="container-fluid">
+          <div class="info-center">
+                    <div class="page-header">
+                      <div class="pull-left">
+						<h4>商户收入回盘统计表</h4>
+					</div>
+                    </div>
+				    <div class="search-box row">
+                       <div class="col-md-8" style="width: 100%">
+                           <form id="searchForm">
+                               <div class="form-group">
+                                   <span class="pull-left form-span">开始账期:</span>
+                                   <input class="Wdate" type="text" id="applyStartDate" name="applyStartDate" style="margin-top: 5px;height: 30px;" id="d15" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'applyEndDate\')}',isShowClear:false,readOnly:true})"/>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">结束账期:</span>
+                                   <input class="Wdate" type="text" id="applyEndDate" name="applyEndDate" style="margin-top: 5px;height: 30px;" id="d16" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'applyStartDate\')}',isShowClear:false,readOnly:true})"/>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">公司名称:</span>
+                                   <input type="text" id="enterpriseName" name="enterpriseName" style="margin-top: 5px;height: 30px;"/>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">产品名称:</span>
+                                   <input type="text" id="productName" name="productName" style="margin-top: 5px;height: 30px;"/>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">是否上架:</span>
+                                   <select id="isValid" class="form-control" name="isValid">
+                                       <option value="">全部</option>
+                                       <option value="true">销售中</option>
+                                       <option value="false">已下架</option>
+                                   </select>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">合作模式:</span>
+                                   <select id="cooperationModel" class="form-control" name="cooperationModel">
+                                       <option value="">全部</option>
+                                       <option value="CPA">CPA</option>
+                                       <option value="CPS">CPS</option>
+                                       <option value="CPA+CPS">CPA+CPS</option>
+                                   </select>
+                               </div>
+                               <div class="form-group">
+                                   <span class="pull-left form-span">状态:</span>
+                                   <select id="status" class="form-control" name="status">
+                                       <option value="9">全部</option>
+                                       <option value="0">未确认</option>
+                                       <option value="1">已确认</option>
+                                       <option value="2">已复核</option>
+                                       <option value="3">已开票</option>
+                                       <option value="4">已邮寄</option>
+                                       <option value="5">已回款</option>
+                                   </select>
+                               </div>
+                           </form>
+                           <div class="form-group btn-search">
+                                <button class="btn btn-default" onclick="javascript:initData(0)"><span class="glyphicon glyphicon-search"></span> 搜索</button>
+                                <!--<button class="btn btn-default" onclick="javascript:exportExcel('productList')"><span class="glyphicon glyphicon-export"></span> 导出</button>-->
+                           </div>
+                        </div>
+
+                        </div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                      <div class="table-margin">
+                      <table id="dataTable" class="table table-bordered table-header">
+                          <input type="hidden" name="direction" id="direction"/>
+                      <thead>
+                          <tr>
+                              <td>日期</td>
+                              <td>公司名称</td>
+                              <td>产品名称</td>
+                              <td>合作类型</td>
+                              <td>快递公司</td>
+                              <td>运单号</td>
+                              <td>邮寄时间</td>
+                              <td>申请次数</td>
+                              <td>申请用户数</td>
+                              <td>CPA价格</td>
+                              <td>CPS价格</td>
+                              <td>CPA数</td>
+                              <td>CPS数</td>
+                              <td>下款额</td>
+                              <td>均单值</td>
+                              <td>CPA收入</td>
+                              <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'convertCpa')">CPA转化率(%)</td>
+                              <td>CPS收入</td>
+                              <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'convertCps')">CPS转化率(%)</td>
+                              <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'totalIncome')">总收入</a></td>
+                              <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'thousandIncome')">单用户收入</a></td>
+                              <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'thousandCost')">单用户成本</a></td>
+                              <td>入库时间</td>
+                              <td style="cursor: pointer" title="点击实现排序" onclick="initData(0,'status')">操作</a></td>
+                          </tr>
+                         </thead>
+                         <tbody id="productList">
+
+                         </tbody>
+                         <tfoot>
+                          <tr>
+                            <td colspan="24">
+                              <div class="pull-right">
+                                  <nav>
+                                      <ul id="pageHtml" class="pagination">
+
+                                      </ul>
+                                    </nav>
+                              </div>
+                            </td>
+                          </tr>
+                         </tfoot>
+                      </table>
+                    </div>
+                    </div>
+          </div>
+        </div>
+   </div>
+ </div>
+</div>
+<script type="text/javascript">
+function initData(pageIndex,sortZiduan) {
+    $("#productList").empty();
+    var values = {};
+    var data = $("#searchForm").serializeArray();
+    values["pageNo"]=(pageIndex+1);
+    values["channelNo"]="backend";
+    values["sortColumn"]=sortZiduan;
+    values["sortDesc"]=$("#direction").val();
+    for (var item in data) {
+        values[data[item].name] = data[item].value;
+    }
+    var result = post(marketDailyReportUrl,values);
+    if(!result.success){
+        showTipMessage(result.message,true);
+    }else{
+        var resultData = result.data;
+        bindData(resultData);
+    }
+}
+function bindData(obj) {
+    var resultData = obj;
+    var sHtml = "";
+    $.each(resultData, function (j) {
+        var sTrHtml = "";
+        sTrHtml += "<tr>";
+        sTrHtml += "<td>";
+        sTrHtml += j;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].enterpriseName;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += "<a href=\"javascript:void(0)\" onclick=\"viewDetail("+resultData[j].id+",'"+resultData[j].dayId+"')\">"+resultData[j].productName+"</a>";
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].cooperationModel==null?"":resultData[j].cooperationModel;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].express==null?"":resultData[j].express;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].postNo==null?"":resultData[j].postNo;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].postDate==null?"":resultData[j].postDate;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyTime;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNum;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].priceA==null?0:resultData[j].priceA;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].priceS==null?0:resultData[j].priceS;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNuma==null?0:resultData[j].applyNuma;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNums==null?0:resultData[j].applyNums;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].loanAmount==null?0:resultData[j].loanAmount;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].applyNums==null?0:Math.round(resultData[j].loanAmount/resultData[j].applyNums);
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].incomeA==null?0:resultData[j].incomeA;
+        sTrHtml += "</td>";
+
+        var aa=resultData[j].applyNuma/resultData[j].applyNum;
+        var bb=aa.toFixed(4);
+        var cc=bb.slice(2,4)+"."+bb.slice(4,6)+"%";
+        sTrHtml += "<td>";
+        sTrHtml += cc;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].incomeS==null?0:resultData[j].incomeS;
+        sTrHtml += "</td>";
+
+        var aaa=resultData[j].applyNums/resultData[j].applyNum;
+        var bbb=aaa.toFixed(4);
+        var ccc=bbb.slice(2,4)+"."+bbb.slice(4,6)+"%";
+
+        sTrHtml += "<td>";
+        sTrHtml += ccc;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].totalIncome==null?0:resultData[j].totalIncome;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].thousandIncome==null?0:resultData[j].thousandIncome;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].thousandCost==null?0:resultData[j].thousandCost;
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        sTrHtml += resultData[j].importDate.substr(0,10);
+        sTrHtml += "</td>";
+
+        sTrHtml += "<td>";
+        if(resultData[j].enterpriseName!='合计'){
+            if(resultData[j].status==0){
+                sTrHtml += "&nbsp;&nbsp;<a href=\"javascript:confirmIncome("+resultData[j].id+",'"+resultData[j].productName+"',1,"+resultData[j].totalIncome+");\"><font color='red'>确认回盘</font></a>";
+            }else if(resultData[j].status==1){
+                sTrHtml += "&nbsp;&nbsp;已确认&nbsp;&nbsp;<a href=\"javascript:viewSettleRelation("+resultData[j].id+",'"+resultData[j].productName+"');\">结算关联</a>";
+            }else if(resultData[j].status==2){
+                sTrHtml += "&nbsp;&nbsp;已复核";
+            }else if(resultData[j].status==3){
+                sTrHtml += "&nbsp;&nbsp;已开票";
+            }else if(resultData[j].status==4){
+                sTrHtml += "&nbsp;&nbsp;已邮寄";
+            }else if(resultData[j].status==5){
+                sTrHtml += "&nbsp;&nbsp;已回款";
+            }
+        }
+        sTrHtml += "</td>";
+
+        sTrHtml += "</tr>";
+        sHtml += sTrHtml;
+
+        $("#direction").val(resultData[j].sortDesc);
+    });
+
+    $("#productList").append(sHtml);
+}
+//加载数据
+initData(0);
+function viewDetail(id,dayId) {
+    window.location.href="/static/report/marketDailyDetail.html?productId="+id+"&applyStartDate="+dayId;
+}
+function confirmIncome(id,productName,status,totalFee) {
+    layer.ready(function () {
+        layer.confirm('确认'+productName+'的回盘数据？' +
+            '<br>确认账期：<input type="text" class="Wdate" id="settleDate" name="settleDate" id="d15" ' +
+            ' onFocus="WdatePicker({dateFmt:\'yyyy-MM\''+',maxDate:\'%y-%M\',isShowClear:false,readOnly:true})"/>'+
+            '<br>是否开票：<input type="radio" id="isBilling" name="isBilling" value="3" checked="checked"/>开票' +
+            '&nbsp;&nbsp;<input type="radio" id="isBilling" name="isBilling" value="6"/>不开票'+
+            '<br>确认结算金额：<input type="text" id="confirmSettleFee" name="confirmSettleFee" value="'+totalFee+'"/> ' ,{
+            btn: ['确认', '取消'] //可以无限个按钮
+        }, function(index, layero){
+            var values={};
+            values["productId"]=id;
+            values["status"]=status;
+            if($("#settleDate").val()==""||$("#settleDate").val()==undefined){
+                showTipMessage("请选择确认账期！",false);
+                return ;
+            }
+            values["settleDate"]=$("#settleDate").val();
+            values["isBilling"]=$("input[name='isBilling']:checked").val();
+            values["confirmSettleFee"]=$("#confirmSettleFee").val();
+            var result = post(marketStatusUrl,values);
+            if(!result.success){
+                showTipMessage(result.message,false);
+            }else{
+                showTipMessage(result.message,false);
+                layer.closeAll();
+                initData(0);
+            }
+        }, function(index){
+        });
+    });
+}
+//结算关联
+function viewSettleRelation(id,productName) {
+    layer.ready(function(){
+        layer.open({
+            type: 2,
+            title: '商户结算关联设置',
+            maxmin: true,
+            area: ['800px', '500px'],
+            content: "/static/report/settleRelation.html?productId="+id+"&productName="+productName,
+            end: function(){
+
+            }
+        });
+    });
+}
+$(function(){
+    $("#navtop").load("/top.html",function () {
+        topFunc();
+    });
+    $("#left").load("/left.html",function(){
+        left();
+        var links = window.location.href;
+        if(links.indexOf("marketDailyReport")!=-1)
+        {
+            $("#marketDailyReport").addClass("active");
+        }
+    });
+    initAppList();
+});
+
+</script>
+</body>
+</html>
