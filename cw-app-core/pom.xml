@@ -18,9 +18,9 @@
             <version>2.6</version>
         </dependency>
         <dependency>
-            <groupId>com.pingxun.com</groupId>
+            <groupId>com.pingxun</groupId>
             <artifactId>util</artifactId>
-            <version>2.2.20170605</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
