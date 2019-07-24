@@ -1,5 +1,5 @@
 // var httpUrl = "https://www.pingxundata.com";//正式环境
-var httpUrl = "http://192.168.3.107:9999";//本地开发环境
+var httpUrl = "http://192.168.1.88/apis";//本地开发环境
 // var httpUrl = "http://192.168.1.100:1234";//测试环境
 var loginUrl = httpUrl + "/common/passwordLogin.json";
 var logoutUrl = httpUrl + "/common/logout.json";
