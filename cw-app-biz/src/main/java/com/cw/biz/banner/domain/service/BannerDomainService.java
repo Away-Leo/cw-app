@@ -5,8 +5,11 @@ import com.cw.biz.banner.app.dto.BannerDto;
 import com.cw.biz.banner.domain.entity.Banner;
 import com.cw.biz.banner.domain.repository.BannerRepository;
 import com.cw.biz.home.app.service.AppInfoAppService;
+import com.cw.biz.product.domain.entity.Product;
 import com.cw.biz.product.domain.entity.ProductAuditVersion;
 import com.cw.biz.product.domain.repository.ProductAuditRepository;
+import com.cw.biz.product.domain.service.ProductDomainService;
+import com.cw.core.common.util.ObjectHelper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +36,8 @@ public class BannerDomainService {
     private ProductAuditRepository productAuditRepository;
     @Autowired
     private AppInfoAppService appInfoAppService;
+    @Autowired
+    private ProductDomainService productDomainService;
     /**
      * 新增banner图标
      * @param bannerDto
@@ -42,7 +47,17 @@ public class BannerDomainService {
     {
         Banner banner = new Banner();
         banner.from(bannerDto);
+        banner=bindProduct(banner);
         return repository.save(banner);
+    }
+
+    private Banner bindProduct(Banner banner){
+        Product product=this.productDomainService.findByUrl(banner.getJumpUrl().trim());
+        if(ObjectHelper.isNotEmpty(product)){
+            banner.setProductId(product.getId());
+            banner.setProductName(product.getName());
+        }
+        return banner;
     }
 
     /**
@@ -57,8 +72,8 @@ public class BannerDomainService {
             CwException.throwIt("banner不存在");
         }
         banner.from(bannerDto);
+        banner=bindProduct(banner);
         repository.save(banner);
-
         return banner;
     }
 

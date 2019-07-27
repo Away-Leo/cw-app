@@ -30,6 +30,7 @@ import com.cw.biz.product.domain.repository.ProductVersionRepository;
 import com.cw.biz.push.app.dto.PushMessageDto;
 import com.cw.biz.push.app.service.PushMessageAppService;
 import com.cw.core.common.util.AppUtils;
+import com.cw.core.common.util.ObjectHelper;
 import com.cw.core.common.util.Utils;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -498,6 +499,24 @@ public class ProductDomainService {
             return query.getRestriction();
         };
         return repository.findAll(supplierSpecification, searchDto.toPage());
+    }
+
+
+    /**
+     * @Author: Away
+     * @Title: findByUrl
+     * @Description: 按照链接查找产品
+     * @Param url
+     * @Return: com.cw.biz.product.domain.entity.Product
+     * @Date: 2019/7/27 2:52
+     * @Version: 1
+     */
+    public Product findByUrl(String url){
+        if(ObjectHelper.isNotEmpty(url)){
+            return repository.findByUrl(url);
+        }else {
+            return null;
+        }
     }
 
     /**

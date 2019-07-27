@@ -32,9 +32,14 @@ public class Banner extends AggEntity {
 
     @Column(name="jump_url",columnDefinition="varchar(200) comment '跳转URL'")
     private String jumpUrl;
-
     @Column(name="show_order",columnDefinition="int(11) comment '排序'")
     private Integer showOrder=1;
+
+    @Column(name="product_id",columnDefinition="int(11) comment '所属产品ID'")
+    private Long productId;
+
+    @Column(name="product_name",columnDefinition="varchar(200) comment '所属产品名称'")
+    private String productName;
 
     @Column(name="is_valid",columnDefinition="tinyint(1) not null comment '是否有效'")
     private Boolean isValid=Boolean.TRUE;

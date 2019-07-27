@@ -20,6 +20,10 @@ public class BannerDto extends PageDto {
 
     private String bannerDetailImg;
 
+    private Long productId;
+
+    private String productName;
+
     private String bannerPosition;
 
     private Integer showOrder;
