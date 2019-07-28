@@ -22,7 +22,7 @@ public class SeUserDao {
     private JdbcTemplate jdbcTemplate;
     private final static String QUERY_SQL  = "select id, merchant_id, username, password, salt, role_ids as roleIdsStr, locked,type,display_name,rid,wechat_id,phone from pf_se_user";
     public SeUser createUser(final SeUser user) {
-        final String sql = "insert into pf_se_user(merchant_id, username, password, salt, role_ids, locked,type,display_name,rid,wechat_id,phone,register_date) values(?,?,?,?,?,?,?,?,?,?,?,now())";
+        final String sql = "insert into pf_se_user(merchant_id, username, password, salt, role_ids, locked,type,display_name,rid,wechat_id,phone,source_code,register_date) values(?,?,?,?,?,?,?,?,?,?,?,?,now())";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         try {
@@ -40,6 +40,7 @@ public class SeUserDao {
                 psst.setLong(count++, user.getrId());
                 psst.setString(count++, user.getWechatId());
                 psst.setString(count++,user.getPhone());
+                psst.setString(count++,user.getSourceCode());
                 return psst;
             }, keyHolder);
         } catch (DuplicateKeyException e) {

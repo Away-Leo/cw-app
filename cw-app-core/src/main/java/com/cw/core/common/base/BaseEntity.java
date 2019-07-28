@@ -17,12 +17,10 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "id", columnDefinition = "int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键'")
     protected Long id;
 
-    @Column(name = "raw_add_time", insertable = false, updatable = false,
-            columnDefinition = " timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'")
+    @Column(name = "raw_add_time", columnDefinition = " timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'")
     protected Date rawAddTime;
 
-    @Column(name = "raw_update_time", insertable = false, updatable = false,
-            columnDefinition = "datetime  COMMENT '修改时间'")
+    @Column(name = "raw_update_time", columnDefinition = "datetime  COMMENT '修改时间'")
     protected Date rawUpdateTime;
 
     @Column(columnDefinition = " tinyint default 0  COMMENT '逻辑删除状态0未删除,1已删除' ")
@@ -35,7 +33,7 @@ public abstract class BaseEntity implements Serializable {
     protected String rawModifier;
 
     @Version
-    @Column(name = "raw_version", columnDefinition = "smallint(6) unsigned NOT NULL DEFAULT '1' COMMENT '版本号'")
+    @Column(name = "raw_version", columnDefinition = "smallint(6) unsigned  DEFAULT '1' COMMENT '版本号'")
     protected Short rawVersion = 1;
 
     public boolean isDeleted() {

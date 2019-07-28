@@ -22,6 +22,8 @@ import com.cw.biz.parameter.app.service.SpinnerParameterAppService;
 import com.cw.biz.push.app.dto.PushMessageDto;
 import com.cw.biz.push.app.service.PushMessageAppService;
 import com.cw.biz.push.domain.entity.PushMessage;
+import com.cw.biz.user.app.dto.UserDto;
+import com.cw.biz.user.domain.service.UserDomainService;
 import com.cw.core.common.util.Utils;
 import com.cw.web.common.component.LoginComponent;
 import com.cw.web.common.component.SendSmsComponent;
@@ -34,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -81,6 +84,9 @@ public class CommonController extends AbstractController {
     private IntegralWallLogAppService integralWallLogAppService;
     @Autowired
     private PushMessageAppService pushMessageAppService;
+
+    @Autowired
+    private UserDomainService userDomainService;
 
     @Value("${spring.profiles.active}")
     private String active;
@@ -460,4 +466,16 @@ public class CommonController extends AbstractController {
         cpViewResultInfo.setMessage("申请成功");
         return cpViewResultInfo;
     }
+
+    @GetMapping("getUserPage.json")
+    @ResponseBody
+    public CPViewResultInfo getUserPage(CPViewResultInfo info, UserDto dto){
+        try {
+            info.newSuccess(userDomainService.findByCondition(new PageRequest(dto.getPage(),dto.getSize()),dto));
+        }catch (Exception e){
+            info.newFalse(e);
+        }
+        return info;
+    }
+
 }

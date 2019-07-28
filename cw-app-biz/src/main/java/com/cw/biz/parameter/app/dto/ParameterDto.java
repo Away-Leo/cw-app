@@ -21,10 +21,20 @@ public class ParameterDto extends BaseDto{
 
     private String parameterType;
 
+    private String parameterValStr;
+
     private Boolean isValid=Boolean.TRUE;
 
     public Long getId() {
         return id;
+    }
+
+    public String getParameterValStr() {
+        return parameterValStr;
+    }
+
+    public void setParameterValStr(String parameterValStr) {
+        this.parameterValStr = parameterValStr;
     }
 
     public void setId(Long id) {

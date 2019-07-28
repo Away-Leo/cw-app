@@ -21,6 +21,9 @@ public class Parameter extends AggEntity{
     @Column(name="parameter_name",columnDefinition="varchar(200) not null comment '参数名称'")
     private String parameterName;
 
+    @Column(name="parameter_val_str",columnDefinition="varchar(255) not null comment '参数值'")
+    private String parameterValStr;
+
     @Column(name="parameter_value",columnDefinition="decimal(20,2) not null comment '参数值'")
     private BigDecimal parameterValue;
 
@@ -32,6 +35,14 @@ public class Parameter extends AggEntity{
 
     public String getParameterCode() {
         return parameterCode;
+    }
+
+    public String getParameterValStr() {
+        return parameterValStr;
+    }
+
+    public void setParameterValStr(String parameterValStr) {
+        this.parameterValStr = parameterValStr;
     }
 
     public void setParameterCode(String parameterCode) {

@@ -39,6 +39,8 @@ public class SeUser implements Serializable {
 
     private  String roleNameStr;
 
+    private  String sourceCode;
+
     public SeUser() {
     }
 
@@ -113,6 +115,14 @@ public class SeUser implements Serializable {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getSourceCode() {
+        return sourceCode;
+    }
+
+    public void setSourceCode(String sourceCode) {
+        this.sourceCode = sourceCode;
     }
 
     public List<Long> getRoleIds() {
