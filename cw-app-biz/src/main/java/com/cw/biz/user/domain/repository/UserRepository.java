@@ -44,4 +44,6 @@ public interface UserRepository extends BaseRepository<UserEntity,Long> {
         return findByHqlPage(pageable,hql.toString(),con);
     }
 
+    public UserEntity findByPhone(String phone);
+
 }

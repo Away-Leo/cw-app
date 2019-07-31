@@ -6,6 +6,7 @@ import com.cw.biz.apply.app.dto.ApplyDto;
 import com.cw.biz.apply.app.service.ApplyAppService;
 import com.cw.biz.banner.app.dto.BannerDto;
 import com.cw.biz.banner.app.service.BannerAppService;
+import com.cw.biz.discount.domain.service.DiscountSettingDomainService;
 import com.cw.biz.log.app.LogEnum;
 import com.cw.biz.log.app.dto.LogDto;
 import com.cw.biz.log.app.service.LogAppService;
@@ -86,6 +87,9 @@ public class ProductDomainService {
     private ProductQuartzConfigDao productQuartzConfigDao;
     @Autowired
     private PushMessageAppService pushMessageAppService;
+
+    @Autowired
+    private DiscountSettingDomainService discountSettingDomainService;
 
     /**
      * 新增产品
@@ -615,6 +619,8 @@ public class ProductDomainService {
                 logDto.setType(LogEnum.APPLY_LOAN);
             }
         }
+        //记录引流渠道统计数
+        discountSettingDomainService.incrementUvAndPv(logDto.getProductId());
 
         //记录数据日志
         logDto.setApplyDate(new Date());

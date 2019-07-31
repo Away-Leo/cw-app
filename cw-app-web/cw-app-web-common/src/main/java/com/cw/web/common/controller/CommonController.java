@@ -6,6 +6,7 @@ import com.cw.biz.banner.app.dto.BannerDto;
 import com.cw.biz.banner.app.service.BannerAppService;
 import com.cw.biz.channel.app.dto.AppMarketDto;
 import com.cw.biz.channel.app.service.AppMarketAppService;
+import com.cw.biz.discount.domain.service.DiscountSettingDomainService;
 import com.cw.biz.home.app.dto.AppInfoDto;
 import com.cw.biz.home.app.dto.LoanServiceDto;
 import com.cw.biz.home.app.service.AppInfoAppService;
@@ -87,6 +88,8 @@ public class CommonController extends AbstractController {
 
     @Autowired
     private UserDomainService userDomainService;
+    @Autowired
+    private DiscountSettingDomainService discountSettingDomainService;
 
     @Value("${spring.profiles.active}")
     private String active;
@@ -126,14 +129,15 @@ public class CommonController extends AbstractController {
             CwException.throwIt("手机号码格式不正确");
         }
         logger.info("发送区域："+sendSmsModel.getApplyArea());
-        List<SpinnerParameterDto> parameterDtoList = this.spinnerParameterAppService.findByType("areaBan");
-        for (SpinnerParameterDto dto : parameterDtoList) {
-            if (dto.getName().equalsIgnoreCase(sendSmsModel.getApplyArea()))
-            {
-                logger.info("发送区域属于被禁止范围" + sendSmsModel.getApplyArea());
-                CwException.throwIt("手机号码格式不正确");
-            }
-        }
+        //TODO 待验证
+//        List<SpinnerParameterDto> parameterDtoList = this.spinnerParameterAppService.findByType("areaBan");
+//        for (SpinnerParameterDto dto : parameterDtoList) {
+//            if (dto.getName().equalsIgnoreCase(sendSmsModel.getApplyArea()))
+//            {
+//                logger.info("发送区域属于被禁止范围" + sendSmsModel.getApplyArea());
+//                CwException.throwIt("手机号码格式不正确");
+//            }
+//        }
         //检查用户已发送次数
         SendSmsTimeDto sendSmsTimeDto = sendSmsTimeAppService.findByPhone(sendSmsModel.getPhone(),sendSmsModel.getAppName());
         if(!Objects.isNull(sendSmsTimeDto))

@@ -56,4 +56,8 @@ public class ApplyDomainService {
         };
         return repository.findAll(supplierSpecification, applyDto.toPage());
     }
+
+    public List<Apply> findByUserAndProduct(Long userId,Long productId){
+        return repository.findByUserIdAndProductId(userId, productId);
+    }
 }

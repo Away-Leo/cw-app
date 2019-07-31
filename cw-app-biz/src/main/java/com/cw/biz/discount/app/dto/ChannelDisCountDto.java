@@ -24,6 +24,18 @@ public class ChannelDisCountDto extends BaseDto {
     /**起始扣量数**/
     private Integer startNum;
 
+    /**渠道PV统计数**/
+    private Integer channelPv;
+
+    /**渠道UV统计数**/
+    private Integer channelUv;
+
+    /**渠道申请数**/
+    private Integer channelRegister;
+
+    /**渠道登陆数**/
+    private Integer channelLogin;
+
     /**扣量比例**/
     private Integer percent;
 

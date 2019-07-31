@@ -40,6 +40,7 @@ public class SendSmsComponent {
         registerDto.setChannelNo(sendSmsModel.getChannelNo()==null?"wechat":sendSmsModel.getChannelNo());
         registerDto.setAppName(sendSmsModel.getAppName());
         registerDto.setApplyArea(sendSmsModel.getApplyArea());
+        registerDto.setSourceCode(sendSmsModel.getSourceCode());
         //查询每款APP对应的信息
         AppInfoDto appInfoDto = moduleAppService.getAppSendMessage(sendSmsModel.getAppName());
         String random = seUserService.sendVerify(registerDto,appInfoDto);

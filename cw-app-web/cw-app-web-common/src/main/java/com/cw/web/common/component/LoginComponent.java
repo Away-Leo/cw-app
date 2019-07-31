@@ -2,12 +2,15 @@ package com.cw.web.common.component;
 
 import com.cw.biz.CPContext;
 import com.cw.biz.CwException;
+import com.cw.biz.discount.domain.service.DiscountSettingDomainService;
 import com.cw.biz.log.app.LogEnum;
 import com.cw.biz.log.app.dto.LogDto;
 import com.cw.biz.log.app.service.LogAppService;
 import com.cw.biz.user.domain.entity.SeUser;
+import com.cw.biz.user.domain.entity.UserEntity;
 import com.cw.biz.user.domain.relm.CwAuthenticationToken;
 import com.cw.biz.user.domain.service.SeUserService;
+import com.cw.core.common.util.ObjectHelper;
 import com.cw.web.common.model.LoginModel;
 import com.cw.web.common.util.Apps;
 import com.zds.common.lang.beans.Copier;
@@ -38,6 +41,9 @@ public class LoginComponent {
 
     @Autowired
     private LogAppService logAppService;
+
+    @Autowired
+    private DiscountSettingDomainService discountSettingDomainService;
 
     private SeUser loginWithPassword(HttpServletRequest httpServletRequest, LoginModel loginModel,String wechatId, String loginType) {
         SeUser seUser = loginVerify(httpServletRequest, loginModel, LoginModel.PasswordLogin.class, loginType);
@@ -108,6 +114,14 @@ public class LoginComponent {
         //微信登录绑定openid
         if(isWechatAccess(httpServletRequest)){
            userService.updateUser(seUser, false);
+        }
+
+        //修改渠道计数
+        if(ObjectHelper.isNotEmpty(seUser)&&seUser.getType().equalsIgnoreCase("user")){
+            discountSettingDomainService.incrementRegisNum(seUser.getPhone(),seUser.getSourceCode(),2);
+            SeUser userEntity=userService.findOne(seUser.getId());
+            userEntity.setActived(true);
+            userService.updateUser(userEntity,false);
         }
 
         //记录登录日志

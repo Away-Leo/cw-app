@@ -71,6 +71,15 @@ public class CPContext {
         private String type;
         private String wechatId;
          private String phone;
+        private  String sourceCode="";
+
+        public String getSourceCode() {
+            return sourceCode;
+        }
+
+        public void setSourceCode(String sourceCode) {
+            this.sourceCode = sourceCode;
+        }
 
         public Long getId() {
             return id;

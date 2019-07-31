@@ -38,6 +38,9 @@ public class UserEntity extends BaseEntity{
     @Column(name="locked",columnDefinition="tinyint(1) comment ''")
     private Boolean locked;
 
+    @Column(name="actived",columnDefinition="tinyint(1) comment '是否下载APP登陆'")
+    private Boolean actived;
+
     @Column(name="type",columnDefinition="varchar(100) comment ''")
     private String type;
 

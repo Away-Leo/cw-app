@@ -1,5 +1,6 @@
 package com.cw.biz.discount.domain.repository;
 
+import com.cw.biz.discount.app.dto.ChannelDisCountDto;
 import com.cw.biz.discount.app.dto.ChannelDisShowDto;
 import com.cw.biz.discount.domain.entity.ChannelDisCountSetting;
 import com.cw.core.common.base.BaseRepository;
@@ -31,4 +32,23 @@ public interface ChannelDisCountSettingRepository extends BaseRepository<Channel
         return findBySqlEntityPage(pageable,sql.toString(),con,ChannelDisCountSetting.class);
     }
 
+    ChannelDisCountSetting findByChannelCode(String channelCode);
+
+    default Page<ChannelDisCountSetting> findByCon(Pageable pageable, ChannelDisCountDto channelDisCountDto){
+        StringBuilder hql=new StringBuilder(" from ChannelDisCountSetting where 1=1 ");
+        Map<String,Object> conditions=new HashMap<>();
+        if(ObjectHelper.isNotEmpty(channelDisCountDto)&&ObjectHelper.isNotEmpty(pageable)){
+            if(ObjectHelper.isNotEmpty(channelDisCountDto.getChannelName())){
+                hql.append(" and channelName like :channelName ");
+                conditions.put("channelName","%"+channelDisCountDto.getChannelName().trim()+"%");
+            }
+            if(ObjectHelper.isNotEmpty(channelDisCountDto.getChannelPhone())){
+                hql.append(" and  channelPhone =:channelPhone ");
+                conditions.put("channelPhone",channelDisCountDto.getChannelPhone().trim());
+            }
+            return findByHqlPage(pageable,hql.toString(),conditions);
+        }else{
+            return null;
+        }
+    }
 }

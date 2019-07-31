@@ -39,11 +39,21 @@ public class LoginModel implements Serializable {
 
     private String channelNo;
 
+    private String sourceCode;
+
     private String appName;
 
     private String applyArea;
 
     private String deviceNumber;
+
+    public String getSourceCode() {
+        return sourceCode;
+    }
+
+    public void setSourceCode(String sourceCode) {
+        this.sourceCode = sourceCode;
+    }
 
     public String getVerifyCode() {
         return verifyCode;

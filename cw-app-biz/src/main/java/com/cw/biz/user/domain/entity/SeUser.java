@@ -36,10 +36,19 @@ public class SeUser implements Serializable {
     private Long rId;
     private List<Long> roleIds; //拥有的角色列表
     private Boolean locked = Boolean.FALSE;
+    private Boolean actived = Boolean.FALSE;
 
     private  String roleNameStr;
 
     private  String sourceCode;
+
+    public Boolean getActived() {
+        return actived;
+    }
+
+    public void setActived(Boolean actived) {
+        this.actived = actived;
+    }
 
     public SeUser() {
     }

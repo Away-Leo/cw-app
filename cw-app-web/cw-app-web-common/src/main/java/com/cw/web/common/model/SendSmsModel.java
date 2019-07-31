@@ -22,6 +22,16 @@ public class SendSmsModel implements Serializable {
 
     private String appName="MBD";//默认秒必贷
 
+    private String sourceCode;//注册来源
+
+    public String getSourceCode() {
+        return sourceCode;
+    }
+
+    public void setSourceCode(String sourceCode) {
+        this.sourceCode = sourceCode;
+    }
+
     public String getPhone() {
         return phone;
     }

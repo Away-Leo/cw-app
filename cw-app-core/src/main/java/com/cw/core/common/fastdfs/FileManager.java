@@ -15,6 +15,8 @@ import org.csource.fastdfs.StorageClient;
 import org.csource.fastdfs.StorageServer;
 import org.csource.fastdfs.TrackerClient;
 import org.csource.fastdfs.TrackerServer;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
 
 
 public class FileManager implements FileManagerConfig {
@@ -33,7 +35,9 @@ public class FileManager implements FileManagerConfig {
         try {
 //            String classPath = new File(FileManager.class.getResource("/").getFile()).getCanonicalPath();
 //            String fdfsClientConfigFilePath = classPath + File.separator + CLIENT_CONFIG_FILE;
-            String fdfsClientConfigFilePath="/home/pingxun/"+CLIENT_CONFIG_FILE;
+            File path = new File(ResourceUtils.getURL("classpath:").getPath());
+            File upload = new File(path.getAbsolutePath(),"fdfs_client.conf");
+            String fdfsClientConfigFilePath=upload.getAbsolutePath();
             logger.info("Fast DFS configuration file path:" + fdfsClientConfigFilePath);
             ClientGlobal.init(fdfsClientConfigFilePath);
 
@@ -82,7 +86,7 @@ public class FileManager implements FileManagerConfig {
                 + groupName
                 + SEPARATOR
                 + remoteFileName;
-
+        logger.info(fileAbsolutePath);
         return fileAbsolutePath;
 
     }

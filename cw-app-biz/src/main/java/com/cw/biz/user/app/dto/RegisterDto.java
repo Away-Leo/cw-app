@@ -20,4 +20,6 @@ public class RegisterDto {
 
     private String applyArea;
 
+    private String sourceCode;
+
 }

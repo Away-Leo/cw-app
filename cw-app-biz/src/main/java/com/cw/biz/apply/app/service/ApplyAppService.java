@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * 借款申请服务
@@ -42,4 +43,5 @@ public class ApplyAppService {
         applyDto.setUserId(CPContext.getContext().getSeUserInfo().getId());
         return Pages.map(domainService.findByCondition(applyDto),ApplyDto.class);
     }
+
 }

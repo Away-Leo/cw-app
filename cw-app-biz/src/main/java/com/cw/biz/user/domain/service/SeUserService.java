@@ -3,6 +3,7 @@ package com.cw.biz.user.domain.service;
 
 import com.cw.biz.CwException;
 import com.cw.biz.common.dto.ListParamDto;
+import com.cw.biz.discount.domain.service.DiscountSettingDomainService;
 import com.cw.biz.home.app.dto.AppInfoDto;
 import com.cw.biz.jdbc.JdbcPage;
 import com.cw.biz.log.app.LogEnum;
@@ -40,6 +41,8 @@ public class SeUserService {
     private LogAppService logAppService;
     @Autowired
     private MessageAppService messageAppService;
+    @Autowired
+    private DiscountSettingDomainService discountSettingDomainService;
     /**
      * 创建用户
      *
@@ -61,6 +64,8 @@ public class SeUserService {
         String randomNum = Utils.randomStr();
 
         SeUser seUser1 = seUserDao.findByUsernameAndMerchantId(registerDto.getPhone(),1L);
+        //记录渠道数据
+        discountSettingDomainService.incrementRegisNum(registerDto.getPhone(),registerDto.getSourceCode(),1);
         if(seUser1==null)
         {
             SeUser newUser = new SeUser();
@@ -71,6 +76,7 @@ public class SeUserService {
             newUser.setType("user");
             newUser.setrId(1L);
             newUser.setPassword(randomNum+"");
+            newUser.setSourceCode(registerDto.getSourceCode());
             SeUser seUser= createUser(newUser);
             //记录注册日志
             recordLog(newUser,registerDto);

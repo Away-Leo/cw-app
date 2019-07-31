@@ -1,5 +1,9 @@
 package com.cw.biz.discount.domain.service;
 
+import com.cw.biz.CPContext;
+import com.cw.biz.apply.domain.entity.Apply;
+import com.cw.biz.apply.domain.service.ApplyDomainService;
+import com.cw.biz.discount.app.dto.ChannelDisCountDto;
 import com.cw.biz.discount.app.dto.ChannelDisShowDto;
 import com.cw.biz.discount.app.dto.WholeDisCountDto;
 import com.cw.biz.discount.domain.entity.ChannelDisCountSetting;
@@ -8,8 +12,12 @@ import com.cw.biz.discount.domain.repository.ChannelDisCountSettingRepository;
 import com.cw.biz.discount.domain.repository.WholeDiscountRepository;
 import com.cw.biz.jdbc.JdbcPage;
 import com.cw.biz.user.domain.entity.SeUser;
+import com.cw.biz.user.domain.entity.UserEntity;
+import com.cw.biz.user.domain.service.UserDomainService;
 import com.cw.core.common.base.BaseDomainService;
+import com.cw.core.common.base.ENUM_EXCEPTION;
 import com.cw.core.common.util.ObjectHelper;
+import com.zds.common.lang.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,13 +38,19 @@ public class DiscountSettingDomainService extends BaseDomainService<ChannelDisCo
 
     private WholeDisCountDto wholeDisCount;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final ApplyDomainService applyDomainService;
+
+    private UserDomainService userDomainService;
 
     @Autowired
-    public DiscountSettingDomainService(ChannelDisCountSettingRepository settingRepository,DiscountDomainService discountDomainService) {
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public DiscountSettingDomainService(ChannelDisCountSettingRepository settingRepository, DiscountDomainService discountDomainService, ApplyDomainService applyDomainService, JdbcTemplate jdbcTemplate) {
         this.settingRepository = settingRepository;
         wholeDisCount= discountDomainService.findDisCount();
+        this.applyDomainService = applyDomainService;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     private JdbcPage<ChannelDisShowDto> findChannelDisShowDtoByCondition(ChannelDisShowDto showDto){
@@ -97,6 +111,67 @@ public class DiscountSettingDomainService extends BaseDomainService<ChannelDisCo
         }else{
             return saveOrUpdateData(disShowDto,ChannelDisCountSetting.class);
         }
+    }
+
+    /**
+     * @Author: Away
+     * @Title: increateRegisNum
+     * @Description: 增加注册数
+     * @Param channelCode
+     * @Return: com.cw.biz.discount.app.dto.ChannelDisCountDto
+     * @Date: 2019/8/1 4:03
+     * @Version: 1
+     */
+    public ChannelDisCountDto incrementRegisNum(String phone,String channelCode,int type){
+        if(ObjectHelper.isNotEmpty(channelCode)){
+            ChannelDisCountSetting old=settingRepository.findByChannelCode(channelCode);
+            if(ObjectHelper.isNotEmpty(old)){
+                UserEntity userEntity=userDomainService.findByPhone(phone);
+                switch (type){
+                    case 1:
+                        if(ObjectHelper.isEmpty(userEntity)){
+                            old.setChannelRegister(old.getChannelRegister()+1);
+                        }
+                    break;
+                    case 2:
+                        if(ObjectHelper.isNotEmpty(userEntity)&&!userEntity.getLocked()){
+                            old.setChannelLogin(old.getChannelLogin()+1);
+                        }
+                    break;
+                }
+                return settingRepository.updateEntity(old).to(ChannelDisCountDto.class);
+            }else{
+                return null;
+            }
+        }else{
+            throw new BusinessException(ENUM_EXCEPTION.E10001.code,ENUM_EXCEPTION.E10001.msg);
+        }
+    }
+
+
+    public ChannelDisCountDto incrementUvAndPv(Long productId){
+        if(ObjectHelper.isNotEmpty(productId)){
+            ChannelDisCountSetting old=settingRepository.findByChannelCode(CPContext.getContext().getSeUserInfo().getSourceCode());
+            if(ObjectHelper.isNotEmpty(old)){
+                List<Apply> apply=this.applyDomainService.findByUserAndProduct(CPContext.getContext().getSeUserInfo().getId(),productId);
+                if(ObjectHelper.isNotEmpty(apply)&&apply.size()>0){
+                    old.setChannelPv(old.getChannelPv()+1);
+                }else{
+                    old.setChannelPv(old.getChannelPv()+1);
+                    old.setChannelUv(old.getChannelUv()+1);
+                }
+                return settingRepository.updateEntity(old).to(ChannelDisCountDto.class);
+            }else {
+                return null;
+            }
+        }else{
+            throw new BusinessException(ENUM_EXCEPTION.E10001.code,ENUM_EXCEPTION.E10001.msg);
+        }
+    }
+
+
+    public Page<ChannelDisCountSetting> findByCon(Pageable pageable,ChannelDisCountDto disCountDto){
+        return this.CT.findByCon(pageable, disCountDto);
     }
 
 }

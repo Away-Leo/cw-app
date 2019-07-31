@@ -26,6 +26,18 @@ public class ChannelDisCountSetting extends BaseEntity {
     @Column(name="start_num",columnDefinition="int(11)  comment '起始扣量数'")
     private Integer startNum;
 
+    @Column(name="channel_pv",columnDefinition="int(11) default 0 comment '渠道PV统计数'")
+    private Integer channelPv;
+
+    @Column(name="channel_uv",columnDefinition="int(11) default 0 comment '渠道UV统计数'")
+    private Integer channelUv;
+
+    @Column(name="channel_register",columnDefinition="int(11) default 0  comment '渠道注册数'")
+    private Integer channelRegister;
+
+    @Column(name="channel_login",columnDefinition="int(11) default 0  comment '渠道登陆数'")
+    private Integer channelLogin;
+
     @Column(name="percent",columnDefinition="int(11)  comment '扣量比例'")
     private Double percent;
 

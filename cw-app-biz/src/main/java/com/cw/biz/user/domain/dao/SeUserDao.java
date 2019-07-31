@@ -51,11 +51,11 @@ public class SeUserDao {
     }
 
     public SeUser updateUser(SeUser user) {
-        String sql = "update pf_se_user set merchant_id=?,username=?, password=?, salt=?, role_ids=?, locked=? ,type=? ,display_name=?,rid=?,wechat_id=?,phone=? where id=?";
+        String sql = "update pf_se_user set merchant_id=?,username=?, password=?, salt=?, role_ids=?, locked=? ,type=? ,display_name=?,rid=?,wechat_id=?,phone=?,actived=? where id=?";
         try {
             jdbcTemplate.update(
                     sql,
-                    user.getMerchantId(), user.getUsername(), user.getPassword(), user.getSalt(), user.getRoleIdsStr(), user.getLocked(), user.getType(), user.getDisplayName(), user.getrId(), user.getWechatId(),user.getPhone(), user.getId());
+                    user.getMerchantId(), user.getUsername(), user.getPassword(), user.getSalt(), user.getRoleIdsStr(), user.getLocked(), user.getType(), user.getDisplayName(), user.getrId(), user.getWechatId(),user.getPhone(), user.getActived(),user.getId());
         } catch (DuplicateKeyException e) {
             CwException.throwIt("该账号被其他客户使用！");
         }
@@ -68,7 +68,7 @@ public class SeUserDao {
     }
 
     public SeUser findOne(Long userId) {
-        String sql = "select id, merchant_id, username, password, salt, role_ids as roleIdsStr, locked,type,display_name ,rid,wechat_id ,phone from pf_se_user where id=?";
+        String sql = "select id, merchant_id, username, password, salt, role_ids as roleIdsStr, locked,type,display_name ,rid,wechat_id ,phone,source_code,actived from pf_se_user where id=?";
         List<SeUser> userList = jdbcTemplate.query(sql, new BeanPropertyRowMapper(SeUser.class), userId);
         if (userList.size() == 0) {
             return null;
@@ -103,7 +103,7 @@ public class SeUserDao {
 
 
     public SeUser findByUsernameAndMerchantId(String username, Long merchantId) {
-        String sql = "select id, merchant_id, username, password, salt, role_ids as roleIdsStr, locked,type,display_name,rid,wechat_id,phone from pf_se_user where  merchant_id=? and (username=? or phone=?)";
+        String sql = "select id, merchant_id, username, password, salt, role_ids as roleIdsStr, locked,type,display_name,rid,wechat_id,phone,source_code,actived from pf_se_user where  merchant_id=? and (username=? or phone=?)";
         List<SeUser> userList = jdbcTemplate.query(sql, new BeanPropertyRowMapper(SeUser.class), merchantId, username,username);
         if (userList.size() == 0) {
             return null;
