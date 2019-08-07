@@ -51,11 +51,11 @@ public class SeUserDao {
     }
 
     public SeUser updateUser(SeUser user) {
-        String sql = "update pf_se_user set merchant_id=?,username=?, password=?, salt=?, role_ids=?, locked=? ,type=? ,display_name=?,rid=?,wechat_id=?,phone=?,actived=? where id=?";
+        String sql = "update pf_se_user set merchant_id=?,username=?, password=?, salt=?, role_ids=?, locked=? ,type=? ,display_name=?,rid=?,wechat_id=?,phone=?,actived=?,activedevice=? where id=?";
         try {
             jdbcTemplate.update(
                     sql,
-                    user.getMerchantId(), user.getUsername(), user.getPassword(), user.getSalt(), user.getRoleIdsStr(), user.getLocked(), user.getType(), user.getDisplayName(), user.getrId(), user.getWechatId(),user.getPhone(), user.getActived(),user.getId());
+                    user.getMerchantId(), user.getUsername(), user.getPassword(), user.getSalt(), user.getRoleIdsStr(), user.getLocked(), user.getType(), user.getDisplayName(), user.getrId(), user.getWechatId(),user.getPhone(), user.getActived(),user.getActivedevice(),user.getId());
         } catch (DuplicateKeyException e) {
             CwException.throwIt("该账号被其他客户使用！");
         }

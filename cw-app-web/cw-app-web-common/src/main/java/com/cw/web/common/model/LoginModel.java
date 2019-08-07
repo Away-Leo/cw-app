@@ -39,13 +39,44 @@ public class LoginModel implements Serializable {
 
     private String channelNo;
 
+    private String loginType;
+
     private String sourceCode;
+
+    //一键登录TOKEN
+    private String oclToken;
 
     private String appName;
 
     private String applyArea;
 
     private String deviceNumber;
+
+    private String device;
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
+
+    public String getOclToken() {
+        return oclToken;
+    }
+
+    public void setOclToken(String oclToken) {
+        this.oclToken = oclToken;
+    }
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
+    }
 
     public String getSourceCode() {
         return sourceCode;

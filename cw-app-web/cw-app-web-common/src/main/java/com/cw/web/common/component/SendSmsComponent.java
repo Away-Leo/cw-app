@@ -5,14 +5,21 @@ import com.cw.biz.home.app.dto.AppInfoDto;
 import com.cw.biz.home.app.service.ModuleAppService;
 import com.cw.biz.user.app.dto.RegisterDto;
 import com.cw.biz.user.domain.service.SeUserService;
+import com.cw.core.common.util.HttpRequest;
 import com.cw.core.common.util.SmsClientAccessTool;
 import com.cw.web.common.model.SendSmsModel;
+import com.cw.web.common.sms.SmsUtil;
+import com.cw.web.common.sms.message.SubmitFullTextSmsMessage;
+import com.cw.web.common.sms.message.SubmitFullTextSmsRespMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
 import java.net.URLEncoder;
+
+import static com.cw.web.common.sms.SmsUtil.send;
 
 /**
  * 发送短信验证码
@@ -46,8 +53,9 @@ public class SendSmsComponent {
         String random = seUserService.sendVerify(registerDto,appInfoDto);
         String content = appInfoDto.getSmsContent().replaceAll("random",random);
         logger.info(sendSmsModel.getPhone()+":"+content);
-        return sendSms(url, userId, account, password, sendSmsModel.getPhone(), content, null,
-                null, null, null, null, null, null, "POST", "UTF-8", "UTF-8");
+        return sendSMS(sendSmsModel.getPhone(),"123456",appInfoDto.getTemplateid(),content);
+//        return sendSms(url, userId, account, password, sendSmsModel.getPhone(), content, null,
+//                null, null, null, null, null, null, "POST", "UTF-8", "UTF-8");
     }
 
     /**
@@ -152,6 +160,34 @@ public class SendSmsComponent {
             logger.info("******************发送验证码结束*******************"+sendResult);
             return sendResult;
         } catch (Exception e) {
+            CwException.throwIt("短信发送失败");
+            return "error";
+        }
+    }
+
+    /**
+     * 发送短信接口
+     * wangjie
+     * 2017-8-8 17:38:34
+     * @param phone   接收手机号码
+     * @param extnum  扩展码
+     * @param templateid   已报备的模板id（模板中用“{?}”表示参数）
+     * @param templateparams   短信参数（字符串数组，元素个数与对应模板中的参数个数相同）
+     * @return
+     * @throws MalformedURLException
+     */
+    public static String sendSMS(String phone,String extnum,String templateid,String content){
+        String ip="http://118.31.115.228";
+        String port="7890";
+        String appkey="717171";
+        String appsecret="SNVv4t";
+        try{
+            logger.info("******************发送验证码开始*******************");
+            SubmitFullTextSmsRespMessage respMessage=SmsUtil.send(appkey,appsecret,phone,templateid,content);
+            logger.info("******************发送验证码结束 信息为：{},内容为：{}",respMessage.getMsg(),content);
+            return respMessage.getMsg();
+        }catch (Exception e){
+            logger.error("",e);
             CwException.throwIt("短信发送失败");
             return "error";
         }

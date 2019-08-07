@@ -27,4 +27,6 @@ public class AppInfoDto extends BaseDto {
     private String masterSecret;
 
     private String appKey;
+
+    private String templateid;
 }

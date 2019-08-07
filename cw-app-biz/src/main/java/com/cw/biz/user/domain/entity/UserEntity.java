@@ -21,7 +21,7 @@ public class UserEntity extends BaseEntity{
     private Long merchantId;
 
     @Column(name="username",columnDefinition="varchar(100) unique NOT NULL  comment '用户名'")
-    private String userName;
+    private String username;
 
     @Column(name="display_name",columnDefinition="varchar(100) comment ''")
     private String displayName;
@@ -59,5 +59,8 @@ public class UserEntity extends BaseEntity{
 
     @Column(name="source_code",columnDefinition="varchar(255) comment ''")
     private String sourceCode;
+
+    @Column(name="activedevice",columnDefinition="varchar(255) comment '登录APP设备'")
+    private String activedevice;
 
 }

@@ -42,6 +42,16 @@ public class SeUser implements Serializable {
 
     private  String sourceCode;
 
+    private  String activedevice;
+
+    public String getActivedevice() {
+        return activedevice;
+    }
+
+    public void setActivedevice(String activedevice) {
+        this.activedevice = activedevice;
+    }
+
     public Boolean getActived() {
         return actived;
     }

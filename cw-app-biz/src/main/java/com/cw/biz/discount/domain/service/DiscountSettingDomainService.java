@@ -134,7 +134,7 @@ public class DiscountSettingDomainService extends BaseDomainService<ChannelDisCo
                         }
                     break;
                     case 2:
-                        if(ObjectHelper.isNotEmpty(userEntity)&&!userEntity.getLocked()){
+                        if(ObjectHelper.isNotEmpty(userEntity)&&!userEntity.getLocked()&&!userEntity.getActived()){
                             old.setChannelLogin(old.getChannelLogin()+1);
                         }
                     break;

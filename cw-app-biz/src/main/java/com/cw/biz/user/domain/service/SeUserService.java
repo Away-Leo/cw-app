@@ -16,7 +16,9 @@ import com.cw.biz.user.domain.dao.SeUserDao;
 import com.cw.biz.user.domain.entity.SeResource;
 import com.cw.biz.user.domain.entity.SeRole;
 import com.cw.biz.user.domain.entity.SeUser;
+import com.cw.core.common.util.ObjectHelper;
 import com.cw.core.common.util.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Slf4j
 public class SeUserService {
 
     @Autowired
@@ -65,9 +68,12 @@ public class SeUserService {
 
         SeUser seUser1 = seUserDao.findByUsernameAndMerchantId(registerDto.getPhone(),1L);
         //记录渠道数据
-        discountSettingDomainService.incrementRegisNum(registerDto.getPhone(),registerDto.getSourceCode(),1);
+
         if(seUser1==null)
         {
+            if(ObjectHelper.isNotEmpty(registerDto.getSourceCode())){
+                discountSettingDomainService.incrementRegisNum(registerDto.getPhone(),registerDto.getSourceCode(),1);
+            }
             SeUser newUser = new SeUser();
             newUser.setDisplayName(registerDto.getPhone());
             newUser.setUsername(registerDto.getPhone());
@@ -78,6 +84,7 @@ public class SeUserService {
             newUser.setPassword(randomNum+"");
             newUser.setSourceCode(registerDto.getSourceCode());
             SeUser seUser= createUser(newUser);
+            log.info("用户注册信息为：用户名{}，密码{}",registerDto.getPhone(),randomNum);
             //记录注册日志
             recordLog(newUser,registerDto);
             sendRegisterMessage(seUser,appInfoDto);
@@ -89,6 +96,7 @@ public class SeUserService {
             //测试账号不能修改密码
             if(!"15736177295".equals(registerDto.getPhone())&&!"18623270209".equals(registerDto.getPhone())) {
                 seUser1.setPassword(randomNum + "");
+                log.info("修改之后的注册信息为：用户名{}，密码{}",registerDto.getPhone(),randomNum);
                 updateUser(seUser1, Boolean.TRUE);
             }
         }

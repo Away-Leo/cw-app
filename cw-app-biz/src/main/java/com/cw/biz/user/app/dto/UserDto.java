@@ -17,7 +17,7 @@ public class UserDto extends BaseDto{
 
     private Long merchantId;
 
-    private String userName;
+    private String username;
 
     private String displayName;
 

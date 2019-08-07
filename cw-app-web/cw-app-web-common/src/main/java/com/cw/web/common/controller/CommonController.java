@@ -24,6 +24,7 @@ import com.cw.biz.push.app.dto.PushMessageDto;
 import com.cw.biz.push.app.service.PushMessageAppService;
 import com.cw.biz.push.domain.entity.PushMessage;
 import com.cw.biz.user.app.dto.UserDto;
+import com.cw.biz.user.domain.entity.SeUser;
 import com.cw.biz.user.domain.service.UserDomainService;
 import com.cw.core.common.util.Utils;
 import com.cw.web.common.component.LoginComponent;
@@ -102,17 +103,18 @@ public class CommonController extends AbstractController {
      */
     @PostMapping("passwordLogin.json")
     @ResponseBody
-    public CPViewResultInfo passwordLogin(HttpServletRequest httpServletRequest, @RequestBody LoginModel loginModel) {
-        CPViewResultInfo cpViewResultInfo = new CPViewResultInfo();
-        if("dev".equalsIgnoreCase(active)&&!loginModel.getUserName().equals("18623270209")) {
-            loginModel.setPassword("Yx18623185183");
+    public CPViewResultInfo passwordLogin(HttpServletRequest httpServletRequest,CPViewResultInfo info, @RequestBody LoginModel loginModel) {
+//        if("dev".equalsIgnoreCase(active)&&!loginModel.getUserName().equals("18623270209")) {
+//            loginModel.setPassword("Yx18623185183");
+//        }
+        try{
+            String openid = (String) httpServletRequest.getSession().getAttribute("openid");
+            UserDto user=loginComponent.wechatBinding(httpServletRequest, loginModel, openid, loginModel.getLoginType());
+            info.newSuccess(user);
+        }catch (Exception e){
+            info.newFalse(e);
         }
-        String openid = (String) httpServletRequest.getSession().getAttribute("openid");
-        loginComponent.wechatBinding(httpServletRequest, loginModel, openid, "passwordLogin");
-
-        cpViewResultInfo.setSuccess(true);
-        cpViewResultInfo.setMessage("登录成功");
-        return cpViewResultInfo;
+        return info;
     }
 
     /**
@@ -164,9 +166,7 @@ public class CommonController extends AbstractController {
 
             //发送短信
             String result = sendSmsComponent.sendSms(sendSmsModel);
-            //解析发送结果
-            String sendResult = Utils.strConvertXml(result);
-            if (sendResult.contains("Success")) {
+            if (result.contains("success")) {
                 //修改发送标识
                 sendSmsLogDto.setId(smsId);
                 sendSmsLogDto.setIsSuccess(Boolean.TRUE);

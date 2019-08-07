@@ -1,19 +1,29 @@
 package com.cw.web.common.component;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cw.biz.CPContext;
 import com.cw.biz.CwException;
 import com.cw.biz.discount.domain.service.DiscountSettingDomainService;
+import com.cw.biz.home.app.dto.AppInfoDto;
 import com.cw.biz.log.app.LogEnum;
 import com.cw.biz.log.app.dto.LogDto;
 import com.cw.biz.log.app.service.LogAppService;
+import com.cw.biz.user.app.dto.RegisterDto;
+import com.cw.biz.user.app.dto.UserDto;
 import com.cw.biz.user.domain.entity.SeUser;
 import com.cw.biz.user.domain.entity.UserEntity;
 import com.cw.biz.user.domain.relm.CwAuthenticationToken;
 import com.cw.biz.user.domain.service.SeUserService;
+import com.cw.biz.xinyanlogin.component.GetMobileComponent;
+import com.cw.core.common.base.ENUM_EXCEPTION;
+import com.cw.core.common.base.ENUM_LOGINTYPE;
 import com.cw.core.common.util.ObjectHelper;
+import com.cw.core.common.util.ObjectProperUtil;
 import com.cw.web.common.model.LoginModel;
 import com.cw.web.common.util.Apps;
 import com.zds.common.lang.beans.Copier;
+import com.zds.common.lang.exception.BusinessException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -33,6 +43,7 @@ import java.util.Date;
  *
  */
 @Service
+@Slf4j
 public class LoginComponent {
     public static Logger logger = LoggerFactory.getLogger(LoginComponent.class);
 
@@ -47,6 +58,7 @@ public class LoginComponent {
 
     private SeUser loginWithPassword(HttpServletRequest httpServletRequest, LoginModel loginModel,String wechatId, String loginType) {
         SeUser seUser = loginVerify(httpServletRequest, loginModel, LoginModel.PasswordLogin.class, loginType);
+        if(ObjectHelper.isEmpty(seUser))throw new BusinessException(ENUM_EXCEPTION.E10011.code,ENUM_EXCEPTION.E10011.msg);
         seUser.setWechatId(wechatId);
         AuthenticationToken token = new CwAuthenticationToken(loginModel.getUserName(), loginModel.getPassword(), loginModel.getMerchantId());
         login(httpServletRequest, seUser, token);
@@ -66,9 +78,10 @@ public class LoginComponent {
 //        }
         SeUser seUser = userService.findByUserNameAndMerchantId(loginModel.getUserName(), loginModel.getMerchantId());
         if (seUser == null) {
-            CwException.throwIt("用户不存在");
+//            CwException.throwIt("用户不存在");
+            log.error("用户不存在");
         }
-        if (!loginModel.getType().equalsIgnoreCase(seUser.getType())) {
+        if (ObjectHelper.isNotEmpty(seUser)&&!loginModel.getType().equalsIgnoreCase(seUser.getType())) {
             CwException.throwIt("用户类型不匹配");
         }
         return seUser;
@@ -76,11 +89,47 @@ public class LoginComponent {
 
     private SeUser loginWithPhone(HttpServletRequest httpServletRequest, LoginModel loginModel,String wechatId, String loginType) {
         SeUser seUser = loginVerify(httpServletRequest, loginModel, LoginModel.PhoneLogin.class,loginType);
+        if(ObjectHelper.isEmpty(seUser))throw new BusinessException(ENUM_EXCEPTION.E10011.code,ENUM_EXCEPTION.E10011.msg);
         seUser.setWechatId(wechatId);
 //        SmsValidation.validate(httpServletRequest, loginModel.getSmsVerifyCode());
         AuthenticationToken token = new CwAuthenticationToken(loginModel.getUserName(), true, loginModel.getMerchantId());
         login(httpServletRequest, seUser, token);
         return seUser;
+    }
+
+    private SeUser loginWithToken(HttpServletRequest httpServletRequest, LoginModel loginModel,String wechatId, String loginType) {
+        JSONObject netResult= GetMobileComponent.getMobile(loginModel.getOclToken());
+        if(ObjectHelper.isNotEmpty(netResult.getJSONObject("result"))){
+            String phoneNum=netResult.getJSONObject("result").getString("phoneNum");
+            loginModel.setUserName(phoneNum);
+            SeUser seUser = loginVerify(httpServletRequest, loginModel, LoginModel.PhoneLogin.class,loginType);
+            if(ObjectHelper.isNotEmpty(seUser)){
+                //如果用户已经注册进行正常无密码登录
+                seUser.setWechatId(wechatId);
+                AuthenticationToken token = new CwAuthenticationToken(loginModel.getUserName(), true, loginModel.getMerchantId());
+                login(httpServletRequest, seUser, token);
+                return seUser;
+            }else{
+                //如果不存在用户则将来源号设置为APP渠道并且新建用户
+                SeUser newUser = new SeUser();
+                newUser.setDisplayName(phoneNum);
+                newUser.setUsername(phoneNum);
+                newUser.setPhone(phoneNum);
+                newUser.setMerchantId(1L);
+                newUser.setType("user");
+                newUser.setrId(1L);
+                newUser.setPassword("");
+                newUser.setSourceCode(loginModel.getChannelNo());
+                seUser=userService.createUser(newUser);
+                seUser.setWechatId(wechatId);
+                AuthenticationToken token = new CwAuthenticationToken(loginModel.getUserName(), true, loginModel.getMerchantId());
+                login(httpServletRequest, seUser, token);
+                return seUser;
+            }
+            //如果用户为空则注册用户再进行无密码登录
+        }else {
+            throw new BusinessException(ENUM_EXCEPTION.E10033.code,netResult.getString("errorMsg"));
+        }
     }
 
     public void loginWithWechatId(HttpServletRequest httpServletRequest, String wechatId, Long merchantId) {
@@ -103,13 +152,21 @@ public class LoginComponent {
         login(httpServletRequest, seUser, token);
     }
 
-    public void wechatBinding(HttpServletRequest httpServletRequest, LoginModel loginModel, String wechatId,String loginType) {
+    public UserDto wechatBinding(HttpServletRequest httpServletRequest, LoginModel loginModel, String wechatId, String loginType) throws Exception {
         logger.info("登录类型,{},openId,{}",loginType,wechatId);
         SeUser seUser=null;
-        if(loginType.equals("phoneLogin")){
-          seUser =loginWithPhone(httpServletRequest, loginModel,wechatId,"phoneLogin");
-        }else if(loginType.equals("passwordLogin")){
-           seUser =loginWithPassword(httpServletRequest, loginModel,wechatId,"passwordLogin");
+        //如果没有传递登陆类型则默认设置为密码登录
+        loginType=ENUM_LOGINTYPE.getType(loginType);
+        //手机号无密码登录
+        if(loginType.equals(ENUM_LOGINTYPE.PHONELOGIN.code)&&ObjectHelper.isEmpty(loginModel.getOclToken())){
+          seUser =loginWithPhone(httpServletRequest, loginModel,wechatId,loginType);
+        }else if(loginType.equals(ENUM_LOGINTYPE.PASSWORDLOGIN.code)&&ObjectHelper.isEmpty(loginModel.getOclToken())){
+            //密码登录
+           seUser =loginWithPassword(httpServletRequest, loginModel,wechatId,loginType);
+        }
+        if(loginType.equalsIgnoreCase(ENUM_LOGINTYPE.PHONELOGIN.code)&&ObjectHelper.isNotEmpty(loginModel.getOclToken())){
+            //token登录
+            seUser=loginWithToken(httpServletRequest, loginModel, wechatId, loginType);
         }
         //微信登录绑定openid
         if(isWechatAccess(httpServletRequest)){
@@ -117,11 +174,14 @@ public class LoginComponent {
         }
 
         //修改渠道计数
-        if(ObjectHelper.isNotEmpty(seUser)&&seUser.getType().equalsIgnoreCase("user")){
+        if(ObjectHelper.isNotEmpty(seUser)&&seUser.getType().equalsIgnoreCase("user")&&ObjectHelper.isNotEmpty(seUser.getSourceCode())){
             discountSettingDomainService.incrementRegisNum(seUser.getPhone(),seUser.getSourceCode(),2);
-            SeUser userEntity=userService.findOne(seUser.getId());
-            userEntity.setActived(true);
-            userService.updateUser(userEntity,false);
+            if(ObjectHelper.isNotEmpty(loginModel.getDevice())){
+                SeUser userEntity=userService.findOne(seUser.getId());
+                userEntity.setActived(true);
+                userEntity.setActivedevice(loginModel.getDevice());
+                userService.updateUser(userEntity,false);
+            }
         }
 
         //记录登录日志
@@ -136,6 +196,7 @@ public class LoginComponent {
             logDto.setUserId(seUser.getId());
             logAppService.create(logDto);
         }
+        return ObjectProperUtil.compareAndValue(seUser,new UserDto(),true,new String[]{"merchantId","password","salt","roleIds","id"});
     }
 
 

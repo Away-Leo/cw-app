@@ -43,6 +43,9 @@ public class AppInfo extends AggEntity {
     @Column(name="app_key",columnDefinition="varchar(100)  comment 'app主键'")
     private String appKey;
 
+    @Column(name="templateid",columnDefinition="varchar(30)  comment '备案模板ID'")
+    private String templateid;
+
     /**
      * 保存数据验证
      */
