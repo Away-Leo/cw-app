@@ -83,6 +83,7 @@ public class SeUserService {
             newUser.setrId(1L);
             newUser.setPassword(randomNum+"");
             newUser.setSourceCode(registerDto.getSourceCode());
+            newUser.setActived(false);
             SeUser seUser= createUser(newUser);
             log.info("用户注册信息为：用户名{}，密码{}",registerDto.getPhone(),randomNum);
             //记录注册日志

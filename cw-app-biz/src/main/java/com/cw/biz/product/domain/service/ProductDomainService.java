@@ -575,7 +575,7 @@ public class ProductDomainService {
      * 借款申请
      * @param logDto
      */
-    public void applyLoan(LogDto logDto){
+    public void applyLoan(LogDto logDto) throws Exception {
         //Banner链接申请记录
         if(LogEnum.BANNER_LINK.getKey().toString().equals(logDto.getDeviceNumber().toUpperCase())){
             //首页banner的url查询产品ID

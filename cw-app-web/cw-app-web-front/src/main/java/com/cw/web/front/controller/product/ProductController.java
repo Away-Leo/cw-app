@@ -120,12 +120,14 @@ public class ProductController extends AbstractFrontController {
      * @return
      */
     @PostMapping("/product/applyLoan.json")
-    public CPViewResultInfo applyLoan(@RequestBody LogDto logDto) {
-        CPViewResultInfo cpViewResultInfo = new CPViewResultInfo();
-        productAppService.applyLoan(logDto);
-        cpViewResultInfo.setSuccess(true);
-        cpViewResultInfo.setMessage("成功");
-        return cpViewResultInfo;
+    public CPViewResultInfo applyLoan(CPViewResultInfo info,@RequestBody LogDto logDto) {
+        try{
+            productAppService.applyLoan(logDto);
+            info.newSuccess(null);;
+        }catch (Exception e){
+            info.newFalse(e);
+        }
+        return info;
     }
 
     /**

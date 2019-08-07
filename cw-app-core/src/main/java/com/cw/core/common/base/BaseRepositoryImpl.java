@@ -143,14 +143,12 @@ public class BaseRepositoryImpl<T extends BaseEntity, ID extends Serializable> e
 	}
 
 	@Override
-	@Transactional
 	public T saveEntity(T t) {
 	    t.setRawAddTime(new Date());
 		return this.saveAndFlush(t);
 	}
 
 	@Override
-	@Transactional
 	public T updateEntity(T t) {
 		t.setRawUpdateTime(new Date());
 	    return this.saveAndFlush(t);

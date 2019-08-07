@@ -1,9 +1,9 @@
 package com.cw.biz.user.domain.dao;
 
-import com.cw.biz.user.domain.entity.SeUser;
-import com.cw.biz.common.dto.ListParamDto;
 import com.cw.biz.CwException;
+import com.cw.biz.common.dto.ListParamDto;
 import com.cw.biz.jdbc.JdbcPage;
+import com.cw.biz.user.domain.entity.SeUser;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+
 import java.sql.PreparedStatement;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class SeUserDao {
     private JdbcTemplate jdbcTemplate;
     private final static String QUERY_SQL  = "select id, merchant_id, username, password, salt, role_ids as roleIdsStr, locked,type,display_name,rid,wechat_id,phone from pf_se_user";
     public SeUser createUser(final SeUser user) {
-        final String sql = "insert into pf_se_user(merchant_id, username, password, salt, role_ids, locked,type,display_name,rid,wechat_id,phone,source_code,register_date) values(?,?,?,?,?,?,?,?,?,?,?,?,now())";
+        final String sql = "insert into pf_se_user(merchant_id, username, password, salt, role_ids, locked,type,display_name,rid,wechat_id,phone,source_code,actived,register_date) values(?,?,?,?,?,?,?,?,?,?,?,?,?,now())";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         try {
@@ -41,6 +42,7 @@ public class SeUserDao {
                 psst.setString(count++, user.getWechatId());
                 psst.setString(count++,user.getPhone());
                 psst.setString(count++,user.getSourceCode());
+                psst.setBoolean(count++,user.getActived());
                 return psst;
             }, keyHolder);
         } catch (DuplicateKeyException e) {

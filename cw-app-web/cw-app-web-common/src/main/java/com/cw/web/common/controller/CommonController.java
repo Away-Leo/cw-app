@@ -6,6 +6,7 @@ import com.cw.biz.banner.app.dto.BannerDto;
 import com.cw.biz.banner.app.service.BannerAppService;
 import com.cw.biz.channel.app.dto.AppMarketDto;
 import com.cw.biz.channel.app.service.AppMarketAppService;
+import com.cw.biz.discount.app.dto.ChannelDisShowDto;
 import com.cw.biz.discount.domain.service.DiscountSettingDomainService;
 import com.cw.biz.home.app.dto.AppInfoDto;
 import com.cw.biz.home.app.dto.LoanServiceDto;
@@ -26,6 +27,7 @@ import com.cw.biz.push.domain.entity.PushMessage;
 import com.cw.biz.user.app.dto.UserDto;
 import com.cw.biz.user.domain.entity.SeUser;
 import com.cw.biz.user.domain.service.UserDomainService;
+import com.cw.core.common.util.ObjectHelper;
 import com.cw.core.common.util.Utils;
 import com.cw.web.common.component.LoginComponent;
 import com.cw.web.common.component.SendSmsComponent;
@@ -166,7 +168,7 @@ public class CommonController extends AbstractController {
 
             //发送短信
             String result = sendSmsComponent.sendSms(sendSmsModel);
-            if (result.contains("success")) {
+            if (ObjectHelper.isNotEmpty(result)) {
                 //修改发送标识
                 sendSmsLogDto.setId(smsId);
                 sendSmsLogDto.setIsSuccess(Boolean.TRUE);
@@ -199,6 +201,30 @@ public class CommonController extends AbstractController {
         cpViewResultInfo.setSuccess(true);
         cpViewResultInfo.setMessage("上传成功");
         return cpViewResultInfo;
+    }
+
+
+    /**
+     * @Author: Away
+     * @Description 查找渠道跑量分页数据
+     * @Param: info
+     * @Param: pageRequest
+     * @Param: disShowDto
+     * @Return com.cw.web.common.dto.CPViewResultInfo
+     * @Date 2019/7/27 23:03
+     * @Copyright 重庆平讯数据
+     */
+    @GetMapping("channelCountShow.json")
+    @ResponseBody
+    public CPViewResultInfo channelCountShow(CPViewResultInfo info, ChannelDisShowDto disShowDto){
+        try {
+            if(ObjectHelper.isNotEmpty(disShowDto.getChannelCode())){
+                info.newSuccess(this.discountSettingDomainService.findChannelByCondition(new PageRequest(disShowDto.getPage(),disShowDto.getSize()),disShowDto));
+            }
+        }catch (Exception e){
+            info.newFalse(e);
+        }
+        return info;
     }
 
     /**

@@ -109,6 +109,7 @@ public class ObjectProperUtil {
                     targetFieldSuper=target.getClass().getSuperclass().getDeclaredField(temp.getName());
                 }catch (NoSuchFieldException e){
                     logger.info("",e);
+                    continue;
                 }
                 if(ObjectHelper.isEmpty(targetFieldSuper))continue;
                 //设置private属性的可访问性

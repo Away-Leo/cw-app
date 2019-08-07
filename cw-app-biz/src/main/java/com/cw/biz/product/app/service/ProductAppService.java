@@ -132,7 +132,7 @@ public class ProductAppService {
      * 借款申请
      * @param dto
      */
-    public void applyLoan(LogDto dto){
+    public void applyLoan(LogDto dto) throws Exception {
         if(dto.getUserId()==null) {
             dto.setUserId(CPContext.getContext().getSeUserInfo().getrId());
         }

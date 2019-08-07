@@ -2,6 +2,7 @@ package com.cw.web.backend.controller.flow;
 
 import com.cw.biz.discount.app.dto.ChannelDisCountDto;
 import com.cw.biz.discount.app.dto.ChannelDisShowDto;
+import com.cw.biz.discount.app.dto.ChannelQualityDto;
 import com.cw.biz.discount.app.dto.WholeDisCountDto;
 import com.cw.biz.discount.domain.entity.ChannelDisCountSetting;
 import com.cw.biz.discount.domain.service.DiscountDomainService;
@@ -68,9 +69,9 @@ public class FlowController extends AbstractBackendController {
      * @Copyright 重庆平讯数据
      */
     @GetMapping("/flow/findChannelQuality.json")
-    public CPViewResultInfo findChannelQuality(CPViewResultInfo info, ChannelDisCountDto disShowDto){
+    public CPViewResultInfo findChannelQuality(CPViewResultInfo info, ChannelQualityDto disShowDto){
         try {
-            info.newSuccess(this.discountSettingDomainService.findByCon(new PageRequest(disShowDto.getPage(),disShowDto.getSize()),disShowDto));
+            info.newSuccess(this.discountSettingDomainService.findChannelQualityByCon(new PageRequest(disShowDto.getPage(),disShowDto.getSize()),disShowDto));
         }catch (Exception e){
             info.newFalse(e);
         }

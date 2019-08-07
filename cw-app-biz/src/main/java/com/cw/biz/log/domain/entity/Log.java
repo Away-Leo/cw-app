@@ -29,7 +29,7 @@ public class Log extends AggEntity {
     @Column(name="user_id",columnDefinition="int(11) comment '用户id'")
     private Long userId;
 
-    @Column(name="channel_no",columnDefinition="varchar(20)  comment '来源渠道'")
+    @Column(name="channel_no",columnDefinition="varchar(100)  comment '来源渠道'")
     private String channelNo;
 
     @Column(name="type",columnDefinition="varchar(20)  comment '日志类型'")

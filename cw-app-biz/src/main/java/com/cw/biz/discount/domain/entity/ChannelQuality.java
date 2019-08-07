@@ -6,7 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
 * @Title: WholeDisCount.java
@@ -17,14 +19,11 @@ import javax.persistence.Table;
 * @version V1.0
 */
 @Entity
-@Table(name="cw_channel_discount")
-@org.hibernate.annotations.Table(appliesTo = "cw_channel_discount",comment = "渠道扣量设置")
+@Table(name="cw_channel_quality",indexes = {@Index(name = "quality_channel", columnList = "channel_code,flow_time")})
+@org.hibernate.annotations.Table(appliesTo = "cw_channel_quality",comment = "渠道质量")
 @Getter
 @Setter
-public class ChannelDisCountSetting extends BaseEntity {
-
-    @Column(name="start_num",columnDefinition="int(11)  comment '起始扣量数'")
-    private Integer startNum;
+public class ChannelQuality extends BaseEntity {
 
     @Column(name="channel_pv",columnDefinition="int(11) default 0 comment '渠道PV统计数'")
     private Integer channelPv=0;
@@ -35,17 +34,8 @@ public class ChannelDisCountSetting extends BaseEntity {
     @Column(name="channel_register",columnDefinition="int(11) default 0  comment '渠道注册数'")
     private Integer channelRegister=0;
 
-    @Column(name="channel_login",columnDefinition="int(11) default 0  comment '渠道登陆数'")
+    @Column(name="channel_login",columnDefinition="int(11) default 0  comment '渠道激活数'")
     private Integer channelLogin=0;
-
-    @Column(name="percent",columnDefinition="int(11)  comment '扣量比例'")
-    private Double percent;
-
-    @Column(name="channel_url",columnDefinition="varchar(255)  comment '渠道推广链接'")
-    private String channelUrl;
-
-    @Column(name="channel_back_url",columnDefinition="varchar(255)  comment '渠道推广后台链接'")
-    private String channelBackUrl;
 
     @Column(name="channel_name",columnDefinition="varchar(255)  comment '渠道名称'")
     private String channelName;
@@ -59,16 +49,9 @@ public class ChannelDisCountSetting extends BaseEntity {
     @Column(name="channel_code",columnDefinition="varchar(50) unique comment '渠道编号'")
     private String channelCode;
 
-    @Column(name="operator",columnDefinition="varchar(100)  comment '操作员'")
-    private String operator;
+    @Column(name="flow_time",columnDefinition="varchar(10) not null comment '引流日期'")
+    private String flowTime;
 
-    private String trueNum;
-
-    private String showNum;
-
-    private String uniId;
-
-    private String regisDate;
 
     private transient int page;
     private transient int size;

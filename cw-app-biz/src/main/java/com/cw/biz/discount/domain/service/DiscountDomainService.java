@@ -1,6 +1,6 @@
 package com.cw.biz.discount.domain.service;
 
-import com.cw.biz.discount.app.dto.ChannelDisCountDto;
+import com.cw.biz.CPContext;
 import com.cw.biz.discount.app.dto.ChannelDisShowDto;
 import com.cw.biz.discount.app.dto.WholeDisCountDto;
 import com.cw.biz.discount.domain.entity.ChannelDisCountSetting;
@@ -11,16 +11,16 @@ import com.cw.biz.parameter.domain.entity.Parameter;
 import com.cw.biz.parameter.domain.service.ParameterDomainService;
 import com.cw.core.common.base.BaseDomainService;
 import com.cw.core.common.base.ENUM_EXCEPTION;
+import com.cw.core.common.util.DateHelper;
 import com.cw.core.common.util.ObjectHelper;
 import com.cw.core.common.util.ObjectProperUtil;
 import com.cw.core.common.util.UUIDUtil;
 import com.zds.common.lang.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -75,7 +75,8 @@ public class DiscountDomainService extends BaseDomainService<WholeDiscountReposi
             }else{
                 ChannelDisCountSetting channelDisCountSetting=new ChannelDisCountSetting();
                 channelDisCountSetting=ObjectProperUtil.compareAndValue(channelDisCountDto,channelDisCountSetting,false,new String[]{"id"});
-                channelDisCountSetting.setChannelCode(UUIDUtil.generateShortUuid());
+                channelDisCountSetting.setChannelCode(UUIDUtil.generateShortUuid()+ DateHelper.getDateString(new Date(),DateHelper.getFormat(DateHelper.dtLong)));
+                channelDisCountSetting.setOperator(CPContext.getContext().getSeUserInfo().getUsername());
                 Parameter parameter=this.parameterDomainService.findByCode("channelBaseUrl");
                 Parameter parameter2=this.parameterDomainService.findByCode("channelBackBaseUrl");
                 channelDisCountSetting.setChannelUrl(parameter.getParameterValStr()+"?channel="+channelDisCountSetting.getChannelCode());
