@@ -97,6 +97,7 @@ public class ObjectProperUtil {
             }catch (Exception e){
                 e.printStackTrace();
                 logger.error("ObjectProperUtil-compareAndValue出错",e);
+                continue;
             }
         }
         //父类属性
@@ -108,7 +109,6 @@ public class ObjectProperUtil {
                 try{
                     targetFieldSuper=target.getClass().getSuperclass().getDeclaredField(temp.getName());
                 }catch (NoSuchFieldException e){
-                    logger.info("",e);
                     continue;
                 }
                 if(ObjectHelper.isEmpty(targetFieldSuper))continue;

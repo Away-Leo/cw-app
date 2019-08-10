@@ -25,11 +25,14 @@ import java.util.Date;
 @Setter
 public class ChannelQuality extends BaseEntity {
 
-    @Column(name="channel_pv",columnDefinition="int(11) default 0 comment '渠道PV统计数'")
+    @Column(name="channel_pv",columnDefinition="int(11) default 0 comment '产品PV统计数'")
     private Integer channelPv=0;
 
-    @Column(name="channel_uv",columnDefinition="int(11) default 0 comment '渠道UV统计数'")
+    @Column(name="channel_uv",columnDefinition="int(11) default 0 comment '产品UV统计数'")
     private Integer channelUv=0;
+
+    @Column(name="flow_uv",columnDefinition="int(11) default 0 comment '渠道引流页UV数'")
+    private Integer flowUv=0;
 
     @Column(name="channel_register",columnDefinition="int(11) default 0  comment '渠道注册数'")
     private Integer channelRegister=0;
@@ -46,7 +49,7 @@ public class ChannelQuality extends BaseEntity {
     @Column(name="channel_price",columnDefinition="varchar(10)  comment '渠道价格'")
     private String channelPrice;
 
-    @Column(name="channel_code",columnDefinition="varchar(50) unique comment '渠道编号'")
+    @Column(name="channel_code",columnDefinition="varchar(200) comment '渠道编号'")
     private String channelCode;
 
     @Column(name="flow_time",columnDefinition="varchar(10) not null comment '引流日期'")

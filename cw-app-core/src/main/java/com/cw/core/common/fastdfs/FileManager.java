@@ -35,9 +35,7 @@ public class FileManager implements FileManagerConfig {
         try {
 //            String classPath = new File(FileManager.class.getResource("/").getFile()).getCanonicalPath();
 //            String fdfsClientConfigFilePath = classPath + File.separator + CLIENT_CONFIG_FILE;
-            File path = new File(ResourceUtils.getURL("classpath:").getPath());
-            File upload = new File(path.getAbsolutePath(),"fdfs_client.conf");
-            String fdfsClientConfigFilePath=upload.getAbsolutePath();
+            String fdfsClientConfigFilePath="/home/pingxun/"+CLIENT_CONFIG_FILE;
             logger.info("Fast DFS configuration file path:" + fdfsClientConfigFilePath);
             ClientGlobal.init(fdfsClientConfigFilePath);
 
@@ -79,9 +77,7 @@ public class FileManager implements FileManagerConfig {
         String groupName 		= uploadResults[0];
         String remoteFileName   = uploadResults[1];
 
-        String fileAbsolutePath = PROTOCOL + trackerServer.getInetSocketAddress().getHostName()
-                + ":"
-                + TRACKER_NGNIX_PORT
+        String fileAbsolutePath = PROTOCOL + Domain
                 + SEPARATOR
                 + groupName
                 + SEPARATOR

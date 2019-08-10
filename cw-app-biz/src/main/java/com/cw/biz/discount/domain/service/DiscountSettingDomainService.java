@@ -45,19 +45,25 @@ public class DiscountSettingDomainService extends BaseDomainService<ChannelDisCo
 
     private final ChannelQualityRepository channelQualityRepository;
 
+    private final ChannelQualityDomainService channelQualityDomainService;
+
+    private final ChannelUserIpDomainService channelUserIpDomainService;
+
     private final UserDomainService userDomainService;
 
     @Autowired
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public DiscountSettingDomainService(ChannelDisCountSettingRepository settingRepository, DiscountDomainService discountDomainService, ApplyDomainService applyDomainService, JdbcTemplate jdbcTemplate, ChannelQualityRepository channelQualityRepository, UserDomainService userDomainService) {
+    public DiscountSettingDomainService(ChannelDisCountSettingRepository settingRepository, DiscountDomainService discountDomainService, ApplyDomainService applyDomainService, JdbcTemplate jdbcTemplate, ChannelQualityRepository channelQualityRepository, UserDomainService userDomainService, ChannelQualityDomainService channelQualityDomainService, ChannelUserIpDomainService channelUserIpDomainService) {
         this.settingRepository = settingRepository;
         wholeDisCount= discountDomainService.findDisCount();
         this.applyDomainService = applyDomainService;
         this.jdbcTemplate = jdbcTemplate;
         this.channelQualityRepository = channelQualityRepository;
         this.userDomainService = userDomainService;
+        this.channelQualityDomainService = channelQualityDomainService;
+        this.channelUserIpDomainService = channelUserIpDomainService;
     }
 
     private JdbcPage<ChannelDisShowDto> findChannelDisShowDtoByCondition(ChannelDisShowDto showDto){
@@ -150,8 +156,8 @@ public class DiscountSettingDomainService extends BaseDomainService<ChannelDisCo
      * @Date: 2019/8/1 4:03
      * @Version: 1
      */
-    public ChannelDisCountDto incrementRegisNum(String phone,String channelCode,int type){
-        if(ObjectHelper.isNotEmpty(channelCode)){
+    public ChannelDisCountDto incrementRegisNum(String phone,String channelCode,int type) throws Exception {
+         if(ObjectHelper.isNotEmpty(channelCode)){
             ChannelDisCountSetting old=settingRepository.findByChannelCode(channelCode);
             if(ObjectHelper.isNotEmpty(old)){
                 //查找每日渠道质量数据
@@ -180,7 +186,8 @@ public class DiscountSettingDomainService extends BaseDomainService<ChannelDisCo
                         }
                     break;
                 }
-                channelQualityRepository.updateEntity(quality);
+//                channelQualityDomainService.saveOrUpdateData(quality.to(ChannelQualityDto.class),ChannelQuality.class);
+                this.channelQualityRepository.updateEntity(quality);
                 return settingRepository.updateEntity(old).to(ChannelDisCountDto.class);
             }else{
                 return null;
@@ -237,7 +244,9 @@ public class DiscountSettingDomainService extends BaseDomainService<ChannelDisCo
         if(ObjectHelper.isNotEmpty(sourceData)&&ObjectHelper.isNotEmpty(sourceData.getContent())&&sourceData.getContent().size()>0){
             List<ChannelQualityDto> returnList=new ArrayList<>(sourceData.getContent().size());
             for(ChannelQuality temp:sourceData.getContent()){
-                returnList.add(ObjectProperUtil.compareAndValue(temp,new ChannelQualityDto(),true,new String[]{"id"}));
+                ChannelQualityDto qualityDto=new ChannelQualityDto();
+                qualityDto.setFlowUv(channelUserIpDomainService.findByCodeAndTime(temp.getChannelCode(),temp.getFlowTime()).intValue());
+                returnList.add(ObjectProperUtil.compareAndValue(temp,qualityDto,true,new String[]{"id","flowUv"}));
             }
             return new PageImpl<>(returnList,pageable,sourceData.getTotalElements());
         }else{

@@ -56,7 +56,7 @@ public class ChannelDisCountSetting extends BaseEntity {
     @Column(name="channel_price",columnDefinition="varchar(10)  comment '渠道价格'")
     private String channelPrice;
 
-    @Column(name="channel_code",columnDefinition="varchar(50) unique comment '渠道编号'")
+    @Column(name="channel_code",columnDefinition="varchar(200) unique comment '渠道编号'")
     private String channelCode;
 
     @Column(name="operator",columnDefinition="varchar(100)  comment '操作员'")

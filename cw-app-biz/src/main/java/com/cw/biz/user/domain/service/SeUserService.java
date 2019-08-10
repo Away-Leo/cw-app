@@ -61,8 +61,7 @@ public class SeUserService {
      * 发送验证码
      * @param registerDto
      */
-    public String sendVerify(RegisterDto registerDto,AppInfoDto appInfoDto)
-    {
+    public String sendVerify(RegisterDto registerDto,AppInfoDto appInfoDto) throws Exception {
         //随机数
         String randomNum = Utils.randomStr();
 

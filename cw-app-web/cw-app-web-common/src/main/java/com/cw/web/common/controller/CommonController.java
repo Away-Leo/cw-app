@@ -7,6 +7,8 @@ import com.cw.biz.banner.app.service.BannerAppService;
 import com.cw.biz.channel.app.dto.AppMarketDto;
 import com.cw.biz.channel.app.service.AppMarketAppService;
 import com.cw.biz.discount.app.dto.ChannelDisShowDto;
+import com.cw.biz.discount.app.dto.ChannelUserIpDto;
+import com.cw.biz.discount.domain.service.ChannelUserIpDomainService;
 import com.cw.biz.discount.domain.service.DiscountSettingDomainService;
 import com.cw.biz.home.app.dto.AppInfoDto;
 import com.cw.biz.home.app.dto.LoanServiceDto;
@@ -94,6 +96,9 @@ public class CommonController extends AbstractController {
     @Autowired
     private DiscountSettingDomainService discountSettingDomainService;
 
+    @Autowired
+    private ChannelUserIpDomainService channelUserIpDomainService;
+
     @Value("${spring.profiles.active}")
     private String active;
 
@@ -126,14 +131,14 @@ public class CommonController extends AbstractController {
      */
     @PostMapping("sendSmsVerify.json")
     @ResponseBody
-    public CPViewResultInfo sendSmsVerify(@RequestBody SendSmsModel sendSmsModel) {
-        CPViewResultInfo cpViewResultInfo = new CPViewResultInfo();
-        if(!isMobilePhone(sendSmsModel.getPhone()))
-        {
-            CwException.throwIt("手机号码格式不正确");
-        }
-        logger.info("发送区域："+sendSmsModel.getApplyArea());
-        //TODO 待验证
+    public CPViewResultInfo sendSmsVerify(CPViewResultInfo cpViewResultInfo,@RequestBody SendSmsModel sendSmsModel) {
+        try{
+            if(!isMobilePhone(sendSmsModel.getPhone()))
+            {
+                CwException.throwIt("手机号码格式不正确");
+            }
+            logger.info("发送区域："+sendSmsModel.getApplyArea());
+            //TODO 待验证
 //        List<SpinnerParameterDto> parameterDtoList = this.spinnerParameterAppService.findByType("areaBan");
 //        for (SpinnerParameterDto dto : parameterDtoList) {
 //            if (dto.getName().equalsIgnoreCase(sendSmsModel.getApplyArea()))
@@ -142,48 +147,51 @@ public class CommonController extends AbstractController {
 //                CwException.throwIt("手机号码格式不正确");
 //            }
 //        }
-        //检查用户已发送次数
-        SendSmsTimeDto sendSmsTimeDto = sendSmsTimeAppService.findByPhone(sendSmsModel.getPhone(),sendSmsModel.getAppName());
-        if(!Objects.isNull(sendSmsTimeDto))
-        {
-            if(sendSmsTimeDto.getSendTime() > 2)
+            //检查用户已发送次数
+            SendSmsTimeDto sendSmsTimeDto = sendSmsTimeAppService.findByPhone(sendSmsModel.getPhone(),sendSmsModel.getAppName());
+            if(!Objects.isNull(sendSmsTimeDto))
             {
-                CwException.throwIt("短信发送超过次数,最近一次验证码可直接登录");
+                if(sendSmsTimeDto.getSendTime() > 2)
+                {
+                    CwException.throwIt("短信发送超过次数,最近一次验证码可直接登录");
+                }
             }
+
+            //查询上次是否发送成功
+            SendSmsLogDto isSendSmsLog = sendSmsLogAppService.findById(sendSmsModel.getPhone());
+            if(Objects.isNull(isSendSmsLog)) {
+                //记录发送日志
+                SendSmsLogDto sendSmsLogDto = new SendSmsLogDto();
+                sendSmsLogDto.setDeviceNumber(sendSmsModel.getDeviceNumber());
+                sendSmsLogDto.setApplyArea(sendSmsModel.getApplyArea());
+                sendSmsLogDto.setSendDate(new Date());
+                sendSmsLogDto.setChannelNo(sendSmsModel.getChannelNo());
+                sendSmsLogDto.setPhone(sendSmsModel.getPhone());
+                sendSmsLogDto.setAppName(sendSmsModel.getAppName());
+                sendSmsLogDto.setIsSuccess(Boolean.FALSE);
+                Long smsId = sendSmsLogAppService.create(sendSmsLogDto);
+
+                //发送短信
+                String result = sendSmsComponent.sendSms(sendSmsModel);
+                if (ObjectHelper.isNotEmpty(result)) {
+                    //修改发送标识
+                    sendSmsLogDto.setId(smsId);
+                    sendSmsLogDto.setIsSuccess(Boolean.TRUE);
+                    sendSmsLogAppService.update(sendSmsLogDto);
+                    //记录发送次数
+                    sendSmsTimeDto = new SendSmsTimeDto();
+                    sendSmsTimeDto.setPhone(sendSmsModel.getPhone());
+                    sendSmsTimeDto.setAppName(sendSmsModel.getAppName());
+                    sendSmsTimeAppService.update(sendSmsTimeDto);
+                } else {
+                    CwException.throwIt("短信发送失败");
+                }
+            }
+            cpViewResultInfo.newSuccess(null,"发送成功");
+        }catch (Exception e){
+            cpViewResultInfo.newFalse(e);
         }
 
-        //查询上次是否发送成功
-        SendSmsLogDto isSendSmsLog = sendSmsLogAppService.findById(sendSmsModel.getPhone());
-        if(Objects.isNull(isSendSmsLog)) {
-            //记录发送日志
-            SendSmsLogDto sendSmsLogDto = new SendSmsLogDto();
-            sendSmsLogDto.setDeviceNumber(sendSmsModel.getDeviceNumber());
-            sendSmsLogDto.setApplyArea(sendSmsModel.getApplyArea());
-            sendSmsLogDto.setSendDate(new Date());
-            sendSmsLogDto.setChannelNo(sendSmsModel.getChannelNo());
-            sendSmsLogDto.setPhone(sendSmsModel.getPhone());
-            sendSmsLogDto.setAppName(sendSmsModel.getAppName());
-            sendSmsLogDto.setIsSuccess(Boolean.FALSE);
-            Long smsId = sendSmsLogAppService.create(sendSmsLogDto);
-
-            //发送短信
-            String result = sendSmsComponent.sendSms(sendSmsModel);
-            if (ObjectHelper.isNotEmpty(result)) {
-                //修改发送标识
-                sendSmsLogDto.setId(smsId);
-                sendSmsLogDto.setIsSuccess(Boolean.TRUE);
-                sendSmsLogAppService.update(sendSmsLogDto);
-                //记录发送次数
-                sendSmsTimeDto = new SendSmsTimeDto();
-                sendSmsTimeDto.setPhone(sendSmsModel.getPhone());
-                sendSmsTimeDto.setAppName(sendSmsModel.getAppName());
-                sendSmsTimeAppService.update(sendSmsTimeDto);
-            } else {
-                CwException.throwIt("短信发送失败");
-            }
-        }
-        cpViewResultInfo.setSuccess(true);
-        cpViewResultInfo.setMessage("发送成功");
         return cpViewResultInfo;
     }
 
@@ -275,6 +283,20 @@ public class CommonController extends AbstractController {
         cpViewResultInfo.setSuccess(true);
         cpViewResultInfo.setMessage("成功");
         return cpViewResultInfo;
+    }
+
+    /**
+     * 记录引流渠道UV数
+     */
+    @PostMapping("recordChannelUv.json")
+    @ResponseBody
+    public CPViewResultInfo recordChannelUv(HttpServletRequest request, CPViewResultInfo info,ChannelUserIpDto dto){
+        try{
+            info.newSuccess(channelUserIpDomainService.saveDataFromRequest(request,dto));
+        }catch (Exception e){
+            info.newFalse(e);
+        }
+        return info;
     }
 
     /**

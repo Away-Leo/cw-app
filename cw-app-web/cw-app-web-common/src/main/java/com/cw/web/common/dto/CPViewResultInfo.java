@@ -23,6 +23,11 @@ public class CPViewResultInfo implements Serializable{
         this.success=true;
         this.message="成功";
     }
+    public void newSuccess(Object data,String msg){
+        this.data=data;
+        this.success=true;
+        this.message=msg;
+    }
 
     public void newFalse(Exception e,String falseCode){
         this.success=false;

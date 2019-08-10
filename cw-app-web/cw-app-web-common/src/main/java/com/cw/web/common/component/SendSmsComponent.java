@@ -35,7 +35,7 @@ public class SendSmsComponent {
     @Autowired
     private ModuleAppService moduleAppService;
 
-    public String sendSms(SendSmsModel sendSmsModel) {
+    public String sendSms(SendSmsModel sendSmsModel) throws Exception {
         RegisterDto registerDto = new RegisterDto();
         registerDto.setPhone(sendSmsModel.getPhone());
         registerDto.setChannelNo(sendSmsModel.getChannelNo()==null?"wechat":sendSmsModel.getChannelNo());

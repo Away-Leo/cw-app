@@ -28,6 +28,8 @@ public class ChannelQualityDto extends BaseDto {
     /**渠道UV统计数**/
     private Integer channelUv;
 
+    private Integer flowUv;
+
     /**渠道注册数**/
     private Integer channelRegister;
 
